@@ -1,6 +1,7 @@
 #include "User.h"
 #include <regex>
 
+
  bool User::canBeCode(string code)
 {
 	regex rx("^[0-9a-zA-Z]+$");
@@ -30,7 +31,7 @@ bool User::changeName(string name)
 	}  else 	return false;
 }
 
-int User::income(unsigned int income)
+int User::income(moneyType income)
 {
 	if (money + income > 0) {
 		money += income;
@@ -38,18 +39,41 @@ int User::income(unsigned int income)
 	}else 	return 0;
 }
 
-int User::outcome(unsigned int)
+int User::outcome(moneyType outcome)
 {
-	return 0;
+	if (money - outcome > 0) {
+		money -= outcome;
+		return 1;
+	}
+	else 	return 0;
 }
 
 
 string User::turnIntoString()const
 {
-	return string();
+	return " "+to_string(ID)+ " " +code + " " +" "+to_string(money)+" "+ name+" ";
+	
 }
 
-string User::turnFromString(string str)
+moneyType User::Money()const
 {
-	return string();
+	return money;
+}
+
+idType User::id()const
+{
+	return id;
+}
+
+bool User::turnFromString(string str)
+{
+	istringstream input(str);
+	input >> ID >> code >> money >> name;
+	return true;
+}
+
+bool User::turnFromStream(istream& input)
+{
+	input >> ID >> code >> money >> name;
+	return false;
 }

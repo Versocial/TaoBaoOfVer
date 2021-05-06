@@ -1,12 +1,16 @@
 #include "User.h"
 
-
-Consumer::Consumer(string)
+Consumer::Consumer(string info)
 {
-
+	turnFromString(info)
 }
 
-string Consumer::type() const
+Consumer::Consumer(istream& input)
 {
-	return "Consumer";
+	turnFromStream(input);
+}
+
+userType Consumer::type()const
+{
+	return Type_Consumer;
 }

@@ -1,10 +1,16 @@
 #include "User.h"
 
-Seller::Seller(string)
+Seller::Seller(string info)
 {
+	turnFromString(info);
 }
 
-string Seller::type() const
+Seller::Seller(istream& input)
 {
-	return "Seller";
+	turnFromStream(input);
+}
+
+userType Seller::type() const
+{
+	return Type_Seller;
 }

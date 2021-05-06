@@ -1,24 +1,35 @@
 #pragma once
 #include <string>
+#include<sstream>
+#define idType unsigned long
+#define moneyType unsigned long long
 using namespace::std;
+
+ enum userType {
+	Type_Consumer, Type_Seller
+};
 
 class User
 {
 private:
 	string name;
-	unsigned long ID;
+	 idType ID;
 	string code;
-	unsigned long long money;
+	moneyType money;
 	static bool canBeCode(string code);
 	static bool canBeName(string name);
+protected:
+	bool turnFromString(string str);
+	bool turnFromStream(istream& input);
 public:
-	virtual string  type()const = 0 ;
+	virtual userType  type()const = 0 ;
 	bool changeCode(string code);// { if ()this->code = code; }
 	bool changeName(string name);
-	int income(unsigned int);
-	int outcome(unsigned int);
+	int income(moneyType);
+	int outcome(moneyType);
 	string turnIntoString()const;
-	string turnFromString(string str);
+	moneyType Money()const;
+	idType id()const;
 };
 
 class Consumer :
@@ -26,7 +37,8 @@ class Consumer :
 {
 public:
 	Consumer(string);
-	string  type()const;
+	Consumer(istream&);
+	userType type() const;
 };
 
 class Seller :
@@ -34,6 +46,7 @@ class Seller :
 {
 public:
 	Seller(string);
-	string  type()const;
+	Seller(istream&);
+	userType   type()const;
 };
 
