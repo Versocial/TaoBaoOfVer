@@ -1,5 +1,6 @@
 #pragma once
 #include "User.h"
+#include "Controler.h"
 #include <unordered_map>
 #include <thread>
 #include<set>
@@ -9,24 +10,39 @@
 
 using namespace::std;
 using namespace::stdext;
-class UsersControler
+class UsersControler:public Controler
 {
 private:
-	idType maxUserId;
-	int userNum;
-	string path;
-	unordered_map <idType,User*> allUsers;
-	 bool add(string str);
-	 bool add(istream&input);
-	 bool rem(idType id);
-	void saveThread()const;
-	UsersControler(string path);
+protected:
+	UsersControler(string path) ;
 	~UsersControler();
-	set<idType> toBeSaved;
-	set<idType> toBeRemoved;
-	inline int save()const;
+	virtual bool getByStream(Object*&, istream&)const;
+	virtual string turnIntoString(Object&)const;
+	virtual bool deleteByPtr(Object*)const;
 public:
-	static UsersControler* instance;
-	static UsersControler* getInstance(string path);
 };
+
+class ConsumersControler :
+	public UsersControler
+{
+private:
+	ConsumersControler(string path);
+	~ConsumersControler();
+	static  ConsumersControler* getInstance(string path);
+	static bool dispose();
+	static ConsumersControler* instanceC;
+};
+
+
+class SellersControler :
+	public UsersControler
+{
+private:
+	SellersControler(string path);
+	~SellersControler();
+	static  SellersControler* getInstance(string path);
+	static bool dispose();
+	static SellersControler* instanceS;
+};
+
 

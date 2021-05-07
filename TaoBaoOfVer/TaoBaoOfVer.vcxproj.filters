@@ -74,6 +74,12 @@
     <ClCompile Include="Object.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="ConsumersControler.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SellersControler.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="userData">

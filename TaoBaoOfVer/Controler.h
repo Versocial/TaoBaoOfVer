@@ -12,30 +12,31 @@ using namespace::stdext;
 class Controler
 {
 private:
-	static Controler* instance;
 	idType maxId;
 	int objectNum;
 	string path;
 	unordered_map <idType, Object*> allObjects;
 	thread* autoSave;
 	bool toStopSave;
-	bool add(istream& input);
 	bool rem(idType id);
 	void saveThread();
-	Controler(string path);
-	~Controler();
 	set<idType> toBeSaved;
 	set<idType> toBeRemoved;
-	inline int save()const;
-	static void getByLine(Object*&,istream&);
-	static string turnIntoLine(const Object&);
-	static	void deleteByPtr(Object*);
+	int save();
 	static void getFiles(string path, vector<string>& files);
+protected:
+	Controler(string path);
+	~Controler();
+	bool add(istream& input);
+	virtual bool getByStream(Object*&, istream&)const;
+	virtual string turnIntoString(const Object&)const;
+	virtual bool deleteByPtr(Object*)const;
 public:
-	bool add(string str);
-	static Controler* getInstance(string path);
-	static bool dispose();
+	virtual bool add(string str);
+	//virtual Object getCopyById(idType id);
+	//virtual Object* getPtrById(idType id);
+	bool contains(idType id);
+	void askForSave(idType id);
+	
+	
 };
-
-Controler* Controler::instance(NULL);
-

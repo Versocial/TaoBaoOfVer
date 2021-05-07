@@ -5,11 +5,30 @@ bool Controler::add(string str)
 {
 	istringstream input(str);
 	return add(input);
+	
+}
+/*
+Object Controler::getCopyById(idType id)
+{
+		return *(allObjects.find(id)->second);
+}
+Object* Controler::getPtrById(idType id)
+{
+	return nullptr;
+}
+*/
+bool Controler::contains(idType id)
+{
+	return (allObjects.find(id) != allObjects.end());
+}
+void Controler::askForSave(idType id)
+{
+	toBeSaved.insert(id);
 }
 bool Controler::add(istream& input)
 {
 	Object* objectPtr;
-	getByLine(objectPtr,input);
+	getByStream(objectPtr,input);
 	bool ok = allObjects.insert(make_pair((objectPtr->id()), objectPtr)).second;
 	if (ok) {
 		toBeSaved.insert(objectPtr->id());
@@ -50,6 +69,8 @@ Controler::Controler(string path)
 	maxId = 0;
 	objectNum = 0;
 	this->path = path;
+	toBeSaved.clear();
+
 	vector<string> files;
 	getFiles(path, files);
 	for (string filePath : files) {
@@ -76,56 +97,51 @@ Controler:: ~Controler()
 	}
 }
 
-inline int Controler::save()const
+ int Controler::save()
 {
 	bool flag[4] = { 0 };
-	for (idType id : toBeSaved) {
+	set<idType>::iterator it = toBeSaved.begin();
+	while(it!=toBeSaved.end()) {
+		idType id = *it;
+		it=toBeSaved.erase(it);
 		time_t t; time(&t);
 		if (ENOENT != _access((path + "/" + to_string(id)).c_str(), 0)) {
 			if (0 != rename((path + "/" + to_string(id)).c_str(), (path + "/" + "source_temp_" + to_string(id) + "_" + to_string(t)).c_str())) { flag[0] = 1; };
 		}
 		ofstream output(path + "/" + to_string(id));
 		if (output.is_open()) {
-			output << turnIntoLine(*allObjects.find(id)->second);
+			output << turnIntoString(*allObjects.find(id)->second);
 			output.close();
 		}
 		else { flag[1] = 1; }
 		if (0 != remove((path + "/" + "source_temp_" + to_string(id) + "_" + to_string(t)).c_str())) { flag[2] = 1; }
 	}
-	for (idType id : toBeRemoved) {
+	
+	it = toBeRemoved.begin();
+	while(it!=toBeRemoved.end()) {
+		idType id = *it;
+		it = toBeRemoved.erase(it);
 		if (0 != remove((path + "/" + to_string(id)).c_str())) { flag[3] = 1; }
 	}
 	return flag[0] + flag[1] * 2 + flag[2] * 4 + flag[3] * 8;
 }
 
-Controler* Controler::getInstance(string path)
-{
-	if (instance == NULL)return (instance=new Controler(path));
-	else return NULL;
-}
 
-bool Controler::dispose()
-{
-	if (instance != NULL) {
-		delete(instance);
-		return true;
-	}
-	else return false;
-}
-
-void Controler::getByLine(Object*&ptr,istream&input)
+bool Controler::getByStream(Object*&ptr,istream&input)const
 {
 	ptr = new Object(input);
+	return true;
 }
 
-string Controler::turnIntoLine(const Object& ptr)
+string Controler::turnIntoString(const Object& ptr)const
 {
 	return ptr.turnIntoString();
 }
 
-void Controler::deleteByPtr(Object* ptr)
+bool Controler::deleteByPtr(Object* ptr)const
 {
 	delete (Object*)ptr;
+	return true;
 }
 
 void Controler::getFiles(string path, vector<string>& files)

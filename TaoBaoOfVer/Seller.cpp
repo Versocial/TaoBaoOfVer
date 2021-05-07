@@ -1,13 +1,13 @@
 #include "User.h"
 
-Seller::Seller(string info)
+Seller::Seller(string info):User(info)
 {
-	turnFromString(info);
+	
 }
 
-Seller::Seller(istream& input)
+Seller::Seller(istream& input):User(input)
 {
-	turnFromStream(input);
+
 }
 
 userType Seller::type() const

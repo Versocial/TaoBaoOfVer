@@ -60,20 +60,13 @@ moneyType User::Money()const
 	return money;
 }
 
-idType User::id()const
-{
-	return ID;
-}
-
-bool User::turnFromString(string str)
+User::User(string str):Object(str)
 {
 	istringstream input(str);
 	input >> ID >> code >> money >> name;
-	return true;
 }
 
-bool User::turnFromStream(istream& input)
+User::User(istream& input):Object(input)
 {
 	input >> ID >> code >> money >> name;
-	return false;
 }

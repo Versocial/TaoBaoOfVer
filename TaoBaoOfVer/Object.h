@@ -5,13 +5,13 @@ using namespace::std;
 class Object
 {
 private:
-	idType ID;
 protected:
-	
+	idType ID;
 public:
 	Object(string str);
 	Object(istream& input);
 	virtual string turnIntoString()const;
 	idType id()const;
+	//virtual unsigned int type()const = 0;
 };
 
