@@ -2,7 +2,7 @@
 
 Consumer::Consumer(string info)
 {
-	turnFromString(info)
+	turnFromString(info);
 }
 
 Consumer::Consumer(istream& input)

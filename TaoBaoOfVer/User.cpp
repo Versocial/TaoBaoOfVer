@@ -62,7 +62,7 @@ moneyType User::Money()const
 
 idType User::id()const
 {
-	return id;
+	return ID;
 }
 
 bool User::turnFromString(string str)

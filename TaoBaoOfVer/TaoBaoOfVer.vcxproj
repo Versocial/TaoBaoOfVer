@@ -142,6 +142,7 @@
     <ClInclude Include="Client.h" />
     <ClInclude Include="Good.h" />
     <ClInclude Include="GoodsControler.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Server.h" />
     <ClInclude Include="User.h" />
     <ClInclude Include="UsersControler.h" />
@@ -155,6 +156,9 @@
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="User.cpp" />
     <ClCompile Include="UsersControler.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="userData" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

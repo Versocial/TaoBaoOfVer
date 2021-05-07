@@ -1,22 +1,33 @@
 #pragma once
 #include "User.h"
-#include <hash_map>
+#include <unordered_map>
 #include <thread>
+#include<set>
+#include<sstream>
+#include<fstream>
+
+#include<io.h>
 
 using namespace::std;
 using namespace::stdext;
 class UsersControler
 {
 private:
-	hash_map <idType,User*> allUsers;
-	inline bool add(string str);
-	inline bool remove(idType id);
-	void saveThread();
-	UsersControler();
-	bool saved;
-	inline bool save();
+	idType maxUserId;
+	int userNum;
+	string path;
+	unordered_map <idType,User*> allUsers;
+	 bool add(string str);
+	 bool add(istream&input);
+	 bool rem(idType id);
+	void saveThread()const;
+	UsersControler(string path);
+	~UsersControler();
+	set<idType> toBeSaved;
+	set<idType> toBeRemoved;
+	inline int save()const;
 public:
 	static UsersControler* instance;
-	static UsersControler* getInstance;
+	static UsersControler* getInstance(string path);
 };
 
