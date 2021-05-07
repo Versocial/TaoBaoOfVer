@@ -140,8 +140,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Client.h" />
+    <ClInclude Include="Controler.h" />
     <ClInclude Include="Good.h" />
     <ClInclude Include="GoodsControler.h" />
+    <ClInclude Include="Object.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Server.h" />
     <ClInclude Include="User.h" />
@@ -150,8 +152,10 @@
   <ItemGroup>
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Consumer.cpp" />
+    <ClCompile Include="Controler.cpp" />
     <ClCompile Include="Good.cpp" />
     <ClCompile Include="GoodsControler.cpp" />
+    <ClCompile Include="Object.cpp" />
     <ClCompile Include="Seller.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="User.cpp" />

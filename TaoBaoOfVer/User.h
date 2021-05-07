@@ -1,9 +1,8 @@
 #pragma once
+#include "Object.h"
 #include <string>
 #include<sstream>
-#define idType unsigned long
 #define moneyType unsigned long long
-using namespace::std;
 
  enum userType {
 	Type_Consumer, Type_Seller

@@ -53,7 +53,7 @@ UsersControler::UsersControler(string path)
 {
 	this->path = path;
 	vector<string> files;
-	getFiles1(path, files);
+	//getFiles1(path, files);
 	
 
 }
