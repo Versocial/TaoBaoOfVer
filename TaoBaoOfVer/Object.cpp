@@ -1,12 +1,14 @@
 #include "Object.h"
 
-Object::Object(string str)
+Object::Object()
 {
 }
 
-Object::Object(istream& input)
+Object::Object(idType id)
 {
+	this->ID = id;
 }
+
 
 string Object::turnIntoString() const
 {

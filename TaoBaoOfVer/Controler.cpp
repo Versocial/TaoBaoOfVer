@@ -2,7 +2,8 @@
 //#define RENAME_FILE_ERR
 
 bool Controler::add(string str)
-{
+{	
+	//AvoidConfictFromSaving
 	istringstream input(str);
 	return add(input);
 	
@@ -19,14 +20,17 @@ Object* Controler::getPtrById(idType id)
 */
 bool Controler::contains(idType id)
 {
+	AvoidConfictFromSaving
 	return (allObjects.find(id) != allObjects.end());
 }
 void Controler::askForSave(idType id)
 {
+	AvoidConfictFromSaving
 	toBeSaved.insert(id);
 }
 bool Controler::add(istream& input)
 {
+	AvoidConfictFromSaving
 	Object* objectPtr;
 	getByStream(objectPtr,input);
 	bool ok = allObjects.insert(make_pair((objectPtr->id()), objectPtr)).second;
@@ -41,6 +45,7 @@ bool Controler::add(istream& input)
 
 bool Controler::rem(idType id)
 {
+	AvoidConfictFromSaving
 	unordered_map<idType,Object*>::iterator it = allObjects.find(id);
 	if (it != allObjects.end()) {
 		deleteByPtr(allObjects.find(it->second->id())->second);
@@ -56,10 +61,16 @@ void Controler::saveThread()
 {
 	while (1) {
 		if (toStopSave)break;
+		isAutoSaveSleeping = true;
 		this_thread::sleep_for(chrono::minutes(1));
-		if (toBeSaved.empty())continue;
+		isAutoSaveSleeping = false;
+		if (toBeSaved.empty()&&toBeRemoved.empty())continue;
 		if (toStopSave)break;
-		else save();
+		else {
+			//usingLocker.lock();
+			save();
+			//usingLocker.unlock();
+		}
 	}
 }
 
@@ -70,6 +81,7 @@ Controler::Controler(string path)
 	objectNum = 0;
 	this->path = path;
 	toBeSaved.clear();
+	isAutoSaveSleeping = true;
 
 	vector<string> files;
 	getFiles(path, files);
@@ -88,7 +100,8 @@ Controler::Controler(string path)
 Controler:: ~Controler()
 {
 	toStopSave = true;
-	autoSave->join();
+	if (isAutoSaveSleeping); //pthread_cancel();
+	else autoSave->join();
 	save();
 	unordered_map <idType, Object*>::iterator it=allObjects.begin();
 	while(it!=allObjects.end()) {
@@ -99,16 +112,17 @@ Controler:: ~Controler()
 
  int Controler::save()
 {
+	 AvoidConfictFromSaving
 	bool flag[4] = { 0 };
 	set<idType>::iterator it = toBeSaved.begin();
 	while(it!=toBeSaved.end()) {
 		idType id = *it;
 		it=toBeSaved.erase(it);
 		time_t t; time(&t);
-		if (ENOENT != _access((path + "/" + to_string(id)).c_str(), 0)) {
+		if (ENOENT != _access((path + "/" + to_string(id)+".TBobj").c_str(), 0)) {
 			if (0 != rename((path + "/" + to_string(id)).c_str(), (path + "/" + "source_temp_" + to_string(id) + "_" + to_string(t)).c_str())) { flag[0] = 1; };
 		}
-		ofstream output(path + "/" + to_string(id));
+		ofstream output(path + "/" + to_string(id) + ".TBobj");
 		if (output.is_open()) {
 			output << turnIntoString(*allObjects.find(id)->second);
 			output.close();
@@ -129,7 +143,7 @@ Controler:: ~Controler()
 
 bool Controler::getByStream(Object*&ptr,istream&input)const
 {
-	ptr = new Object(input);
+	ptr = NULL;//new Object();
 	return true;
 }
 
@@ -144,12 +158,13 @@ bool Controler::deleteByPtr(Object* ptr)const
 	return true;
 }
 
+
 void Controler::getFiles(string path, vector<string>& files)
 {
 	intptr_t hFile = 0;//文件句柄  
 	struct _finddata_t fileinfo;//文件信息  
 	string p;
-	if ((hFile = _findfirst(p.assign(path).append("\\*").c_str(), &fileinfo)) != -1)
+	if ((hFile = _findfirst(p.assign(path).append("\\*.TBobj").c_str(), &fileinfo)) != -1)
 		// "\\*"是指读取文件夹下的所有类型的文件，若想读取特定类型的文件，以png为例，则用“\\*.png”
 	{
 		do

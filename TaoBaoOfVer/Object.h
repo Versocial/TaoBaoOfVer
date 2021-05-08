@@ -7,9 +7,9 @@ class Object
 private:
 protected:
 	idType ID;
+	Object();
 public:
-	Object(string str);
-	Object(istream& input);
+	Object(idType id);
 	virtual string turnIntoString()const;
 	idType id()const;
 	//virtual unsigned int type()const = 0;

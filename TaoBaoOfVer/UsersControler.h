@@ -27,10 +27,12 @@ class ConsumersControler :
 {
 private:
 	ConsumersControler(string path);
+	static ConsumersControler* instanceC;
+public:
 	~ConsumersControler();
 	static  ConsumersControler* getInstance(string path);
 	static bool dispose();
-	static ConsumersControler* instanceC;
+
 };
 
 
@@ -39,10 +41,12 @@ class SellersControler :
 {
 private:
 	SellersControler(string path);
+	static SellersControler* instanceS;
+public:
 	~SellersControler();
 	static  SellersControler* getInstance(string path);
 	static bool dispose();
-	static SellersControler* instanceS;
+	
 };
 
 

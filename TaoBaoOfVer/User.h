@@ -20,6 +20,7 @@ protected:
 	User(string str);
 	User(istream& input);
 public:
+	User(const idType id, const string& code, const string& name);
 	virtual userType  type()const = 0 ;
 	bool changeCode(string code);// { if ()this->code = code; }
 	bool changeName(string name);

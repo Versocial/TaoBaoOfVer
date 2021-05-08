@@ -5,6 +5,7 @@ ConsumersControler::ConsumersControler(string path):UsersControler(path)
 }
 ConsumersControler::~ConsumersControler()
 {
+	instanceC = NULL;
 }
 ConsumersControler* ConsumersControler::getInstance(string path)
 {

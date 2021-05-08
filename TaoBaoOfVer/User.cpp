@@ -60,13 +60,18 @@ moneyType User::Money()const
 	return money;
 }
 
-User::User(string str):Object(str)
+User::User(string str):Object()
 {
 	istringstream input(str);
 	input >> ID >> code >> money >> name;
 }
 
-User::User(istream& input):Object(input)
+User::User(istream& input):Object()
 {
 	input >> ID >> code >> money >> name;
+}
+
+User::User(const idType id, const string& code,const string& name):Object(id) {
+	this->code = code;
+	this->name = name;
 }
