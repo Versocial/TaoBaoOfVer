@@ -8,10 +8,13 @@ private:
 protected:
 	idType ID;
 	Object();
-public:
 	Object(idType id);
-	virtual string turnIntoString()const;
+	~Object();
+public:
 	idType id()const;
-	//virtual unsigned int type()const = 0;
+
+	virtual Object* getByStream( istream&)=0;
+	virtual string turnIntoString()const=0;
+	virtual bool deleteByPtr()=0;
 };
 

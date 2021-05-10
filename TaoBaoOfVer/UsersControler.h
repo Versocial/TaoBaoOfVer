@@ -8,45 +8,44 @@
 #include<fstream>
 #include<io.h>
 
+#define FIRST_CONSUMER_NUMBER 10000
+
 using namespace::std;
 using namespace::stdext;
-class UsersControler:public Controler
-{
-private:
-protected:
-	UsersControler(string path) ;
-	~UsersControler();
-	virtual bool getByStream(Object*&, istream&)const;
-	virtual string turnIntoString(Object&)const;
-	virtual bool deleteByPtr(Object*)const;
-public:
-};
+
+//class UsersControler:public Controler
+//{
+//private:
+//protected:
+//	UsersControler(string path) ;
+//	~UsersControler();
+//public:
+//};
 
 class ConsumersControler :
-	public UsersControler
+	public Controler
 {
 private:
 	ConsumersControler(string path);
 	static ConsumersControler* instanceC;
+	virtual Object* NewObject();
 public:
 	~ConsumersControler();
+	bool addCountByCin();
 	static  ConsumersControler* getInstance(string path);
-	static bool dispose();
-
 };
 
 
 class SellersControler :
-	public UsersControler
+	public Controler
 {
 private:
 	SellersControler(string path);
 	static SellersControler* instanceS;
-public:
 	~SellersControler();
-	static  SellersControler* getInstance(string path);
-	static bool dispose();
+public:
 	
+	static  SellersControler* getInstance(string path);
 };
 
 

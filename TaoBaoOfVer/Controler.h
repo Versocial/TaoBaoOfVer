@@ -12,10 +12,10 @@ using namespace::std;
 using namespace::stdext;
 
 #define AvoidConfictFromSaving  ; lock_guard<mutex> temp_lock_guard(Controler::usingLocker);
+//#define 
 class Controler
 {
 private:
-	idType maxId;
 	int objectNum;
 	string path;
 	unordered_map <idType, Object*> allObjects;
@@ -28,20 +28,20 @@ private:
 	set<idType> toBeRemoved;
 	int save();
 	static void getFiles(string path, vector<string>& files);
+	bool add(istream& input);
 protected:
+	idType maxId;
+	idType suggestID();
+	bool add(Object* ptr);
 	mutex usingLocker;
 	Controler(string path);
 	~Controler();
-	virtual bool getByStream(Object*&, istream&)const;
-	virtual string turnIntoString(const Object&)const;
-	virtual bool deleteByPtr(Object*)const;
+	virtual Object* NewObject();
 public:
-	virtual bool add(string str);
-	bool add(istream& input);
-	//virtual Object getCopyById(idType id);
-	//virtual Object* getPtrById(idType id);
+	int ObjectNum();
 	bool contains(idType id);
 	void askForSave(idType id);
+	bool readOutFromFiles();
 	
 	
 };

@@ -9,11 +9,10 @@ Object::Object(idType id)
 	this->ID = id;
 }
 
-
-string Object::turnIntoString() const
+Object::~Object()
 {
-	return "object: "+to_string(ID);
 }
+
 
 idType Object::id() const
 {

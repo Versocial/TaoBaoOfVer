@@ -6,7 +6,16 @@ SellersControler::~SellersControler()
 	instanceS = NULL;
 }
 
+SellersControler::SellersControler(string path) :Controler( path)
+{
+
+}
+
 SellersControler* SellersControler::getInstance(string path)
 {
-	return SellersControler::instanceS;
+	if (instanceS == NULL) {
+		instanceS = new SellersControler(path);
+		return instanceS;
+	}
+	else return NULL;
 }
