@@ -33,7 +33,7 @@ public:
 	moneyType Money()const;
 
 	virtual Object* getByStream(istream&)=0;
-	virtual string turnIntoString()const=0;
+	virtual string turnIntoString()const;
 	virtual bool deleteByPtr()=0;
 };
 
@@ -64,8 +64,8 @@ public:
 	Seller();
 	userType   type()const;
 
-	//virtual Object* getByStream(istream&);
-	//virtual string turnIntoString()const ;
-	//virtual bool deleteByPtr() ;
+	virtual Object* getByStream(istream&);
+	virtual string turnIntoString()const;
+	virtual bool deleteByPtr();
 };
 

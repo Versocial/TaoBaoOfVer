@@ -80,6 +80,11 @@ moneyType User::Money()const
 	return money;
 }
 
+string User::turnIntoString() const
+{
+	return " " + to_string(ID) + " " + password + " " + " " + to_string(money) + " " + name + " ";
+}
+
 User::User():Object()
 {
 }

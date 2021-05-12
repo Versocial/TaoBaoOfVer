@@ -30,7 +30,7 @@ Object* Consumer::getByStream(istream& input)
 
 string Consumer::turnIntoString() const
 {
-	return " " + to_string(ID) + " " + password + " " + " " + to_string(money) + " " + name + " ";
+	return User::turnIntoString();
 
 }
 
