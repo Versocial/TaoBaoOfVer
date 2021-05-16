@@ -2,7 +2,7 @@
 
 Consumer::Consumer(idType id) :User() 
 {
-	initUser(id);
+	initUser(id,cin,cout);
 }
 
 Consumer::Consumer(string info):User(info)
@@ -22,6 +22,11 @@ userType Consumer::type()const
 	return Type_Consumer;
 }
 
+Object* Consumer::getByPtr(Object* obj)
+{
+	return new Consumer(*(Consumer*)obj);
+}
+
 Object* Consumer::getByStream(istream& input)
 {
 	Consumer* consumer = new Consumer(input);
@@ -37,5 +42,5 @@ string Consumer::turnIntoString() const
 bool Consumer::deleteByPtr()
 {
 	delete this;
-	return false;
+	return true;
 }

@@ -1,7 +1,7 @@
 #include "User.h"
 #include <regex>
 #define EXIT_CMD_   ("@exit")
-#define ReadByCin(key)  ;cin>>(key);cin.clear();cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
+#define ReadByInput(key)  ;input>>(key);input.clear();input.ignore(numeric_limits<streamsize>::max(), '\n'); 
 
  bool User::canBePassword(string code)
 {
@@ -15,28 +15,28 @@
 	return name.length() >= 2 && name.length() <= 15 && regex_match(name, rx);
 }
 
- bool User::initUser(idType id)
+ bool User::initUser(idType id,istream& input, ostream& output)
  {
 	 money = 0;
-	 cout << "Your count " << id << " initializing now !" << " And you can enter \"" << EXIT_CMD_ << "\" to exit if you want.\n";
+	 output << "Your count " << id << " initializing now !" << " And you can enter \"" << EXIT_CMD_ << "\" to exit if you want.\n";
 	 ID = id;
-	 cout <<"["<<id<<"]"<< "Please enter your password, which must be : digit or label , 6 to15 characters.\n";
-	 ReadByCin(password);
+	 output <<"["<<id<<"]"<< "Please enter your password, which must be : digit or label , 6 to15 characters.\n";
+	 ReadByInput(password);
 	 while (!canBePassword(password)) {
-		 if (password == EXIT_CMD_)return  false;
-		 cout << "[" << id << "]" << "Illegal password Format ! Please type in again your password, which must be : digit or label , 6 to15 characters.\n";
-		 ReadByCin(password);
+		 if (password == EXIT_CMD_) {cout << "Exit count initializing.\n"; return  false; }
+		 output << "[" << id << "]" << "Illegal password Format ! Please type in again your password, which must be : digit or label , 6 to15 characters.\n";
+		 ReadByInput(password);
 	 }
-	 cout << "[" << id << "]" << "Your password is " << password<<endl;
-	 cout << "[" << id << "]" << "Please enter your name, which must be : digit or label , 2 to15 characters.\n";
-	 ReadByCin(name);
+	 output << "[" << id << "]" << "Your password is " << password<<endl;
+	 output << "[" << id << "]" << "Please enter your name, which must be : digit or label , 2 to15 characters.\n";
+	 ReadByInput(name);
 	 while (!canBeName(name)) {
-		 if (name == EXIT_CMD_)return  false;
-		 cout << "Illegal Name Format ! Please type in again your password, which must be : digit or label , 6 to15 characters.\n";
-		 ReadByCin(name);
+		 if (name == EXIT_CMD_) {cout << "Exit count initializing.\n"; return  false; }
+		 output << "Illegal Name Format ! Please type in again your password, which must be : digit or label , 6 to15 characters.\n";
+		 ReadByInput(name);
 	 }
-	 cout << "[" << id << "]" << "Your name is " << name << endl;
-	 cout << "[" << name << "]" << "You have your count now ! Enjoy your time !\n";
+	 output << "[" << id << "]" << "Your name is " << name << endl;
+	 output << "[" << name << "]" << "You have your count now ! Enjoy your time !\n";
 	 return true;
  }
 

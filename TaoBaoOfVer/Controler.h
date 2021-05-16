@@ -29,15 +29,17 @@ private:
 	int save();
 	static void getFiles(string path, vector<string>& files);
 	bool add(istream& input);
+	mutex usingLocker;
 protected:
 	idType maxId;
 	idType suggestID();
 	bool add(Object* ptr);
-	mutex usingLocker;
 	Controler(string path);
 	~Controler();
 	virtual Object* NewObject();
 public:
+	void getObjectById(idType id,Object*& obj);
+	set<idType> getAllID();
 	int ObjectNum();
 	bool contains(idType id);
 	void askForSave(idType id);

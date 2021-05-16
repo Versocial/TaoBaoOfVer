@@ -5,6 +5,29 @@
 //#define RENAME_FILE_ERR
 
 
+
+
+void Controler::getObjectById(idType id, Object*& obj)
+{
+	AvoidConfictFromSaving
+	Object* temp = obj;
+	obj=obj->getByPtr( allObjects.find(id)->second);
+	temp->deleteByPtr();
+	return;
+}
+
+set<idType> Controler::getAllID()
+{
+	AvoidConfictFromSaving
+	unordered_map<idType, Object*>::iterator it = allObjects.begin();
+	set<idType> IDset;
+	while (it != allObjects.end()) {
+		IDset.insert(it->first);
+		it++;
+	}
+		return IDset;
+}
+
 int Controler::ObjectNum()
 {
 	return objectNum;

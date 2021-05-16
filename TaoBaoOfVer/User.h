@@ -21,7 +21,7 @@ protected:
 	User(string str);
 	User(istream& input);
 	User(const idType id, const string& code, const string& name);//useless
-	bool initUser(idType id);
+	bool initUser(idType id,istream &input,ostream& output);
 public:
 	static bool canBePassword(string code);
 	static bool canBeName(string name);
@@ -32,6 +32,8 @@ public:
 	int outcome(moneyType);
 	moneyType Money()const;
 
+
+	virtual Object* getByPtr(Object* obj) = 0;
 	virtual Object* getByStream(istream&)=0;
 	virtual string turnIntoString()const;
 	virtual bool deleteByPtr()=0;
@@ -48,6 +50,7 @@ public:
 	Consumer();
 	userType type() const;
 
+	virtual Object* getByPtr(Object* obj) ;
 	virtual Object* getByStream(istream&);
 	virtual string turnIntoString()const ;
 	virtual bool deleteByPtr();
@@ -64,6 +67,7 @@ public:
 	Seller();
 	userType   type()const;
 
+	virtual Object* getByPtr(Object* obj) ;
 	virtual Object* getByStream(istream&);
 	virtual string turnIntoString()const;
 	virtual bool deleteByPtr();
