@@ -2,6 +2,10 @@
 
 
 GoodsControler* GoodsControler::instanceG = NULL;
+string GoodsControler::objPostfix()
+{
+	return "TBgood";
+}
 GoodsControler::GoodsControler(string path) :Controler(path)
 {
 
@@ -28,7 +32,7 @@ Object* GoodsControler::NewObject()
 
 GoodsControler* GoodsControler::getInstance(string path)
 {
-	if (instanceG == NULL) { instanceG = new GoodsControler(path); instanceG->readOutFromFiles();  return instanceG; }
+	if (instanceG == NULL) { instanceG = new GoodsControler(path); instanceG->readOutAllObjects();  return instanceG; }
 	else return NULL;
 }
 

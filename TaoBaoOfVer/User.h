@@ -3,6 +3,7 @@
 #include <string>
 #include<sstream>
 #include <iostream>
+#include <set>
 #define moneyType unsigned long long
 using namespace::std;
 
@@ -60,12 +61,15 @@ class Seller :
 	public User
 {
 private:
+	set<idType> tradeGoods;
 	Seller(string);
 	Seller(istream&);
 public:
 	Seller(idType id);
 	Seller();
 	userType   type()const;
+	bool addGood(idType id);
+	bool remGood(idType id);
 
 	virtual Object* getByPtr(Object* obj) ;
 	virtual Object* getByStream(istream&);

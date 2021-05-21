@@ -26,6 +26,7 @@ class ConsumersControler :
 	public Controler
 {
 private:
+	virtual string objPostfix();
 	ConsumersControler(string path);
 	static ConsumersControler* instanceC;
 	virtual Object* NewObject();
@@ -33,6 +34,8 @@ public:
 	~ConsumersControler();
 	bool addCountByCin();
 	static  ConsumersControler* getInstance(string path);
+	void LogIn(idType id);
+	void LogOut(idType id);
 };
 
 
@@ -40,11 +43,13 @@ class SellersControler :
 	public Controler
 {
 private:
+	virtual string objPostfix();
 	SellersControler(string path);
 	static SellersControler* instanceS;
-	~SellersControler();
+	virtual Object* NewObject();
 public:
-	
+	~SellersControler();
+	bool addCountByCin();
 	static  SellersControler* getInstance(string path);
 };
 

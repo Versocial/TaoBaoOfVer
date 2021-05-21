@@ -143,6 +143,7 @@
     <ClInclude Include="Controler.h" />
     <ClInclude Include="Good.h" />
     <ClInclude Include="GoodsControler.h" />
+    <ClInclude Include="log.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Server.h" />
@@ -156,6 +157,8 @@
     <ClCompile Include="Controler.cpp" />
     <ClCompile Include="Good.cpp" />
     <ClCompile Include="GoodsControler.cpp" />
+    <ClCompile Include="log.cpp" />
+    <ClCompile Include="Main1.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Seller.cpp" />
     <ClCompile Include="SellersControler.cpp" />
