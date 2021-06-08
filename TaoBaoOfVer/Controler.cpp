@@ -7,7 +7,6 @@ Object* Controler::_the_Object = NULL;
 
 int Controler::deleteObject(idType id)
 {
-	int toReturn;
 	unordered_map<idType, Object*>::iterator it = allObjects.find(id);
 	if (it != allObjects.end()) {
 		if (allObjects[id] != NULL)allObjects[id]->deleteByPtr();
@@ -50,6 +49,7 @@ bool Controler::readFromFile(idType id)
 		}
 		else {
 			allObjects[id] = theObject()->getByStream(input);
+			objectNum++;
 		}
 		input.close();
 		return true;

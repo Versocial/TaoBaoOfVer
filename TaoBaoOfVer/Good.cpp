@@ -122,7 +122,7 @@ string Good::turnIntoString() const
 
 bool Good::deleteByPtr()
 {
-	delete this;
+	if(this!=NULL)delete this;
 	return false;
 }
 

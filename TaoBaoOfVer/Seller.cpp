@@ -53,6 +53,6 @@ string Seller::turnIntoString() const
 
 bool Seller::deleteByPtr()
 {
-	delete this;
+	if(this!=NULL)delete this;
 	return true;
 }

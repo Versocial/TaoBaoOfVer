@@ -41,6 +41,6 @@ string Consumer::turnIntoString() const
 
 bool Consumer::deleteByPtr()
 {
-	delete this;
+	if(this!=NULL)delete this;
 	return true;
 }

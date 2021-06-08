@@ -24,6 +24,7 @@ protected:
 	User(const idType id, const string& code, const string& name);//useless
 	bool initUser(idType id,istream &input,ostream& output);
 public:
+	bool passWordMatch(string passwd);
 	static bool canBePassword(string code);
 	static bool canBeName(string name);
 	virtual userType  type()const = 0 ;
@@ -32,7 +33,7 @@ public:
 	int income(moneyType);
 	int outcome(moneyType);
 	moneyType Money()const;
-
+	string Name();
 
 	virtual Object* getByPtr(Object* obj) = 0;
 	virtual Object* getByStream(istream&)=0;

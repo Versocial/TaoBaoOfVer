@@ -12,10 +12,11 @@ enum _ClientType {
     SellerUser 
 };
 
+Server* Server::instance = NULL;
 
-
-Server::Server(istream* in,ostream* out) {
-    this->input = in; this->output = out;
+Server::Server(istream& in,ostream& out) {
+  //  this->input = in; this->output = out;
+    this->input = &in; this->output = &out;
     consumers = ConsumersControler::getInstance(ConsumersControlerPath);
     sellers = SellersControler::getInstance(SellersControlerPath);
     goods = GoodsControler::getInstance(GoodsControlerPath);
@@ -33,7 +34,7 @@ void Server::serverMain()
         switch (cmd)
         {           
         case LoginIDCheck:*input >> tempID; *output; break;
-        case LoginPassWordCheck:;
+        case LoginPassWordCheck:
         case LogOut:;
         default:
             break;
@@ -64,8 +65,8 @@ void Server::save()
 
 Server* Server::getInstance(istream&in,ostream &out)
 {
-    if (instance == NULL) { instance = new Server(&in, &out); }
-    return nullptr;
+    if (instance == NULL) { instance = new Server(in, out); }
+    return instance;
 }
 
 Server::~Server()

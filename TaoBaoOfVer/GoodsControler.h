@@ -1,3 +1,4 @@
+#pragma once
 #include "Controler.h"
 #include "Good.h"
 #include <iostream>

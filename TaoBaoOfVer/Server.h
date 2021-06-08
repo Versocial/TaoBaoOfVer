@@ -22,12 +22,12 @@ private:
 	SellersControler* sellers;
 	GoodsControler* goods;
 	static Server* instance;
-	Server(istream* in, ostream* out);
+	Server(istream& in, ostream& out);
 	void serverMain();
 	void autoSavingThread();
 	void save();
 public:
 	int Main1();
-	Server* getInstance(istream&in,ostream& out);
+	static Server* getInstance(istream&in,ostream& out);
 	~Server();
 };

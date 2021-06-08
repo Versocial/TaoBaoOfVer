@@ -45,13 +45,13 @@ bool GoodsControler::addByCin()
 	return add(new Good(id));
 }
 
-void GoodsControler::toShowGoods(ostream&input)
+void GoodsControler::toShowGoods(ostream&output)
 {
-	input << "All Goods :\n";
+	output << "All Goods :\n";
 	Object* good = new Good();
 	for (idType id : getAllID()) {
 		getObjectById(id, good);
-		input<< ((Good*)good)->toShow()<<endl;
+		output<< ((Good*)good)->toShow()<<endl;
 	}
 	delete (Good*)good;
 }

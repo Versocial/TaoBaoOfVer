@@ -3,7 +3,12 @@
 #define EXIT_CMD_   ("@exit")
 #define ReadByInput(key)  ;input>>(key);input.clear();input.ignore(numeric_limits<streamsize>::max(), '\n'); 
 
- bool User::canBePassword(string code)
+bool User::passWordMatch(string passwd)
+{
+	return password==passwd;
+}
+
+bool User::canBePassword(string code)
 {
 	regex rx("^[0-9a-zA-Z]+$");
 	return code.length()>=6&&code.length()<=15&& regex_match(code, rx);
@@ -78,6 +83,11 @@ int User::outcome(moneyType outcome)
 moneyType User::Money()const
 {
 	return money;
+}
+
+string User::Name()
+{
+	return name;
 }
 
 string User::turnIntoString() const
