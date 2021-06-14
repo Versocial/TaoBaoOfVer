@@ -1,39 +1,28 @@
      #include "Controler.h"
-#define  _FILE_SAVING_PATH_(id)  ((path + "/" + to_string(id) + "."+objPostfix()).c_str())
-#define  _FILE_TEMP_PATH_(id)  ((path + "/" + "source_temp_" + to_string(id) + "_" + to_string(t)).c_str())
-//#define RENAME_FILE_ERR
 
-Object* Controler::_the_Object = NULL;
 
-int Controler::deleteObject(idType id)
+int Controler::deleteFile(idType id)
 {
-	unordered_map<idType, Object*>::iterator it = allObjects.find(id);
-	if (it != allObjects.end()) {
-		if (allObjects[id] != NULL)allObjects[id]->deleteByPtr();
-		allObjects.erase(it);
-		if (toBeSaved.find(it->second->id()) != toBeSaved.end())toBeSaved.erase(it->second->id());
-		objectNum--;
-		return (0 != remove(_FILE_SAVING_PATH_(id)));
-	}
-	return 3;
+	if (containsInMemory(id))removeFromMemory(id);
+	return  remove(_FILE_SAVING_PATH_(id));
 }
 
-int Controler::saveObject(idType id)
+int Controler::saveFile(idType id)
 {
 	bool flag[3] = { 0,0,0 };
-	if (allObjects.find(id) != allObjects.end()) {
-			toBeSaved.erase(id);
-			time_t t; time(&t);
-			if (ENOENT != _access(_FILE_SAVING_PATH_(id), 0)) {
-				if (0 != rename(_FILE_SAVING_PATH_(id), _FILE_TEMP_PATH_(id))) { flag[0] = 1; };
+	if (allObjects.count(id)) {
+			if(toBeSaved.count(id))toBeSaved.erase(id);
+			time_t t=time(NULL);
+			if (containsInFile(id)) {
+				if (0 != rename(_FILE_SAVING_PATH_(id), _FILE_TEMP_PATH_(id,t))) { flag[0] = 1; };
 			}
 			ofstream output(_FILE_SAVING_PATH_(id));
 			if (output.is_open()) {
-				output << (*allObjects.find(id)->second).turnIntoString();//**
+				output << allObjects[id]->turnIntoString();//**
 				output.close();
 			}
 			else { flag[1] = 1; }
-			if (0 != remove(_FILE_TEMP_PATH_(id))) { flag[2] = 1; }
+			if (0 != remove(_FILE_TEMP_PATH_(id,t))) { flag[2] = 1; }
 		}
 
 		return flag[0] + flag[1] * 2 + flag[2] * 4;
@@ -41,48 +30,20 @@ int Controler::saveObject(idType id)
 
 bool Controler::readFromFile(idType id)
 {
+	if (allObjects.count(id))return false;
 	ifstream input(_FILE_SAVING_PATH_(id));
 	if (input.is_open()) {
-		if (allObjects.find(id) == allObjects.end()) {
-			if (allObjects[id] != NULL)allObjects[id]->deleteByPtr();
-				add(input);
-		}
-		else {
-			allObjects[id] = theObject()->getByStream(input);
-			objectNum++;
-		}
+		allObjects[id] = theObject().getByStream(input);
 		input.close();
 		return true;
 	}
 	return false;
 }
 
-bool Controler::releaseIntoFile(idType id)
-{
-	unordered_map<idType, Object*>::iterator it = allObjects.find(id);
-	if (it != allObjects.end()) {
-		if (allObjects[id]!= NULL) {
-			if(toBeSaved.find(it->second->id()) != toBeSaved.end())saveObject(id);
-			allObjects.find(it->second->id())->second->deleteByPtr();
-		}
-		allObjects[id] = NULL;
-		if (toBeSaved.find(it->second->id()) != toBeSaved.end())toBeSaved.erase(it->second->id());
-	}
-	return it != allObjects.end();
-}
 
-void Controler::getObjectById(idType id, Object*& obj)
-{
-	//AvoidConfictFromSaving
-	Object* temp = obj;
-	obj=obj->getByPtr( allObjects.find(id)->second);
-	temp->deleteByPtr();
-	return;
-}
 
-set<idType> Controler::getAllID()
+set<idType>& Controler::AllIDInMemory()
 {
-	//AvoidConfictFromSaving
 	unordered_map<idType, Object*>::iterator it = allObjects.begin();
 	set<idType> IDset;
 	while (it != allObjects.end()) {
@@ -94,103 +55,71 @@ set<idType> Controler::getAllID()
 
 int Controler::ObjectNum()
 {
-	return objectNum;
+	return allObjects.size();
 }
 
-bool Controler::contains(idType id)
+bool Controler::containsInMemory(idType id)
 {
 	//AvoidConfictFromSaving
-	return (allObjects.find(id) != allObjects.end());
+	return allObjects.count(id);
+}
+bool Controler::containsInFile(idType id)
+{
+	return ENOENT != _access(_FILE_SAVING_PATH_(id), 0);
 }
 void Controler::askForSave(idType id)
 {
-	//AvoidConfictFromSaving
-	toBeSaved.insert(id);
+	if(!toBeSaved.count(id))	toBeSaved.insert(id);
 }
-bool Controler::add(istream& input)
+bool Controler::addToMemory(istream& input)
 {
-	return  add(theObject()->getByStream(input));	
-}
-
-Object* Controler::theObject()
-{
-	if (_the_Object == NULL)_the_Object = NewObject();
-	return _the_Object;
+	return  addToMemory(theObject().getByStream(input));	
 }
 
-bool  Controler::readOutAllObjects()
+
+bool  Controler::readOutAllFromFile()
 {
 	//AvoidConfictFromSaving
-	//if (autoSave != NULL)return false;
-	vector<string> files;
-	getFiles(path, files);
+	vector<string> files=getFiles(filePath);
 	for (string filePath : files) {
 		ifstream input(filePath);
 		if (input.is_open()) {
-			add(input);
+			addToMemory(input);
 			input.close();
 		}
-
 	}
 	return true;
 }
 
-bool Controler::readOutAllIDs()
+
+inline const char* Controler::_FILE_SAVING_PATH_(idType id)
 {
-	vector<string> files;
-	getFiles(path, files);
-	for (string filePath : files) {
-		//1.获取不带路径的文件名
-		string::size_type iPos = filePath.find_last_of('\\') + 1;
-		string filename = filePath.substr(iPos, filePath.length() - iPos);
-		//2.获取不带后缀的文件名
-		string name = filename.substr(0, filename.rfind("."));
-		idType id;
-		stringstream nameString(name); nameString >> id;
-		allObjects.insert(make_pair(id, (Object*)NULL));
-	}
-	return true;
+	 return ((filePath + "/" + to_string(id) + "." + objPostfix()).c_str()); 
 }
 
+inline const char* Controler::_FILE_TEMP_PATH_(idType id,time_t t)
+{
+	return (filePath + "/" + "source_temp_" + to_string(id) + "_" + to_string(t)).c_str();
+}
 
-bool Controler::rem(idType id)
+bool Controler::removeFromMemory(idType id)
 {
 	//AvoidConfictFromSaving
-	unordered_map<idType,Object*>::iterator it = allObjects.find(id);
-	if (it != allObjects.end()) {
-		allObjects.find(it->second->id())->second->deleteByPtr();
-		allObjects.erase(it);
-		if (toBeSaved.find(it->second->id()) != toBeSaved.end())toBeSaved.erase(it->second->id());
-		objectNum--;
-	}
-	return it != allObjects.end();
+	bool flag = allObjects.count(id);
+	if (allObjects.count(id)) { allObjects[id]->deleteByPtr(); allObjects.erase(id); }
+	if (toBeSaved.count(id))toBeSaved.erase(id);
+	return flag;
 }
-//
-//void Controler::saveThread()
-//{
-//	while (1) {
-//		if (toStopSave)break;
-//		isAutoSaveSleeping = true;
-//		this_thread::sleep_for(chrono::minutes(1));
-//		isAutoSaveSleeping = false;
-//		if (toBeSaved.empty()&&toBeRemoved.empty())continue;
-//		if (toStopSave)break;
-//		else {
-//			save();
-//		}
-//	}
-//}
 
 Controler::Controler(string path)
 {
 	maxId = 0;
-	objectNum = 0;
-	this->path = path;
+	allObjects.clear();
 	toBeSaved.clear();
+	this->filePath = path;
 }
 
 Controler:: ~Controler() {
-	_the_Object->deleteByPtr();
 	save();
 	unordered_map <idType, Object*>::iterator it = allObjects.begin();
 	while (it != allObjects.end()) {
@@ -201,12 +130,6 @@ Controler:: ~Controler() {
 
 
 
-Object* Controler::NewObject()
-{
-	return nullptr;
-}
-
-
  int Controler::save()
 {
 	 //AvoidConfictFromSaving
@@ -215,28 +138,29 @@ Object* Controler::NewObject()
 	while(it!=toBeSaved.end()) {
 		idType id = *it;
 		it=toBeSaved.erase(it);
-		time_t t; time(&t);
+		time_t t= time(NULL);
 		if (ENOENT != _access(_FILE_SAVING_PATH_(id), 0)) {
-			if (0 != rename(_FILE_SAVING_PATH_(id), _FILE_TEMP_PATH_(id))) { flag[0] = 1; };
+			if (0 != rename(_FILE_SAVING_PATH_(id), _FILE_TEMP_PATH_(id,t))) { flag[0] = 1; };
 		}
 		ofstream output(_FILE_SAVING_PATH_(id));
 		if (output.is_open()) {
-			output << (*allObjects.find(id)->second).turnIntoString();//**
+			output << allObjects[id]->turnIntoString();
 			output.close();
 		}
 		else { flag[1] = 1; }
-		if (0 != remove(_FILE_TEMP_PATH_(id))) { flag[2] = 1; }
+		if (0 != remove(_FILE_TEMP_PATH_(id,t))) { flag[2] = 1; }
 	}
 	
-	return flag[0] + flag[1] * 2 + flag[2] * 4;// +flag[3] * 8;
+	return flag[0] + flag[1] * 2 + flag[2] * 4;
 }
 
 
-void Controler::getFiles(string path, vector<string>& files)
+ vector<string>& Controler::getFiles(string path)
 {
 	intptr_t hFile = 0;//文件句柄  
 	struct _finddata_t fileinfo;//文件信息  
 	string p;
+	vector<string>files;
 	if ((hFile = _findfirst(p.assign(path).append("\\*."+ objPostfix()).c_str(), &fileinfo)) != -1)
 		// "\\*"是指读取文件夹下的所有类型的文件，若想读取特定类型的文件，以png为例，则用“\\*.png”
 	{
@@ -246,6 +170,7 @@ void Controler::getFiles(string path, vector<string>& files)
 		} while (_findnext(hFile, &fileinfo) == 0);
 		_findclose(hFile);
 	}
+	return files;
 }
 
 idType Controler::suggestID()
@@ -253,20 +178,19 @@ idType Controler::suggestID()
 	idType id= maxId+1;
 	idType top = maxId;
 	while (id != top) {
-		if (allObjects.find(id) == allObjects.end())return id;
+		if (!allObjects.count(id)&&!containsInFile(id))return id;
 		maxId++; id++;
 	}
-	return 0;
+	return _UNVALID_ID;
 }
 
-bool Controler::add(Object* ptr)
+bool Controler::addToMemory(Object* ptr)
 {
 	//AvoidConfictFromSaving
-	if (allObjects.find(ptr->id()) != allObjects.end())return false;
+	if(allObjects.count(ptr->id()))return false;
 	bool ok = allObjects.insert(make_pair(ptr->id(), ptr)).second;
 	if (ok) {
-		toBeSaved.insert(ptr->id());;
-		objectNum++;
+		toBeSaved.insert(ptr->id());
 		if (ptr->id() > maxId)maxId = ptr->id();
 	}
 	return true;

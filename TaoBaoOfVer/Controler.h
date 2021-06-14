@@ -10,44 +10,51 @@
 
 using namespace::std;
 using namespace::stdext;
+#define _UNVALID_ID 0
 
-//#define AvoidConfictFromSaving  ; lock_guard<mutex> temp_lock_guard(Controler::usingLocker);
-//#define 
 class Controler
 {
 private:
-	static Object* _the_Object;
-	int objectNum;
-	string path;
-	unordered_map <idType, Object*> allObjects;
-	bool rem(idType id);
-	set<idType> toBeSaved;
-	 void getFiles(string path, vector<string>& files);
-	bool add(istream& input);
-	Object* theObject();
-protected:
-
-	virtual string objPostfix()=0;
+	//filePath
+	string filePath;
+	inline const char* _FILE_SAVING_PATH_(idType id);
+	inline const char* _FILE_TEMP_PATH_(idType id, time_t t);
+	vector<string>& getFiles(string path);
+	//Memory
+	unordered_map <idType, Object*> allObjects;//core Memory
+	bool addToMemory(istream& input);//add to Memory
+	//Auto Save
+	set<idType> toBeSaved;//need auto save
+	//Id suggest
 	idType maxId;
+	
+protected:
+	//filePath
+	virtual string objPostfix() = 0;
+	//controling Type 
+	virtual Object& theObject()=0;// controling Type;
+	//Id suggest
 	idType suggestID();
-	bool add(Object* ptr);
+		//..
 	Controler(string path);
 	~Controler();
-	virtual Object* NewObject();
-public:
-	void askForSave(idType id);
-	int deleteObject(idType id);
-	int saveObject(idType id);
-	bool readFromFile(idType id);
-	bool releaseIntoFile(idType id);
-	void getObjectById(idType id,Object*& obj);
-	set<idType> getAllID();
-	int ObjectNum();
-	bool contains(idType id);
-	bool readOutAllObjects();
-	bool readOutAllIDs();
-	int save();
-	/*Object* getControlOf(idType id);
-	void releaseControle();
-	*/
+
+public:;
+	 //File
+	  int deleteFile(idType id);// delete File
+	  int saveFile(idType id);// save File
+	  bool readFromFile(idType id);// read File
+	  bool readOutAllFromFile();//read all File
+	  bool containsInFile(idType id);// if File has id
+	 //Memory
+	  bool removeFromMemory(idType id);//remove from Memory
+	 bool addToMemory(Object* ptr);// add toMemory (just Memory not file, but ask for save)
+	 bool containsInMemory(idType id);// if Memory has id 
+	 set<idType>& AllIDInMemory();//all IDs in Memory
+	 //Auto Save
+	 void askForSave(idType id);//remember to saveing
+	 int save();
+	 //get test
+	int ObjectNum();//size of all Objects
+	void releaseFromMemoryIntoFile(idType id);
 };

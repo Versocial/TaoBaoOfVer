@@ -1,5 +1,10 @@
 #include "UsersControler.h"
 ConsumersControler* ConsumersControler::instanceC = NULL;
+Object& ConsumersControler::theObject()
+{
+	static Consumer consumer;
+	return consumer;
+}
 string ConsumersControler::objPostfix()
 {
 	return "TBconsumer";
@@ -12,10 +17,7 @@ ConsumersControler::~ConsumersControler()
 {
 	instanceC = NULL;
 }
-Object* ConsumersControler::NewObject()
-{
-	return new Consumer();
-}
+
 bool ConsumersControler::addCountByCin()
 {
 	idType id = suggestID();

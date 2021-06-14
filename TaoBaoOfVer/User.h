@@ -35,7 +35,6 @@ public:
 	moneyType Money()const;
 	string Name();
 
-	virtual Object* getByPtr(Object* obj) = 0;
 	virtual Object* getByStream(istream&)=0;
 	virtual string turnIntoString()const;
 	virtual bool deleteByPtr()=0;
@@ -52,7 +51,6 @@ public:
 	Consumer();
 	userType type() const;
 
-	virtual Object* getByPtr(Object* obj) ;
 	virtual Object* getByStream(istream&);
 	virtual string turnIntoString()const ;
 	virtual bool deleteByPtr();
@@ -72,7 +70,6 @@ public:
 	bool addGood(idType id);
 	bool remGood(idType id);
 
-	virtual Object* getByPtr(Object* obj) ;
 	virtual Object* getByStream(istream&);
 	virtual string turnIntoString()const;
 	virtual bool deleteByPtr();

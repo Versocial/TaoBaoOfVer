@@ -22,10 +22,6 @@ userType Consumer::type()const
 	return Type_Consumer;
 }
 
-Object* Consumer::getByPtr(Object* obj)
-{
-	return new Consumer(*(Consumer*)obj);
-}
 
 Object* Consumer::getByStream(istream& input)
 {

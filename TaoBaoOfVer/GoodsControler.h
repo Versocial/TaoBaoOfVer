@@ -7,10 +7,10 @@ using namespace::std;
 class GoodsControler:public Controler
 {
 private:
+	virtual Object& theObject();
 	virtual string objPostfix();
 	static GoodsControler* instanceG;
 	GoodsControler(string path);
-	virtual Object* NewObject();
 public:
 	static GoodsControler* getInstance(string path);
 	~GoodsControler();

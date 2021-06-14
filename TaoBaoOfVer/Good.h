@@ -30,7 +30,6 @@ public:
 	bool changeName(string name);
 	idType getSeller()const;
 
-	virtual Object* getByPtr(Object* obj);
 	virtual Object* getByStream(istream&);
 	virtual string turnIntoString()const;
 	virtual bool deleteByPtr();

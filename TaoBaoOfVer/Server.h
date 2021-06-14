@@ -27,7 +27,7 @@ private:
 	void autoSavingThread();
 	void save();
 public:
-	int Main1();
+	//int Main1();
 	static Server* getInstance(istream&in,ostream& out);
 	~Server();
 };

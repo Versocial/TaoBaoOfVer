@@ -14,6 +14,12 @@ bool SellersControler::addCountByCin()
 	return add(new Seller(id));
 }
 
+Object& SellersControler::theObject()
+{
+	static Seller seller;
+	return seller;
+}
+
 string SellersControler::objPostfix()
 {
 	return "TBseller";
@@ -21,12 +27,8 @@ string SellersControler::objPostfix()
 
 SellersControler::SellersControler(string path) :Controler( path)
 {
-
-}
-
-Object* SellersControler::NewObject()
-{
-	return new Seller();
+	if (ObjectNum() == 0)maxId = FIRST_CONSUMER_NUMBER;
+	_the_Object = new Seller();
 }
 
 SellersControler* SellersControler::getInstance(string path)

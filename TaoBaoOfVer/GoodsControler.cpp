@@ -2,13 +2,17 @@
 
 
 GoodsControler* GoodsControler::instanceG = NULL;
+Object& GoodsControler::theObject()
+{
+	static Good good;
+	return good;
+}
 string GoodsControler::objPostfix()
 {
 	return "TBgood";
 }
 GoodsControler::GoodsControler(string path) :Controler(path)
 {
-
 }
 
 GoodsControler::~GoodsControler()
@@ -16,10 +20,6 @@ GoodsControler::~GoodsControler()
 	instanceG = NULL;
 }
 
-Object* GoodsControler::NewObject()
-{
-	return new Good();
-}
 //
 //Good GoodsControler::getById(idType id)
 //{
@@ -32,7 +32,7 @@ Object* GoodsControler::NewObject()
 
 GoodsControler* GoodsControler::getInstance(string path)
 {
-	if (instanceG == NULL) { instanceG = new GoodsControler(path); instanceG->readOutAllObjects();  return instanceG; }
+	if (instanceG == NULL) { instanceG = new GoodsControler(path); instanceG->readOutAllFromFile();  return instanceG; }
 	else return NULL;
 }
 
@@ -42,14 +42,14 @@ bool GoodsControler::addByCin()
 	if (id == 0) {
 		cout << "[ERORR ]: too many goods ! no id for another good ! Please contact administrator.\n"; return false;
 	}
-	return add(new Good(id));
+	return addToMemory(new Good(id));
 }
 
 void GoodsControler::toShowGoods(ostream&output)
 {
 	output << "All Goods :\n";
 	Object* good = new Good();
-	for (idType id : getAllID()) {
+	for (idType id : AllIDInMemory()) {
 		getObjectById(id, good);
 		output<< ((Good*)good)->toShow()<<endl;
 	}
