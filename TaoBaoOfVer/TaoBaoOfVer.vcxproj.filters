@@ -53,9 +53,6 @@
     <ClCompile Include="Seller.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="UsersControler.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="GoodsControler.cpp">
       <Filter>源文件</Filter>
     </ClCompile>

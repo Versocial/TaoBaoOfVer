@@ -163,7 +163,6 @@
     <ClCompile Include="SellersControler.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="User.cpp" />
-    <ClCompile Include="UsersControler.cpp" />
     <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>

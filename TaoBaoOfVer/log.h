@@ -11,12 +11,20 @@
 //log.c
 class Logger {
 private:
-	FILE* _Log_File;
-	time_t _Log_rawTime;
-	char _Log_TimeBuffer[50];
+	static int fileMod ;
+	static int stdoutMod ;
+	static FILE* _Log_File ;
+	static time_t _Log_rawTime;
+	static char _Log_TimeBuffer[50];
+	virtual void getInstance() = 0;
 public:
-	Logger(const char* path);
-	void log(const char* strFormat, ...);
+	static void setLogPath(const char* path);
+	static void log_1(const char* strFormat, ...);
+	static void log_2(const char* strFormat, ...);
+	static void setLogMod(int fileMod_, int stdoutMod_);
+	static void closeLog();
+	static void logMem_2(void* mem, int len);
+
 };
 
 

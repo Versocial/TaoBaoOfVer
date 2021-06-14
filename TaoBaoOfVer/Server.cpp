@@ -15,13 +15,12 @@ enum _ClientType {
 Server* Server::instance = NULL;
 
 Server::Server(istream& in,ostream& out) {
-  //  this->input = in; this->output = out;
     this->input = &in; this->output = &out;
     consumers = ConsumersControler::getInstance(ConsumersControlerPath);
     sellers = SellersControler::getInstance(SellersControlerPath);
     goods = GoodsControler::getInstance(GoodsControlerPath);
     autoSave = new thread(&Server::autoSavingThread, this);
-    logger = new Logger(LogPath);
+    Logger::setLogPath(LogPath);
 }
 
 void Server::serverMain()
@@ -48,9 +47,9 @@ void Server::autoSavingThread()
 {
     while (1) {
         this_thread::sleep_for(chrono::minutes(1));
-        logger->log("waiting for save.");
+        Logger::log_2("waiting for save.");
         save();
-        logger->log("saved");
+        Logger::log_1("saved");
     }
 }
 
