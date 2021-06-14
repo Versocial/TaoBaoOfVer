@@ -1,9 +1,8 @@
 #include "User.h"
 #include <regex>
 #define EXIT_CMD_   ("@exit")
-#define ReadByInput(key)  ;input>>(key);input.clear();input.ignore(numeric_limits<streamsize>::max(), '\n'); 
 
-bool User::passWordMatch(string passwd)
+bool User::matchWithPassWord(string passwd)const
 {
 	return password==passwd;
 }
@@ -26,19 +25,19 @@ bool User::canBePassword(string code)
 	 output << "Your count " << id << " initializing now !" << " And you can enter \"" << EXIT_CMD_ << "\" to exit if you want.\n";
 	 ID = id;
 	 output <<"["<<id<<"]"<< "Please enter your password, which must be : digit or label , 6 to15 characters.\n";
-	 ReadByInput(password);
+	 input>>(password);  input.clear(); input.ignore(numeric_limits<streamsize>::max(), '\n');
 	 while (!canBePassword(password)) {
 		 if (password == EXIT_CMD_) {cout << "Exit count initializing.\n"; return  false; }
 		 output << "[" << id << "]" << "Illegal password Format ! Please type in again your password, which must be : digit or label , 6 to15 characters.\n";
-		 ReadByInput(password);
+		 input>>(password); input.clear(); input.ignore(numeric_limits<streamsize>::max(), '\n');
 	 }
 	 output << "[" << id << "]" << "Your password is " << password<<endl;
 	 output << "[" << id << "]" << "Please enter your name, which must be : digit or label , 2 to15 characters.\n";
-	 ReadByInput(name);
+	 input>>(name); input.clear(); input.ignore(numeric_limits<streamsize>::max(), '\n');
 	 while (!canBeName(name)) {
 		 if (name == EXIT_CMD_) {cout << "Exit count initializing.\n"; return  false; }
 		 output << "Illegal Name Format ! Please type in again your password, which must be : digit or label , 6 to15 characters.\n";
-		 ReadByInput(name);
+		 input>>(name); input.clear(); input.ignore(numeric_limits<streamsize>::max(), '\n');
 	 }
 	 output << "[" << id << "]" << "Your name is " << name << endl;
 	 output << "[" << name << "]" << "You have your count now ! Enjoy your time !\n";
@@ -46,7 +45,7 @@ bool User::canBePassword(string code)
  }
 
 
-bool User::changeCode(string code)
+bool User::changePassWord(string code)
 {
 	if (canBePassword(code)) {
 		this->password = code;
@@ -85,7 +84,7 @@ moneyType User::Money()const
 	return money;
 }
 
-string User::Name()
+string User::Name()const
 {
 	return name;
 }
@@ -99,18 +98,8 @@ User::User():Object()
 {
 }
 
-User::User(string str):Object()
-{
-	istringstream input(str);
-	input >> ID >> password >> money >> name;
-}
 
 User::User(istream& input):Object()
 {
 	input >> ID >> password >> money >> name;
-}
-
-User::User(const idType id, const string& code,const string& name):Object(id) {
-	this->password = code;
-	this->name = name;
 }

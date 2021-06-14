@@ -13,14 +13,6 @@
 using namespace::std;
 using namespace::stdext;
 
-//class UsersControler:public Controler
-//{
-//private:
-//protected:
-//	UsersControler(string path) ;
-//	~UsersControler();
-//public:
-//};
 
 class ConsumersControler :
 	public Controler
@@ -32,7 +24,7 @@ private:
 	static ConsumersControler* instanceC;
 public:
 	~ConsumersControler();
-	bool addCountByCin();
+	bool addCountByCin();//just for test
 	static  ConsumersControler* getInstance(string path);
 	//void LogIn(idType id);
 	//void LogOut(idType id);
@@ -49,7 +41,7 @@ private:
 	static SellersControler* instanceS;
 public:
 	~SellersControler();
-	bool addCountByCin();
+	bool addCountByCin();//just for test
 	static  SellersControler* getInstance(string path);
 };
 

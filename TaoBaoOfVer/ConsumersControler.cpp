@@ -24,13 +24,12 @@ bool ConsumersControler::addCountByCin()
 	if (id == 0) {
 		cout << "[ERORR ]: too many counts ! no id for you to join ! Please contact administrator.\n"; return false;
 	}cout << ">> Consumer initailizing :\n";
-	 return add(new Consumer(id));
+	 return addToMemory(new Consumer(id));
 }
 ConsumersControler* ConsumersControler::getInstance(string path)
 {
 	if (instanceC == NULL) {
 		instanceC = new ConsumersControler(path);
-		instanceC->readOutAllIDs();
 		return instanceC;
 	}
 	else return NULL;

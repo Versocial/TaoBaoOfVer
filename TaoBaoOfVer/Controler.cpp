@@ -184,6 +184,12 @@ idType Controler::suggestID()
 	return _UNVALID_ID;
 }
 
+Object* Controler::getObject(idType id)
+{
+	if (!allObjects.count(id))return NULL;
+	return allObjects[id];
+}
+
 bool Controler::addToMemory(Object* ptr)
 {
 	//AvoidConfictFromSaving

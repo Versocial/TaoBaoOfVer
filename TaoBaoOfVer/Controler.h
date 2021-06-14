@@ -25,8 +25,7 @@ private:
 	bool addToMemory(istream& input);//add to Memory
 	//Auto Save
 	set<idType> toBeSaved;//need auto save
-	//Id suggest
-	idType maxId;
+	
 	
 protected:
 	//filePath
@@ -34,8 +33,11 @@ protected:
 	//controling Type 
 	virtual Object& theObject()=0;// controling Type;
 	//Id suggest
+	idType maxId;
 	idType suggestID();
-		//..
+	//getObj
+	Object* getObject(idType id);
+	//..
 	Controler(string path);
 	~Controler();
 

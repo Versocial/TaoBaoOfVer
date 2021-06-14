@@ -11,24 +11,27 @@ private:
 	idType sellerID;
 	Number sellingNum;
 	unsigned long long  soldNum;
-protected:
-	static bool canBeName(string name);
 	priceType originalPrice;
-	virtual priceType getPrice()const;
+	double discount;
+protected:
 	Good(istream&);
+	static bool canBeName(string name);
+	virtual priceType getPrice()const;
+	void  setOriginalPrice(priceType price);
 	void initGood(idType id, istream& input, ostream& output);
 public:
-	Good(idType id);
 	Good();
-	unsigned long long SoldNum();
-	Number SellingNum();
+	Good(idType id);
+	unsigned long long SoldNum()const;
+	Number SellingNum()const;
 	bool sell(Number selling);
 	bool increaseSelling(Number num);
 	bool decreaseSelling(Number num);
 	bool setSelling(Number num);
 	priceType getOriginalPrice()const;
 	bool changeName(string name);
-	idType getSeller()const;
+	idType getSellerID()const;
+	bool setDiscount(double discount);
 
 	virtual Object* getByStream(istream&);
 	virtual string turnIntoString()const;

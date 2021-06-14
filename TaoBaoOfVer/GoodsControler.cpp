@@ -20,15 +20,6 @@ GoodsControler::~GoodsControler()
 	instanceG = NULL;
 }
 
-//
-//Good GoodsControler::getById(idType id)
-//{
-//	if (!contains(id))return NULL;
-//	Good* goodPtr;// = (Good*)getPtrById(id);
-//	AvoidConfictFromSaving
-//		return *(Good*)goodPtr;
-//}
-
 
 GoodsControler* GoodsControler::getInstance(string path)
 {
@@ -36,7 +27,7 @@ GoodsControler* GoodsControler::getInstance(string path)
 	else return NULL;
 }
 
-bool GoodsControler::addByCin()
+bool GoodsControler::addOneGoodByCin()
 {
 	idType id = suggestID();
 	if (id == 0) {
@@ -48,10 +39,7 @@ bool GoodsControler::addByCin()
 void GoodsControler::toShowGoods(ostream&output)
 {
 	output << "All Goods :\n";
-	Object* good = new Good();
 	for (idType id : AllIDInMemory()) {
-		getObjectById(id, good);
-		output<< ((Good*)good)->toShow()<<endl;
+		output<< ((Good*)getObject(id))->toShow()<<endl;
 	}
-	delete (Good*)good;
 }

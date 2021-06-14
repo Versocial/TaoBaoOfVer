@@ -5,9 +5,6 @@ Consumer::Consumer(idType id) :User()
 	initUser(id,cin,cout);
 }
 
-Consumer::Consumer(string info):User(info)
-{
-}
 
 Consumer::Consumer(istream& input):User(input)
 {
@@ -37,6 +34,6 @@ string Consumer::turnIntoString() const
 
 bool Consumer::deleteByPtr()
 {
-	if(this!=NULL)delete this;
+	if (this != NULL) { delete this; return true; }
 	return true;
 }

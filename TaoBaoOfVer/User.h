@@ -19,21 +19,19 @@ protected:
 	string password;
 	moneyType money;
 	User();
-	User(string str);
-	User(istream& input);
-	User(const idType id, const string& code, const string& name);//useless
+	User(istream& input);// for server
 	bool initUser(idType id,istream &input,ostream& output);
 public:
-	bool passWordMatch(string passwd);
 	static bool canBePassword(string code);
 	static bool canBeName(string name);
+	bool matchWithPassWord(string passwd)const;
 	virtual userType  type()const = 0 ;
-	bool changeCode(string code);// { if ()this->code = code; }
+	bool changePassWord(string code);
 	bool changeName(string name);
 	int income(moneyType);
 	int outcome(moneyType);
 	moneyType Money()const;
-	string Name();
+	string Name()const;
 
 	virtual Object* getByStream(istream&)=0;
 	virtual string turnIntoString()const;
@@ -44,11 +42,10 @@ class Consumer :
 	public User
 {
 private:
-	Consumer(string);
-	Consumer(istream&);
+	Consumer(istream&);// for server
 public:
-	Consumer(idType id);
 	Consumer();
+	Consumer(idType id);// for client
 	userType type() const;
 
 	virtual Object* getByStream(istream&);
@@ -61,14 +58,13 @@ class Seller :
 {
 private:
 	set<idType> tradeGoods;
-	Seller(string);
 	Seller(istream&);
 public:
-	Seller(idType id);
 	Seller();
+	Seller(idType id);
 	userType   type()const;
 	bool addGood(idType id);
-	bool remGood(idType id);
+	bool deleteGood(idType id);
 
 	virtual Object* getByStream(istream&);
 	virtual string turnIntoString()const;

@@ -14,7 +14,7 @@ private:
 public:
 	static GoodsControler* getInstance(string path);
 	~GoodsControler();
-	bool addByCin();
+	bool addOneGoodByCin();// just for test
 	void toShowGoods(ostream& input);
 };
 
