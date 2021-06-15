@@ -7,6 +7,8 @@
 int Logger::fileMod = 0;
 int Logger::stdoutMod = 0;
 FILE* Logger::_Log_File = NULL;
+ time_t Logger::_Log_rawTime;
+ char Logger::_Log_TimeBuffer[50];
 
     void Logger::setLogPath(const char* path) {
     char tempPath[100]; memcpy(tempPath, path, 100);

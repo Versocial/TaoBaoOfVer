@@ -46,8 +46,9 @@ void Server::serverMain()
 void Server::autoSavingThread()
 {
     while (1) {
-        this_thread::sleep_for(chrono::minutes(1));
         Logger::log_2("waiting for save.");
+        this_thread::sleep_for(chrono::minutes(1));
+        Logger::log_2("begin to save.");
         save();
         Logger::log_1("saved");
     }

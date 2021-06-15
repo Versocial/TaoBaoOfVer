@@ -17,8 +17,6 @@ class Controler
 private:
 	//filePath
 	string filePath;
-	inline const char* _FILE_SAVING_PATH_(idType id);
-	inline const char* _FILE_TEMP_PATH_(idType id, time_t t);
 	vector<string>& getFiles(string path);
 	//Memory
 	unordered_map <idType, Object*> allObjects;//core Memory
@@ -35,8 +33,6 @@ protected:
 	//Id suggest
 	idType maxId;
 	idType suggestID();
-	//getObj
-	Object* getObject(idType id);
 	//..
 	Controler(string path);
 	~Controler();
@@ -49,10 +45,11 @@ public:;
 	  bool readOutAllFromFile();//read all File
 	  bool containsInFile(idType id);// if File has id
 	 //Memory
+	  Object* getObjectInMemory(idType id);
 	  bool removeFromMemory(idType id);//remove from Memory
 	 bool addToMemory(Object* ptr);// add toMemory (just Memory not file, but ask for save)
 	 bool containsInMemory(idType id);// if Memory has id 
-	 set<idType>& AllIDInMemory();//all IDs in Memory
+	 set<idType> AllIDInMemory();//all IDs in Memory
 	 //Auto Save
 	 void askForSave(idType id);//remember to saveing
 	 int save();

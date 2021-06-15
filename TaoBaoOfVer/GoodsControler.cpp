@@ -40,6 +40,6 @@ void GoodsControler::toShowGoods(ostream&output)
 {
 	output << "All Goods :\n";
 	for (idType id : AllIDInMemory()) {
-		output<< ((Good*)getObject(id))->toShow()<<endl;
+		output<< ((Good*)getObjectInMemory(id))->toShow()<<endl;
 	}
 }

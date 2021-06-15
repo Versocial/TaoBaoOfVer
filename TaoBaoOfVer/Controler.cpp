@@ -1,5 +1,6 @@
      #include "Controler.h"
-
+#define _FILE_SAVING_PATH_(id)    ((filePath + "/" + to_string(id) + "." + objPostfix()).c_str())
+#define _FILE_TEMP_PATH_(id,t)  ((filePath + "/" + "source_temp_" + to_string(id) + "_" + to_string(t)).c_str())
 
 int Controler::deleteFile(idType id)
 {
@@ -42,7 +43,7 @@ bool Controler::readFromFile(idType id)
 
 
 
-set<idType>& Controler::AllIDInMemory()
+set<idType> Controler::AllIDInMemory()
 {
 	unordered_map<idType, Object*>::iterator it = allObjects.begin();
 	set<idType> IDset;
@@ -58,6 +59,12 @@ int Controler::ObjectNum()
 	return allObjects.size();
 }
 
+void Controler::releaseFromMemoryIntoFile(idType id)
+{
+	saveFile(id);
+	removeFromMemory(id);
+}
+
 bool Controler::containsInMemory(idType id)
 {
 	//AvoidConfictFromSaving
@@ -65,7 +72,7 @@ bool Controler::containsInMemory(idType id)
 }
 bool Controler::containsInFile(idType id)
 {
-	return ENOENT != _access(_FILE_SAVING_PATH_(id), 0);
+	return -1 != _access(_FILE_SAVING_PATH_(id), 0);
 }
 void Controler::askForSave(idType id)
 {
@@ -92,15 +99,6 @@ bool  Controler::readOutAllFromFile()
 }
 
 
-inline const char* Controler::_FILE_SAVING_PATH_(idType id)
-{
-	 return ((filePath + "/" + to_string(id) + "." + objPostfix()).c_str()); 
-}
-
-inline const char* Controler::_FILE_TEMP_PATH_(idType id,time_t t)
-{
-	return (filePath + "/" + "source_temp_" + to_string(id) + "_" + to_string(t)).c_str();
-}
 
 bool Controler::removeFromMemory(idType id)
 {
@@ -184,7 +182,7 @@ idType Controler::suggestID()
 	return _UNVALID_ID;
 }
 
-Object* Controler::getObject(idType id)
+Object* Controler::getObjectInMemory(idType id)
 {
 	if (!allObjects.count(id))return NULL;
 	return allObjects[id];
