@@ -96,6 +96,7 @@ string User::turnIntoString() const
 
 User::User():Object()
 {
+
 }
 
 

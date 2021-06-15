@@ -3,11 +3,26 @@
 #include "UsersControler.h"
 #include "Good.h"
 #include "GoodsControler.h"
-#include <iostream>
+#include "Command.h"
+#include "Server.h"
 
 using namespace::std;
 
 class Client
 {
+private:
+	Command status;
+	int step ;
+	CMD cmd;
+	idType userID;
+	ClientType userType ;
+	User* user;
+	istream* input;
+	ostream* output;
+public:
+	Client(istream &in,ostream& out);
+	void ClientMain();
+
+
 };
 

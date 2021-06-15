@@ -1,22 +1,51 @@
 #include "Client.h"
-#include "Server.h"
-#include<iostream>
-#define ConsumersControlerPath ("../res/Consumer") 
-#define GoodsControlerPath ("../res/Good") 
-using namespace::std;
+
+#define send(x) ;*output<<" "<<(x)<<" ";
+#define recv(x) ;*input>>(x);
+#define CUser ((Consumer*)User)
+#define SUser ((Seller*)User)
 
 int main() {
-	//ConsumersControler* C_Controler=ConsumersControler::getInstance(ConsumersControlerPath);
-	//GoodsControler* G_Controler = GoodsControler::getInstance(GoodsControlerPath);
-	//G_Controler->toShowGoods(cout);
-	//G_Controler->addByCin();
-	////G_Controler->toShowGoods(cout);
-	//delete C_Controler;
-	//delete G_Controler;
-
+	
 	Server* server = Server::getInstance(cin,cout);
-	server->Main1();
-
+    Client* client = new Client();
+    client->ClientMain();
+    delete(client);
+    delete(server);
 
 }
-/*0 10001 vvv 0  evpeople*/
+
+Client::Client(istream& in, ostream& out) {
+	userType = Visitor;
+	status = Exit;
+	step = 1;
+    input = &in;
+    output = &out;
+}
+
+void Client::ClientMain()
+{
+
+    while (1) {
+        recv(cmd);
+        switch (cmd)
+        {
+        case Exit: step = 1; if (userType == HalfSeller || userType == HalfConsumer)userType = Visitor; break;
+            break;
+        case ShowGoods:/**/cmd = status; break;
+        case LogIn:
+            break;
+        case LogOut:
+            break;
+        case SignIn:manageSignIn();
+            break;
+        case End:
+            // server->save(); 
+            return;
+            break;
+        default:
+            break;
+        }
+        status = (Command)cmd;
+    }
+}

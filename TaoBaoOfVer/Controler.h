@@ -10,7 +10,7 @@
 
 using namespace::std;
 using namespace::stdext;
-#define _UNVALID_ID 0
+#define _INVALID_ID 0
 
 class Controler
 {
@@ -32,7 +32,6 @@ protected:
 	virtual Object& theObject()=0;// controling Type;
 	//Id suggest
 	idType maxId;
-	idType suggestID();
 	//..
 	Controler(string path);
 	~Controler();
@@ -56,4 +55,6 @@ public:;
 	 //get test
 	int ObjectNum();//size of all Objects
 	void releaseFromMemoryIntoFile(idType id);
+	//suggestId
+	idType suggestID();
 };
