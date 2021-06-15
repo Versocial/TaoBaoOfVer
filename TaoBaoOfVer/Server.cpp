@@ -8,10 +8,13 @@ Server::Server(istream& in,ostream& out) {
     consumers = ConsumersControler::getInstance(ConsumersControlerPath);
     sellers = SellersControler::getInstance(SellersControlerPath);
     goods = GoodsControler::getInstance(GoodsControlerPath);
-    autoSave = new thread(&Server::autoSavingThread, this);
+    //autoSave = new thread(&Server::autoSavingThread, this);
     Logger::setLogPath(LogPath);
-    new Dialog(this,& in, &out);
+    Dialog* dialog= new Dialog(this,& in, &out);
+
+
 }
+
 
 void Server::serverMain()
 {

@@ -179,7 +179,7 @@ idType Controler::suggestID()
 		if (!allObjects.count(id)&&!containsInFile(id))return id;
 		maxId++; id++;
 	}
-	return _UNVALID_ID;
+	return _INVALID_ID;
 }
 
 Object* Controler::getObjectInMemory(idType id)

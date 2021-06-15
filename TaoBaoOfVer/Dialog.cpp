@@ -1,7 +1,7 @@
 #include "Server.h"
 
-#define send(x) ;*output<<" "<<(x)<<" ";
-#define recv(x) ;*input>>(x);
+#define send(x) {;*output<<" "<<(x)<<" ";}
+#define recv(x) {;*input>>(x);}
 #define CUser ((Consumer*)User)
 #define SUser ((Seller*)User)
 #define sellers (server->sellers)
@@ -17,13 +17,24 @@ Dialog::Dialog(Server*_server, istream* in, ostream* out) {
 	server = _server;
     input = in;
     output = out;
-    new thread(&Dialogmanage);
+    new thread(&Dialog:: Dialogmanage,this);
+}
+
+void Dialog::run()
+{
+    cout << "\nco";
+    std::chrono::milliseconds dura(4000);
+    std::this_thread::sleep_for(dura);
+    cout << "ol\n";
+    Run.notify_one();
 }
 
 void Dialog::Dialogmanage()
 {
     while (1) {
-        recv(cmd);
+        std::unique_lock <std::mutex> lck(lock); 
+        while (EOF==input->peek()) { new thread(&Dialog::run,this);  Run.wait(lck); }
+            recv(cmd); cout << "ser:" << cmd << endl;
      //   usingLocker.lock();
         switch (cmd)
         {
@@ -83,13 +94,14 @@ void Dialog::manageSignIn()
 
 void Dialog::manageLogIn()
 {
+    bool flag = false;
     switch (step)
     {
     case 1:
         send(cmd);
         recv(userType);
         recv(userID);
-        bool flag = false;
+        flag = false;
         if (userType == ConsumerUser) {
             flag = consumers->containsInFile(userID);
             if (flag)userType==HalfConsumer;
@@ -106,7 +118,7 @@ void Dialog::manageLogIn()
         send(cmd);
         string passWord;
         recv(passWord);
-        bool flag = user->matchWithPassWord(passWord);     
+        flag = user->matchWithPassWord(passWord);     
         if (step > 4)flag = false;
         send(flag);
         if (!flag)send(5-step);

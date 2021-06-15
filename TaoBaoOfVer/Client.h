@@ -5,13 +5,13 @@
 #include "GoodsControler.h"
 #include "Command.h"
 #include "Server.h"
-
+#include "sstream"
 using namespace::std;
 
 class Client
 {
 private:
-	Command status;
+	 enum Command status;
 	int step ;
 	CMD cmd;
 	idType userID;

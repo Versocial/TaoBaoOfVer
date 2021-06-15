@@ -1,14 +1,18 @@
-enum Command{
-		LogIn,
-		LogOut,
-		SignIn,
-		addGood,
-		ChangeGood,
-		ChangeUserInfo,
-		Shop,
-		Exit,
-		ShowGoods,
-		End,		
+#ifndef CommandH
+
+#define CommandH
+
+enum Command {
+	Exit=0,
+	LogIn=1,
+	LogOut=2,
+	SignIn=3,
+	addGood,
+	ChangeGood,
+	ChangeUserInfo,
+	Shop,
+	ShowGoods,
+	End,
 };
 
 enum _ClientType {
@@ -20,3 +24,5 @@ enum _ClientType {
 };
 
 
+
+#endif // !CommandH

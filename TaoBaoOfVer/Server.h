@@ -3,6 +3,8 @@
 #include "UsersControler.h"
 #include "log.h"
 #include "Command.h"
+#include "Dialog.h"
+#include<thread>
 //using namespace ::std;
 
 #define ConsumersControlerPath ("../res/Consumer") 
@@ -30,23 +32,28 @@ public:
 	int Main1();
 	static Server* getInstance(istream&in,ostream& out);
 	~Server();
+	//Dialog* dialog;//just for test
 };
 
 class Dialog {
 private:
-	Command status ;
-	int step ;
+	std::condition_variable Run;
+	std::mutex lock;
+	enum Command status;
+	int step;
 	CMD cmd;
 	idType userID;
-	ClientType userType ;
-	 Server* server;
-	 User* user;
-	 istream* input;
-	 ostream* output;
+	ClientType userType;
+	Server* server;
+	User* user;
+	istream* input;
+	ostream* output;
 
-	 void Dialogmanage();
-	 void manageSignIn();
-	 void manageLogIn();
+	void Dialogmanage();
+	void manageSignIn();
+	void manageLogIn();
 public:
-	Dialog(Server* server,istream*in,ostream*out);
+	Dialog(Server* server, istream* in, ostream* out);
+	void run();
 };
+

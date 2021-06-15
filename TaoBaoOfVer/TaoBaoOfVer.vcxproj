@@ -142,6 +142,7 @@
     <ClInclude Include="Client.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="Controler.h" />
+    <ClInclude Include="Dialog.h" />
     <ClInclude Include="Good.h" />
     <ClInclude Include="GoodsControler.h" />
     <ClInclude Include="log.h" />
