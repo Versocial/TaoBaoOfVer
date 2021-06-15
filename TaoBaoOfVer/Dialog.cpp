@@ -1,7 +1,9 @@
 #include "Server.h"
 
-#define send(x) {;*output<<" "<<(x)<<" ";}
+#define initBuffer  ;Buffer="";
+#define send(x) {;Buffer+=" "+to_string(x)+" ";}
 #define recv(x) {;*input>>(x);}
+#define clearBuffer {output->str(Buffer);}
 #define CUser ((Consumer*)User)
 #define SUser ((Seller*)User)
 #define sellers (server->sellers)
@@ -10,7 +12,7 @@
 
 
 
-Dialog::Dialog(Server*_server, istream* in, ostream* out) {
+Dialog::Dialog(Server*_server, stringstream* in, stringstream* out) {
     userType = Visitor;
     status = Exit;
     step = 1;
@@ -25,15 +27,16 @@ void Dialog::run()
     cout << "\nco";
     std::chrono::milliseconds dura(4000);
     std::this_thread::sleep_for(dura);
-    cout << "ol\n";
+cout << "ol\n";
     Run.notify_one();
 }
 
 void Dialog::Dialogmanage()
 {
     while (1) {
+        initBuffer;
         std::unique_lock <std::mutex> lck(lock); 
-        while (EOF==input->peek()) { new thread(&Dialog::run,this);  Run.wait(lck); }
+        while (EOF == input->peek() || output->peek() != EOF) { cout <<  input->peek() << output->peek() ; new thread(&Dialog::run, this);  Run.wait(lck); }
             recv(cmd); cout << "ser:" << cmd << endl;
      //   usingLocker.lock();
         switch (cmd)
@@ -56,6 +59,8 @@ void Dialog::Dialogmanage()
         }
         //usingLocker.unlock();
         status = (Command)cmd;
+        input->str("");
+        clearBuffer;
     }
 }
 

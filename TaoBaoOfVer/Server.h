@@ -3,7 +3,6 @@
 #include "UsersControler.h"
 #include "log.h"
 #include "Command.h"
-#include "Dialog.h"
 #include<thread>
 //using namespace ::std;
 
@@ -21,7 +20,7 @@ private:
 	mutex usingLocker;
 	thread* autoSave;
 	static Server* instance;
-	Server(istream& in, ostream& out);
+	Server(stringstream& in, stringstream& out);
 	void serverMain();
 	void autoSavingThread();
 	void save();
@@ -30,13 +29,14 @@ public:
 	SellersControler* sellers;
 	GoodsControler* goods;
 	int Main1();
-	static Server* getInstance(istream&in,ostream& out);
+	static Server* getInstance(stringstream&in, stringstream& out);
 	~Server();
 	//Dialog* dialog;//just for test
 };
 
 class Dialog {
 private:
+	string Buffer;
 	std::condition_variable Run;
 	std::mutex lock;
 	enum Command status;
@@ -46,14 +46,14 @@ private:
 	ClientType userType;
 	Server* server;
 	User* user;
-	istream* input;
-	ostream* output;
+	stringstream* input;
+	stringstream* output;
 
 	void Dialogmanage();
 	void manageSignIn();
 	void manageLogIn();
 public:
-	Dialog(Server* server, istream* in, ostream* out);
+	Dialog(Server* server, stringstream* in, stringstream* out);
 	void run();
 };
 

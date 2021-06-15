@@ -4,7 +4,7 @@
 
 Server* Server::instance = NULL;
 
-Server::Server(istream& in,ostream& out) {
+Server::Server(stringstream& in, stringstream& out) {
     consumers = ConsumersControler::getInstance(ConsumersControlerPath);
     sellers = SellersControler::getInstance(SellersControlerPath);
     goods = GoodsControler::getInstance(GoodsControlerPath);
@@ -40,7 +40,7 @@ void Server::save()
 }
 
 
-Server* Server::getInstance(istream&in,ostream &out)
+Server* Server::getInstance(stringstream&in, stringstream &out)
 {
     if (instance == NULL) { instance = new Server(in, out); }
     return instance;
