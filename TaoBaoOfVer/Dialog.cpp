@@ -33,7 +33,7 @@ Dialog::Dialog(Server* _server, Text& in, Text& out) {
 
 void Dialog::run()
 {
-    std::chrono::milliseconds dura(4000);
+    std::chrono::milliseconds dura(2000);
     std::this_thread::sleep_for(dura);
     Run.notify_one();
 }
@@ -45,9 +45,10 @@ void Dialog::Dialogmanage()
         while (!input->infoReady() || !output->empty()) {
             std::unique_lock <std::mutex> lck(lock); waitThread=new thread(&Dialog::run, this);  Run.wait(lck);
         }
-       cmd=recvV("cmd"); cout << "sever recv :" << input->buffer() << endl;
+       cmd=recvV("cmd"); 
+       cout << "sever recv :" << input->buffer() << endl;
         sendV("cmd",cmd);
-
+        if (status == Exit) { status = (Command)cmd; step = 1; }
      //   usingLocker.lock();
         switch (cmd)
         {
@@ -73,7 +74,6 @@ void Dialog::Dialogmanage()
             output->sendInfo();
             input->clear();
         }
-        status = (Command)cmd;
     }
 }
 
@@ -104,7 +104,6 @@ void Dialog::manageSignIn()
         user->changePassWord(passWd);
         user->changeName(name);
         status = Exit;
-        step = 1;
     }
 }
 
@@ -126,23 +125,29 @@ void Dialog::manageLogIn()
             if (flag)userType = HalfSeller;
         }
         if (flag)step++;
-        else { step = 0; userType = Visitor; }
+        else { step = 1; userType = Visitor; }
         sendV("Flag",flag);
         break;        
     default:
         string passWord;
         passWord=recvT("passWd");
+        user =(User*)( (userType == HalfConsumer  )?consumers->readFromFile(userID): sellers->readFromFile(userID));
         flag = user->matchWithPassWord(passWord);  
         sendV("Flag",flag);
-        if (!flag)sendV("Step",5-step);
         if (flag) {
-            step = 0;
+            status = Exit;
             if (userType == HalfConsumer)userType = ConsumerUser;
             else if (userType == HalfSeller)userType = SellerUser;
             sendT("Name",user->Name());
             sendV("Money",user->Money());
         }
-        else { step++; if (step > 4)status = Exit; }
+        else { 
+            sendV("Step", 5 - step); 
+            step++; 
+            if (step > 5) {
+                status = Exit;
+            }
+        }
         break;
     }
 }

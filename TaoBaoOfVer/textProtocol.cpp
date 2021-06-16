@@ -36,6 +36,9 @@ string Text::getString(string tag)
     regex Regex(n.c_str());
     cmatch result;
     regex_search(buf, result, Regex);
+    if (result.size() == 0) { 
+        cout << tag << " wrong" << endl; 
+    }
      string ans((char*) &result[0].str()[tag.size()+2]);
      return ans;
      

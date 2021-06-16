@@ -6,7 +6,8 @@
 #define recvT(tag) (input->getString(tag))
 #define CUser ((Consumer*)User)
 #define SUser ((Seller*)User)
-
+#define WaitAnswer {needAnswer=true;canExit=true;}
+#define WaitAnswerWithoutExit {needAnswer=true;}
 #define ReadByCin(x) {;cin>>(x); cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n');}
 static 	Server*server ;
 
@@ -63,7 +64,7 @@ void Client::ClientMain()
     {
     case Exit:
         if (status == Exit) { continue; }status = Exit;
-        cout << "exit the process"; sendV("cmd",Exit); sendRequest(); step = 1; needAnswer = false; continue;
+        cout << "exit the process.\n"; sendV("cmd",Exit); sendRequest(); step = 1; needAnswer = false; continue;
         break;
     case LogIn:whenLogIn(); break;
     case LogOut:whenLogOut(); break;
@@ -112,19 +113,19 @@ void Client::whenLogIn()
     case 2:
         flag=recvV("Flag");
         if (!flag) { cout << "No such an User ID"<<userID<<".\n"; cmd = Exit; break; }
-        cout << "Please enter your passWord.\n"; needAnswer = true;
-        step++;
+        cout << "Please enter your passWord.\n"; 
+        step++; WaitAnswer;
         break;
     default:
         ReadByCin(temp);
         sendV("cmd",LogIn); sendT("passWd",temp); sendRequest();
-        waitForAnswer(); flag = recvV("Flag");
+        waitForAnswer(); 
+        flag = recvV("Flag");
         if (!flag) {
-            chance=recvV("ID"); 
-            cout << "Wrong password! You have " << chance << "chances left.\n";
-            if (chance == 0)cmd = Exit;
-            else { canExit = true; needAnswer = true; }
-            break;
+            chance=recvV("Step"); 
+            if (chance == 0){ cmd = Exit; cout << "Are you sure you not a robot ?????????"<<endl; }
+            else { cout << "Wrong password! You have " << chance << "chances left.\n"; WaitAnswer;    };
+            step++;
         }  else {
             temp=recvT("Name");
             if (userType == HalfConsumer) { user = new Consumer(userID, temp); userType = ConsumerUser; }
@@ -132,10 +133,9 @@ void Client::whenLogIn()
             tempM=recvV("Money");
             user->changeName(temp);
             user->income(tempM);
-            cout<<"Login suceessful ! welcome "<<user->Name()<<" :"<<user->turnIntoString() << endl;
+            cout<<"Login suceessful ! welcome "<<user->Name()<<" balance:"<<user->Money() << endl;
             cmd = Exit;
         }
-        step++;
         break;
     }
 

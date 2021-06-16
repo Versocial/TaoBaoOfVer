@@ -40,7 +40,7 @@ public:;
 	 //File
 	  int deleteFile(idType id);// delete File
 	  int saveFile(idType id);// save File
-	  bool readFromFile(idType id);// read File
+	  Object* readFromFile(idType id);// read File
 	  bool readOutAllFromFile();//read all File
 	  bool containsInFile(idType id);// if File has id
 	 //Memory

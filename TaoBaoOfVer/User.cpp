@@ -102,6 +102,7 @@ User::User():Object()
 User::User(idType iD, string Name):Object(iD)
 {
 	name = Name;
+	money = 0;
 }
 
 

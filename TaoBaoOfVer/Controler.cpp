@@ -29,16 +29,16 @@ int Controler::saveFile(idType id)
 		return flag[0] + flag[1] * 2 + flag[2] * 4;
 }
 
-bool Controler::readFromFile(idType id)
+Object* Controler::readFromFile(idType id)
 {
-	if (allObjects.count(id))return false;
+	if (allObjects.count(id))return allObjects[id];
 	ifstream input(_FILE_SAVING_PATH_(id));
 	if (input.is_open()) {
 		allObjects[id] = theObject().getByStream(input);
 		input.close();
-		return true;
+		return allObjects[id];
 	}
-	return false;
+	return NULL;
 }
 
 
