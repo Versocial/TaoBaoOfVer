@@ -17,10 +17,10 @@ private:
 	idType userID;
 	ClientType userType ;
 	User* user;
-	stringstream* input;
-	stringstream* output;
+	char* inBuffer;
+	char* outBuffer;
 public:
-	Client(stringstream &in,stringstream& out);
+	Client(char* in,char* out);
 	void ClientMain();
 
 

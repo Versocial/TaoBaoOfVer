@@ -4,13 +4,13 @@
 
 Server* Server::instance = NULL;
 
-Server::Server(stringstream& in, stringstream& out) {
+Server::Server(char* in, char* out) {
     consumers = ConsumersControler::getInstance(ConsumersControlerPath);
     sellers = SellersControler::getInstance(SellersControlerPath);
     goods = GoodsControler::getInstance(GoodsControlerPath);
     //autoSave = new thread(&Server::autoSavingThread, this);
     Logger::setLogPath(LogPath);
-    Dialog* dialog= new Dialog(this,& in, &out);
+    Dialog* dialog= new Dialog(this, in, out);
 
 
 }
@@ -40,7 +40,7 @@ void Server::save()
 }
 
 
-Server* Server::getInstance(stringstream&in, stringstream &out)
+Server* Server::getInstance(char* in, char* out)
 {
     if (instance == NULL) { instance = new Server(in, out); }
     return instance;

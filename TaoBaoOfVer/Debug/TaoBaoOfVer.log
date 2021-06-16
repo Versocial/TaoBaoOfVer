@@ -1,3 +1,16 @@
-﻿  Client.cpp
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(22,20): warning C4305: “=”: 从“_ClientType”到“ClientType”截断
+﻿  Dialog.cpp
+A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Dialog.cpp(22,23): warning C4305: “=”: 从“_ClientType”到“ClientType”截断
+A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Dialog.cpp(55,46): warning C4806: “==”: 不安全操作: 从类型“ClientType”提升到类型“_ClientType”的值不能等于给定的常量
+A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Dialog.cpp(55,72): warning C4806: “==”: 不安全操作: 从类型“ClientType”提升到类型“_ClientType”的值不能等于给定的常量
+A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Dialog.cpp(55,103): warning C4305: “=”: 从“_ClientType”到“ClientType”截断
+A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Dialog.cpp(83,25): warning C4806: “==”: 不安全操作: 从类型“ClientType”提升到类型“_ClientType”的值不能等于给定的常量
+A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Dialog.cpp(84,30): warning C4806: “==”: 不安全操作: 从类型“ClientType”提升到类型“_ClientType”的值不能等于给定的常量
+A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Dialog.cpp(92,25): warning C4806: “==”: 不安全操作: 从类型“ClientType”提升到类型“_ClientType”的值不能等于给定的常量
+A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Dialog.cpp(97,30): warning C4806: “==”: 不安全操作: 从类型“ClientType”提升到类型“_ClientType”的值不能等于给定的常量
+A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Dialog.cpp(120,32): warning C4806: “==”: 不安全操作: 从类型“ClientType”提升到类型“_ClientType”的值不能等于给定的常量
+A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Dialog.cpp(120,30): warning C4553: “==”: 未使用表达式结果；是否打算使用“=”?
+A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Dialog.cpp(124,43): warning C4305: “=”: 从“_ClientType”到“ClientType”截断
+A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Dialog.cpp(127,44): warning C4305: “=”: 从“_ClientType”到“ClientType”截断
+A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Dialog.cpp(139,29): warning C4806: “==”: 不安全操作: 从类型“ClientType”提升到类型“_ClientType”的值不能等于给定的常量
+A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Dialog.cpp(140,34): warning C4806: “==”: 不安全操作: 从类型“ClientType”提升到类型“_ClientType”的值不能等于给定的常量
   TaoBaoOfVer.vcxproj -> A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\Debug\TaoBaoOfVer.exe

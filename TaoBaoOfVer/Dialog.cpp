@@ -14,17 +14,21 @@ Dialog::~Dialog()
 {
     if (waitThread != NULL)delete waitThread;
     delete dialogThread;
+    delete output;
+    delete input;
 }
 
-Dialog::Dialog(Server*_server, stringstream* in, stringstream* out) {
+Dialog::Dialog(Server* _server, char* in, char* out) {
     userType = Visitor;
     status = Exit;
     step = 1;
 	server = _server;
-    input = in;
-    output = out;
+    inBuffer = in;
+    outBuffer = out;
     waitThread = NULL;
     dialogThread= new thread(&Dialog:: Dialogmanage,this);
+    output = new ostringstream("");
+    input = new istringstream("");
 }
 
 void Dialog::run()
@@ -37,19 +41,12 @@ void Dialog::run()
 void Dialog::Dialogmanage()
 {
     while (1) {
-        while (!input->rdbuf()->in_avail()) {
-            if (!output->rdbuf()->in_avail())  output->str("");
+        while (!*inBuffer||*outBuffer) {
             std::unique_lock <std::mutex> lck(lock); waitThread=new thread(&Dialog::run, this);  Run.wait(lck);
-            if (!output->rdbuf()->in_avail())  output->str("");
         }
-        input->clear(); 
-        //recv (cmd);
-       // recv(cmd);
-       char c;
-      //  recv( c);
-        int k; 
-        recv( k);
-        recv(k);
+        output->clear();
+        output->str("");
+        input->str(inBuffer); 
         recv(cmd); cout << "ser:" << cmd << endl;
         send(cmd);
      //   usingLocker.lock();
@@ -72,6 +69,8 @@ void Dialog::Dialogmanage()
             break;
         }
         //usingLocker.unlock();
+        memcpy(outBuffer, output->str().c_str(), strlen(output->str().c_str()));
+        *inBuffer = 0;
         status = (Command)cmd;
     }
 }
