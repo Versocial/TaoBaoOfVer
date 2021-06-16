@@ -16,6 +16,7 @@ private:
 	bool needAnswer;
 	 enum Command status;
 	int step ;
+	string tempInfo;
 	CMD cmd;
 	CMD cmdRecvd;
 	idType userID;

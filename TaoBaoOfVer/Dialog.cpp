@@ -4,6 +4,8 @@
 #define sendT(tag,x){output->setString(tag,x);}
 #define recvV(tag) (input->getValue(tag))
 #define recvT(tag) (input->getString(tag))
+#define ExitProcess {status=Exit;}
+
 #define CUser ((Consumer*)User)
 #define SUser ((Seller*)User)
 #define sellers (server->sellers)
@@ -33,7 +35,7 @@ Dialog::Dialog(Server* _server, Text& in, Text& out) {
 
 void Dialog::run()
 {
-    std::chrono::milliseconds dura(2000);
+    std::chrono::milliseconds dura(500);
     std::this_thread::sleep_for(dura);
     Run.notify_one();
 }
@@ -79,31 +81,52 @@ void Dialog::Dialogmanage()
 
 void Dialog::manageSignIn()
 {
+    string passWd;
+    string name;
+    bool flag=false;
     switch (step) {
     case 1:
-        userType=recvV("Type");
-        if (userType == HalfConsumer)  userID = consumers->suggestID();
-        else if (userType == HalfSeller) userID = sellers->suggestID();
+        userType = recvV("Type");
+        if (userType == ConsumerUser) { userID = consumers->suggestID(); userType = HalfConsumer; }
+        else if (userType == SellerUser) {   userID = sellers->suggestID(); userType = HalfSeller;}
         sendV("ID",userID);
         if (userID != _INVALID_ID)step++;
+        break;
     case 2:
-        string passWd;
         passWd=recvT("passWd");
-        string name;
-        name=recvT("name");
+        name=recvT("Name");
         if (userType == HalfConsumer) {
-            user = new Consumer();
+            user = new Consumer(userID,name,passWd);
             consumers->addToMemory(user);
-            userType = ConsumerUser;
+            consumers->saveFile(userID);
         }
         else if (userType == HalfSeller) {
-            user = new Seller();
+            user = new Seller(userID,name,passWd);
             sellers->addToMemory(user);
-            userType = SellerUser;
+            sellers->saveFile(userID);
         }
-        user->changePassWord(passWd);
-        user->changeName(name);
-        status = Exit;
+        step++;
+        break;
+    case 3:
+        flag=recvV("Flag");
+        if (flag) {
+            if (userType == HalfConsumer) {
+                userType = ConsumerUser;
+            }
+            else if (userType == HalfSeller) {
+                userType = SellerUser;
+            }
+        }
+        else { 
+            if (userType == HalfConsumer) {
+                consumers->releaseFromMemoryIntoFile(userID);
+            }
+            else if (userType == HalfSeller) {
+                sellers->releaseFromMemoryIntoFile(userID);
+            }
+        }
+        ExitProcess;
+        break;
     }
 }
 
@@ -135,17 +158,17 @@ void Dialog::manageLogIn()
         flag = user->matchWithPassWord(passWord);  
         sendV("Flag",flag);
         if (flag) {
-            status = Exit;
             if (userType == HalfConsumer)userType = ConsumerUser;
             else if (userType == HalfSeller)userType = SellerUser;
             sendT("Name",user->Name());
             sendV("Money",user->Money());
+            ExitProcess;
         }
         else { 
             sendV("Step", 5 - step); 
             step++; 
             if (step > 5) {
-                status = Exit;
+                ExitProcess;
             }
         }
         break;

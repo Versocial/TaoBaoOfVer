@@ -28,7 +28,7 @@ bool User::canBePassword(string code)
 	 input>>(password);  input.clear(); input.ignore(numeric_limits<streamsize>::max(), '\n');
 	 while (!canBePassword(password)) {
 		 if (password == EXIT_CMD_) {cout << "Exit count initializing.\n"; return  false; }
-		 output << "[" << id << "]" << "Illegal password Format ! Please type in again your password, which must be : digit or label , 6 to15 characters.\n";
+		 output << "[" << id << "]" << "Illegal password Format ! Please type in again your Name, which must be : digit or label , 6 to15 characters.\n";
 		 input>>(password); input.clear(); input.ignore(numeric_limits<streamsize>::max(), '\n');
 	 }
 	 output << "[" << id << "]" << "Your password is " << password<<endl;
@@ -96,13 +96,13 @@ string User::turnIntoString() const
 
 User::User():Object()
 {
-
 }
 
-User::User(idType iD, string Name):Object(iD)
+User::User(idType iD, string Name,string passWord):Object(iD)
 {
 	name = Name;
 	money = 0;
+	password = passWord;
 }
 
 

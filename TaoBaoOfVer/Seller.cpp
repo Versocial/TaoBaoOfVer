@@ -11,7 +11,7 @@ Seller::Seller(idType id)
 	initUser(id,cin,cout);
 }
 
-Seller::Seller(idType ID, string Name):User(ID,Name)
+Seller::Seller(idType ID, string Name,string Password):User(ID,Name,Password)
 {
 }
 
