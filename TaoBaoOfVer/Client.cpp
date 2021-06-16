@@ -1,23 +1,21 @@
 #include "Client.h"
 
-#define initBuffer string Buffer("");
-#define send(x) {;Buffer+=" "+=(x)+=" ";}
-#define recv(x) {;*input>>(x);}
-#define clearBuffer {output->str(Buffer);}
+#define send(x) {output->clear();*output<<" "<<(x);}
+#define recv(x) {*input>>(x);}
 #define CUser ((Consumer*)User)
 #define SUser ((Seller*)User)
 static 	Server*server ;
 
 stringstream C2S("");
-stringstream S2C("0");
+stringstream S2C("");
 
 int main() {
+    S2C.clear(); S2C << Exit;
     Client* client = new Client(S2C, C2S);
     server = Server::getInstance(C2S,S2C);
     client->ClientMain();
     delete(client);
     delete(server);
-
 }
 
 Client::Client(stringstream& in, stringstream& out) {
@@ -31,24 +29,18 @@ Client::Client(stringstream& in, stringstream& out) {
 void Client::ClientMain()
 {
     while (1) {
-        initBuffer;
-        if (EOF == input->peek() || output->peek() != EOF) continue;
+        if (!output->rdbuf()->in_avail())output->str("");
+        if (! input->rdbuf()->in_avail() ) continue;
         recv(cmd);
          cout << "cli: " << cmd << endl;
-        string k = "kk";
-        cout << output->str() << endl;
-        //*output << k;
-        cout << output->str() << endl;
-        //*output<<"sss";
-        cout << output->str()<<endl;
-        string ou; 
-        cin >> ou;
-        //*output << ou;
-        cout << output->str() << endl;
-        output->str(ou);
-        Buffer += ou; Buffer += " ";
-        //send(ou);
-        cout << output->str() << endl;
+        string ou="3  c 1001"; 
+        //cin >> ou; 
+        send(ou);
+        int k;
+        char c;
+        *output >> k;
+        *output >> c;
+        *output >> k;
         //switch (cmd)
         //{
         //case Exit: step = 1; if (userType == HalfSeller || userType == HalfConsumer)userType = Visitor; break;
@@ -68,7 +60,5 @@ void Client::ClientMain()
         //    break;
         //}
         status = (Command)cmd;
-        input->str("");
-        clearBuffer;
     }
 }

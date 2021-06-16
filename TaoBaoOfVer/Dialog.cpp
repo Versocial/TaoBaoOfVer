@@ -1,9 +1,7 @@
 #include "Server.h"
 
-#define initBuffer  ;Buffer="";
-#define send(x) {;Buffer+=" "+to_string(x)+" ";}
-#define recv(x) {;*input>>(x);}
-#define clearBuffer {output->str(Buffer);}
+#define send(x) {output->clear();*output<<" "<<(x);}
+#define recv(x) {*input>>(x);}
 #define CUser ((Consumer*)User)
 #define SUser ((Seller*)User)
 #define sellers (server->sellers)
@@ -12,6 +10,12 @@
 
 
 
+Dialog::~Dialog()
+{
+    if (waitThread != NULL)delete waitThread;
+    delete dialogThread;
+}
+
 Dialog::Dialog(Server*_server, stringstream* in, stringstream* out) {
     userType = Visitor;
     status = Exit;
@@ -19,32 +23,42 @@ Dialog::Dialog(Server*_server, stringstream* in, stringstream* out) {
 	server = _server;
     input = in;
     output = out;
-    new thread(&Dialog:: Dialogmanage,this);
+    waitThread = NULL;
+    dialogThread= new thread(&Dialog:: Dialogmanage,this);
 }
 
 void Dialog::run()
 {
-    cout << "\nco";
     std::chrono::milliseconds dura(4000);
     std::this_thread::sleep_for(dura);
-cout << "ol\n";
     Run.notify_one();
 }
 
 void Dialog::Dialogmanage()
 {
     while (1) {
-        initBuffer;
-        std::unique_lock <std::mutex> lck(lock); 
-        while (EOF == input->peek() || output->peek() != EOF) { cout <<  input->peek() << output->peek() ; new thread(&Dialog::run, this);  Run.wait(lck); }
-            recv(cmd); cout << "ser:" << cmd << endl;
+        while (!input->rdbuf()->in_avail()) {
+            if (!output->rdbuf()->in_avail())  output->str("");
+            std::unique_lock <std::mutex> lck(lock); waitThread=new thread(&Dialog::run, this);  Run.wait(lck);
+            if (!output->rdbuf()->in_avail())  output->str("");
+        }
+        input->clear(); 
+        //recv (cmd);
+       // recv(cmd);
+       char c;
+      //  recv( c);
+        int k; 
+        recv( k);
+        recv(k);
+        recv(cmd); cout << "ser:" << cmd << endl;
+        send(cmd);
      //   usingLocker.lock();
         switch (cmd)
         {
         case Exit: step = 1; if (userType == HalfSeller || userType == HalfConsumer)userType = Visitor; break;
             break;
         case ShowGoods:/**/cmd = status; break;
-        case LogIn:            
+        case LogIn: manageLogIn();
             break;
         case LogOut:
             break;
@@ -59,8 +73,6 @@ void Dialog::Dialogmanage()
         }
         //usingLocker.unlock();
         status = (Command)cmd;
-        input->str("");
-        clearBuffer;
     }
 }
 
@@ -68,14 +80,12 @@ void Dialog::manageSignIn()
 {
     switch (step) {
     case 1:
-        send(cmd);
         recv(userType);
         if (userType == HalfConsumer)  userID = consumers->suggestID();
         else if (userType == HalfSeller) userID = sellers->suggestID();
         send(userID);
         if (userID != _INVALID_ID)step++;
     case 2:
-        send(cmd);
         string passWd;
         recv(passWd);
         string name;
@@ -103,7 +113,6 @@ void Dialog::manageLogIn()
     switch (step)
     {
     case 1:
-        send(cmd);
         recv(userType);
         recv(userID);
         flag = false;
@@ -120,7 +129,6 @@ void Dialog::manageLogIn()
         send(flag);
         break;        
     default:
-        send(cmd);
         string passWord;
         recv(passWord);
         flag = user->matchWithPassWord(passWord);     

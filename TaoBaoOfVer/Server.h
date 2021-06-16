@@ -36,9 +36,10 @@ public:
 
 class Dialog {
 private:
-	string Buffer;
 	std::condition_variable Run;
 	std::mutex lock;
+	std::thread* waitThread;
+	std::thread* dialogThread;
 	enum Command status;
 	int step;
 	CMD cmd;
@@ -53,6 +54,7 @@ private:
 	void manageSignIn();
 	void manageLogIn();
 public:
+	~Dialog();
 	Dialog(Server* server, stringstream* in, stringstream* out);
 	void run();
 };
