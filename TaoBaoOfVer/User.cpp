@@ -99,6 +99,11 @@ User::User():Object()
 
 }
 
+User::User(idType iD, string Name):Object(iD)
+{
+	name = Name;
+}
+
 
 User::User(istream& input):Object()
 {

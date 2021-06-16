@@ -5,6 +5,10 @@ Consumer::Consumer(idType id) :User()
 	initUser(id,cin,cout);
 }
 
+Consumer::Consumer(idType ID, string Name):User(ID,Name)
+{
+}
+
 
 Consumer::Consumer(istream& input):User(input)
 {

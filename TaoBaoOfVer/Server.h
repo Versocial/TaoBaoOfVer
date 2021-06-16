@@ -3,8 +3,8 @@
 #include "UsersControler.h"
 #include "log.h"
 #include "Command.h"
+#include "textProtocol.h"
 #include<thread>
-//using namespace ::std;
 
 #define ConsumersControlerPath ("../res/Consumer") 
 #define GoodsControlerPath ("../res/Good") 
@@ -12,7 +12,7 @@
 #define LogPath ("../res/server.log")
 
 typedef  unsigned int CMD;
-typedef bool ClientType;
+typedef int ClientType;
 
 class Server
 {
@@ -20,7 +20,7 @@ private:
 	mutex usingLocker;
 	thread* autoSave;
 	static Server* instance;
-	Server(char* in, char* out);
+	Server(Text& in, Text& out);
 	void serverMain();
 	void autoSavingThread();
 	void save();
@@ -29,7 +29,7 @@ public:
 	SellersControler* sellers;
 	GoodsControler* goods;
 	int Main1();
-	static Server* getInstance(char*in, char* out);
+	static Server* getInstance(Text& in, Text& out);
 	~Server();
 	//Dialog* dialog;//just for test
 };
@@ -47,17 +47,15 @@ private:
 	ClientType userType;
 	Server* server;
 	User* user;
-	istringstream* input;
-	ostringstream* output;
-	char* inBuffer;
-	char* outBuffer;
+	Text* input;
+	Text* output;
 
 	void Dialogmanage();
 	void manageSignIn();
 	void manageLogIn();
 public:
 	~Dialog();
-	Dialog(Server* server, char* in, char* out);
+	Dialog(Server* server, Text& in, Text& out);
 	void run();
 };
 

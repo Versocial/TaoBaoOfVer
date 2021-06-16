@@ -19,6 +19,7 @@ protected:
 	string password;
 	moneyType money;
 	User();
+	User(idType id, string name);//for client
 	User(istream& input);// for server
 	bool initUser(idType id,istream &input,ostream& output);
 public:
@@ -46,6 +47,7 @@ private:
 public:
 	Consumer();
 	Consumer(idType id);// for client
+	Consumer(idType ID, string Name);//for client
 	userType type() const;
 
 	virtual Object* getByStream(istream&);
@@ -61,7 +63,8 @@ private:
 	Seller(istream&);
 public:
 	Seller();
-	Seller(idType id);
+	Seller(idType id);//for client
+	Seller(idType ID, string Name);//for client
 	userType   type()const;
 	bool addGood(idType id);
 	bool deleteGood(idType id);

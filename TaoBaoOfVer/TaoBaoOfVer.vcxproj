@@ -88,6 +88,11 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <EnableModules>true</EnableModules>
+      <AdditionalOptions>/Zc:__cplusplus 
+ %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -102,6 +107,11 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <EnableModules>true</EnableModules>
+      <AdditionalOptions>/Zc:__cplusplus 
+ %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -147,6 +157,7 @@
     <ClInclude Include="log.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Server.h" />
+    <ClInclude Include="textProtocol.h" />
     <ClInclude Include="User.h" />
     <ClInclude Include="UsersControler.h" />
   </ItemGroup>
@@ -164,6 +175,7 @@
     <ClCompile Include="Seller.cpp" />
     <ClCompile Include="SellersControler.cpp" />
     <ClCompile Include="Server.cpp" />
+    <ClCompile Include="textProtocol.cpp" />
     <ClCompile Include="User.cpp" />
     <ClCompile Include="test.cpp" />
   </ItemGroup>

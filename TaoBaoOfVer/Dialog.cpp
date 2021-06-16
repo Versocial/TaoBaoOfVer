@@ -1,7 +1,9 @@
 #include "Server.h"
 
-#define send(x) {output->clear();*output<<" "<<(x);}
-#define recv(x) {*input>>(x);}
+#define sendV(tag,x){output->setString(tag, to_string(x)); }
+#define sendT(tag,x){output->setString(tag,x);}
+#define recvV(tag) (input->getValue(tag))
+#define recvT(tag) (input->getString(tag))
 #define CUser ((Consumer*)User)
 #define SUser ((Seller*)User)
 #define sellers (server->sellers)
@@ -18,17 +20,15 @@ Dialog::~Dialog()
     delete input;
 }
 
-Dialog::Dialog(Server* _server, char* in, char* out) {
+Dialog::Dialog(Server* _server, Text& in, Text& out) {
     userType = Visitor;
     status = Exit;
     step = 1;
 	server = _server;
-    inBuffer = in;
-    outBuffer = out;
+    input=&in;
+    output = &out;
     waitThread = NULL;
     dialogThread= new thread(&Dialog:: Dialogmanage,this);
-    output = new ostringstream("");
-    input = new istringstream("");
 }
 
 void Dialog::run()
@@ -41,14 +41,13 @@ void Dialog::run()
 void Dialog::Dialogmanage()
 {
     while (1) {
-        while (!*inBuffer||*outBuffer) {
+        bool notSend=false;
+        while (!input->infoReady() || !output->empty()) {
             std::unique_lock <std::mutex> lck(lock); waitThread=new thread(&Dialog::run, this);  Run.wait(lck);
         }
-        output->clear();
-        output->str("");
-        input->str(inBuffer); 
-        recv(cmd); cout << "ser:" << cmd << endl;
-        send(cmd);
+       cmd=recvV("cmd"); cout << "sever recv :" << input->buffer() << endl;
+        sendV("cmd",cmd);
+
      //   usingLocker.lock();
         switch (cmd)
         {
@@ -68,9 +67,12 @@ void Dialog::Dialogmanage()
         default:
             break;
         }
+        if(status==Exit){ step = 1; if (userType == HalfSeller || userType == HalfConsumer)userType = Visitor; }//outway:status=Exit
         //usingLocker.unlock();
-        memcpy(outBuffer, output->str().c_str(), strlen(output->str().c_str()));
-        *inBuffer = 0;
+        if (!notSend) {
+            output->sendInfo();
+            input->clear();
+        }
         status = (Command)cmd;
     }
 }
@@ -79,16 +81,16 @@ void Dialog::manageSignIn()
 {
     switch (step) {
     case 1:
-        recv(userType);
+        userType=recvV("Type");
         if (userType == HalfConsumer)  userID = consumers->suggestID();
         else if (userType == HalfSeller) userID = sellers->suggestID();
-        send(userID);
+        sendV("ID",userID);
         if (userID != _INVALID_ID)step++;
     case 2:
         string passWd;
-        recv(passWd);
+        passWd=recvT("passWd");
         string name;
-        recv(name);
+        name=recvT("name");
         if (userType == HalfConsumer) {
             user = new Consumer();
             consumers->addToMemory(user);
@@ -112,12 +114,12 @@ void Dialog::manageLogIn()
     switch (step)
     {
     case 1:
-        recv(userType);
-        recv(userID);
+        userType=recvV("Type");
+        userID=recvV("ID");
         flag = false;
         if (userType == ConsumerUser) {
             flag = consumers->containsInFile(userID);
-            if (flag)userType==HalfConsumer;
+            if (flag)userType=HalfConsumer;
         }
         else if (userType == SellerUser) {
             flag = sellers->containsInFile(userID);
@@ -125,21 +127,22 @@ void Dialog::manageLogIn()
         }
         if (flag)step++;
         else { step = 0; userType = Visitor; }
-        send(flag);
+        sendV("Flag",flag);
         break;        
     default:
         string passWord;
-        recv(passWord);
-        flag = user->matchWithPassWord(passWord);     
-        if (step > 4)flag = false;
-        send(flag);
-        if (!flag)send(5-step);
+        passWord=recvT("passWd");
+        flag = user->matchWithPassWord(passWord);  
+        sendV("Flag",flag);
+        if (!flag)sendV("Step",5-step);
         if (flag) {
             step = 0;
             if (userType == HalfConsumer)userType = ConsumerUser;
             else if (userType == HalfSeller)userType = SellerUser;
+            sendT("Name",user->Name());
+            sendV("Money",user->Money());
         }
-        else step++;
+        else { step++; if (step > 4)status = Exit; }
         break;
     }
 }

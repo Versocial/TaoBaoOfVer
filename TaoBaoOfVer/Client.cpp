@@ -1,60 +1,163 @@
 #include "Client.h"
 
-#define send(x) {output.clear();output<<" "<<(x);}
-#define recv(x) {input>>(x);}
+#define sendV(tag,x){output->setString(tag, to_string(x)); }
+#define sendT(tag,x){output->setString(tag,x);}
+#define recvV(tag) (input->getValue(tag))
+#define recvT(tag) (input->getString(tag))
 #define CUser ((Consumer*)User)
 #define SUser ((Seller*)User)
+
+#define ReadByCin(x) {;cin>>(x); cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n');}
 static 	Server*server ;
+
+
+unordered_map<string, enum Command> Client::Client_Command{
+    { "@E", Exit},{"@L",LogIn},{"@O",LogOut}, {"@End",End},{"@S",SignIn}
+};
+
 
 int main() {
     char S2C[60] = "0";
     char C2S[60] = "";
-    Client* client = new Client(S2C, C2S);
-    server = Server::getInstance(C2S,S2C);
+    Text StoC(S2C,60);
+    Text CtoS(C2S, 60);
+    Client* client = new Client(StoC, CtoS);
+    server = Server::getInstance(CtoS,StoC);
     client->ClientMain();
     delete(client);
     delete(server);
 }
 
-Client::Client(char* in, char* out) {
+Client::Client(Text& in, Text& out) {
 	userType = Visitor;
 	status = Exit;
 	step = 1;
-    inBuffer = in;
-    outBuffer = out;
+    input = &in;
+    output = &out;
 }
 
 void Client::ClientMain()
 {
+    needAnswer=false;
+    canExit = false;
     while (1) {
-        if (!*inBuffer||*outBuffer) continue;
-        istringstream input(inBuffer);
-        ostringstream output("");
-        recv(cmd);
-         cout << "cli: " << cmd << endl;
-        string ou="3  c 1001"; 
-        //cin >> ou; 
-        send(ou);
-        //switch (cmd)
-        //{
-        //case Exit: step = 1; if (userType == HalfSeller || userType == HalfConsumer)userType = Visitor; break;
-        //    break;
-        //case ShowGoods:/**/cmd = status; break;
-        //case LogIn:
-        //    break;
-        //case LogOut:
-        //    break;
-        //case SignIn:manageSignIn();
-        //    break;
-        //case End:
-        //    // server->save(); 
-        //    return;
-        //    break;
-        //default:
-        //    break;
-        //}
-        memcpy(outBuffer, output.str().c_str(), strlen(output.str().c_str()));
-        *inBuffer = 0;
-        status = (Command)cmd;
+         //when input from cin
+        if (!needAnswer) {           
+                string command;  cin >> command;
+                while (!Client_Command.count(command)) { cout << "Wrong Command.\n"; cin >> command; }
+                cmd = Client_Command[command];
+        }
+        else if (canExit) {
+            char First = ' ';
+            while (isspace(First)) { First = getchar(); }
+            if (First == '@') {
+                cmd = Exit;
+            }else {
+                ungetc(First, stdin);
+            }
+            canExit = false;
+        }
+        //....
+     if (needAnswer)waitForAnswer();
+    switch (cmd)
+    {
+    case Exit:
+        if (status == Exit) { continue; }status = Exit;
+        cout << "exit the process"; sendV("cmd",Exit); sendRequest(); step = 1; needAnswer = false; continue;
+        break;
+    case LogIn:whenLogIn(); break;
+    case LogOut:whenLogOut(); break;
+    case SignIn:whenSignIn(); break;
+    default:
+        break;
     }
+    if (cmd == Exit) { step = 1; if (userType == HalfConsumer || userType == HalfSeller)userType = Visitor; }//outway:cmd=Exit 
+    status = (Command)cmd;
+    }
+}
+
+void Client::waitForAnswer()
+{
+    while (!input->infoReady()||!output->empty()) ;
+    cmdRecvd=recvV("cmd");
+    cout << "client recv : " << input->buffer() << endl;
+    needAnswer = false;
+}
+
+void Client::whenLogIn()
+{
+    bool flag = false;
+    string temp="";
+    moneyType tempM;
+    int chance = 0;
+    switch (step)
+    {
+    case 1:
+        if (userType == ConsumerUser || userType == SellerUser) {
+            cout << "Please Logout Before you login.\n"; cmd = Exit;
+            return;
+        }
+        do {
+            cout << "Please enter User type, 'c' for Consumer and 's' for Seller\n";
+            ReadByCin(temp);
+            if (temp == "c")userType = HalfConsumer;
+            if (temp == "s")userType == HalfSeller;
+        } while (temp != "c" && temp != "s");
+        cout << "Please enter your id\n";
+        ReadByCin(userID);
+        sendV("cmd",LogIn); sendV("Type",temp=="c"?ConsumerUser:SellerUser); sendV("ID",userID);
+        sendRequest();
+        step++;
+        break;
+    case 2:
+        flag=recvV("Flag");
+        if (!flag) { cout << "No such an User ID"<<userID<<".\n"; cmd = Exit; break; }
+        cout << "Please enter your passWord.\n"; needAnswer = true;
+        step++;
+        break;
+    default:
+        ReadByCin(temp);
+        sendV("cmd",LogIn); sendT("passWd",temp); sendRequest();
+        waitForAnswer(); flag = recvV("Flag");
+        if (!flag) {
+            chance=recvV("ID"); 
+            cout << "Wrong password! You have " << chance << "chances left.\n";
+            if (chance == 0)cmd = Exit;
+            else { canExit = true; needAnswer = true; }
+            break;
+        }  else {
+            temp=recvT("Name");
+            if (userType == HalfConsumer) { user = new Consumer(userID, temp); userType = ConsumerUser; }
+            else if (userType == HalfSeller) { user = new Seller(userID, temp); userType = SellerUser; }
+            tempM=recvV("Money");
+            user->changeName(temp);
+            user->income(tempM);
+            cout<<"Login suceessful ! welcome "<<user->Name()<<" :"<<user->turnIntoString() << endl;
+            cmd = Exit;
+        }
+        step++;
+        break;
+    }
+
+}
+
+void Client::sendRequest()
+{
+    output->sendInfo();
+    input->clear();
+    needAnswer = true;
+}
+
+void Client::whenLogOut()
+{
+}
+
+Client::~Client()
+{
+    delete input;
+    delete output;
+}
+
+void Client::whenSignIn()
+{
 }
