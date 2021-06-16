@@ -139,3 +139,18 @@ string Good::toShow() const
 	if (getPrice() < originalPrice)postfix = " Now is " + to_string(originalPrice - getPrice()) + " RMB less than the Orignal Price !";
 	return "trade good [ "+to_string(ID)+" ] :"+name+" price: "+to_string(getPrice())+" selling: "+to_string(sellingNum)+" sold: "+to_string(soldNum)+postfix;
 }
+
+priceType book::getPrice() const
+{
+	return (priceType)ceil(getOriginalPrice()*discount*GoodDiscount);
+}
+
+priceType clouthing::getPrice() const
+{
+	return (priceType)ceil(getOriginalPrice() * discount * ClouthDiscount);
+}
+
+priceType electronic::getPrice() const
+{
+	return (priceType)ceil(getOriginalPrice() * discount * ElecDiscount);
+}

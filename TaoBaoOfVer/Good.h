@@ -12,8 +12,8 @@ private:
 	Number sellingNum;
 	unsigned long long  soldNum;
 	priceType originalPrice;
-	double discount;
 protected:
+	double discount;
 	Good(istream&);
 	static bool canBeName(string name);
 	virtual priceType getPrice()const;
@@ -38,4 +38,17 @@ public:
 	virtual bool deleteByPtr();
 
 	virtual string toShow()const;
+};
+
+class book :public Good{
+	static double GoodDiscount;
+	virtual priceType getPrice()const;
+};
+class clouthing :public Good {
+	static double ClouthDiscount;
+	virtual priceType getPrice()const;
+};
+class electronic :public Good {
+	static double ElecDiscount;
+	virtual priceType getPrice()const;
 };
