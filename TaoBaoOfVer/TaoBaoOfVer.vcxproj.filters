@@ -48,6 +48,12 @@
     <ClInclude Include="textProtocol.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Order.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="OrdersControler.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="User.cpp">
@@ -96,6 +102,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="textProtocol.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Order.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="OdersControler.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

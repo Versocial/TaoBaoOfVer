@@ -13,6 +13,7 @@ enum Command {
 	Shop,
 	ShowGoods,
 	End,
+	Income,
 };
 
 enum _ClientType {

@@ -53,6 +53,8 @@ private:
 	void Dialogmanage();
 	void manageSignIn();
 	void manageLogIn();
+	void manageLogOut();
+	void manageIncome();
 public:
 	~Dialog();
 	Dialog(Server* server, Text& in, Text& out);

@@ -1,6 +1,6 @@
 ﻿  Client.cpp
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(87,14): warning C4244: “=”: 从“__int64”转换到“CMD”，可能丢失数据
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(142,20): warning C4244: “=”: 从“__int64”转换到“int”，可能丢失数据
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(197,39): warning C4553: “==”: 未使用表达式结果；是否打算使用“=”?
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(206,18): warning C4244: “=”: 从“__int64”转换到“unsigned long”，可能丢失数据
+A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(88,14): warning C4244: “=”: 从“__int64”转换到“CMD”，可能丢失数据
+A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(143,20): warning C4244: “=”: 从“__int64”转换到“int”，可能丢失数据
+A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(229,39): warning C4553: “==”: 未使用表达式结果；是否打算使用“=”?
+A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(238,18): warning C4244: “=”: 从“__int64”转换到“unsigned long”，可能丢失数据
   TaoBaoOfVer.vcxproj -> A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\Debug\TaoBaoOfVer.exe

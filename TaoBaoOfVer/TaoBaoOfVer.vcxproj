@@ -156,6 +156,8 @@
     <ClInclude Include="GoodsControler.h" />
     <ClInclude Include="log.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="Order.h" />
+    <ClInclude Include="OrdersControler.h" />
     <ClInclude Include="Server.h" />
     <ClInclude Include="textProtocol.h" />
     <ClInclude Include="User.h" />
@@ -172,6 +174,8 @@
     <ClCompile Include="log.cpp" />
     <ClCompile Include="Main1.cpp" />
     <ClCompile Include="Object.cpp" />
+    <ClCompile Include="OdersControler.cpp" />
+    <ClCompile Include="Order.cpp" />
     <ClCompile Include="Seller.cpp" />
     <ClCompile Include="SellersControler.cpp" />
     <ClCompile Include="Server.cpp" />

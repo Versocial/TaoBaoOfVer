@@ -140,16 +140,19 @@ string Good::toShow() const
 	return "trade good [ "+to_string(ID)+" ] :"+name+" price: "+to_string(getPrice())+" selling: "+to_string(sellingNum)+" sold: "+to_string(soldNum)+postfix;
 }
 
+
+
+ double book:: BookDiscount=1;
 priceType book::getPrice() const
 {
-	return (priceType)ceil(getOriginalPrice()*discount*GoodDiscount);
+	return (priceType)ceil(getOriginalPrice()*discount*BookDiscount);
 }
-
+double clouthing::ClouthDiscount=1;
 priceType clouthing::getPrice() const
 {
 	return (priceType)ceil(getOriginalPrice() * discount * ClouthDiscount);
 }
-
+double electronic::ElecDiscount=1;
 priceType electronic::getPrice() const
 {
 	return (priceType)ceil(getOriginalPrice() * discount * ElecDiscount);

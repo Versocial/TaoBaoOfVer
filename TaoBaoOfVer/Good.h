@@ -41,14 +41,20 @@ public:
 };
 
 class book :public Good{
-	static double GoodDiscount;
+private:
+	static double BookDiscount;
+public:
 	virtual priceType getPrice()const;
 };
 class clouthing :public Good {
+private:
 	static double ClouthDiscount;
+public:
 	virtual priceType getPrice()const;
 };
 class electronic :public Good {
+private:
 	static double ElecDiscount;
+public:
 	virtual priceType getPrice()const;
 };

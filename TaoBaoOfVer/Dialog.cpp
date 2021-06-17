@@ -5,6 +5,7 @@
 #define recvV(tag) (input->getValue(tag))
 #define recvT(tag) (input->getString(tag))
 #define ExitProcess {status=Exit;}
+#define HasLogIn (userType==ConsumerUser||userType==SellerUser)
 
 #define CUser ((Consumer*)User)
 #define SUser ((Seller*)User)
@@ -43,13 +44,11 @@ void Dialog::run()
 void Dialog::Dialogmanage()
 {
     while (1) {
-        bool notSend=false;
         while (!input->infoReady() || !output->empty()) {
             std::unique_lock <std::mutex> lck(lock); waitThread=new thread(&Dialog::run, this);  Run.wait(lck);
         }
        cmd=recvV("cmd"); 
        cout << "sever recv :" << input->buffer() << endl;
-        sendV("cmd",cmd);
         if (status == Exit) { status = (Command)cmd; step = 1; }
      //   usingLocker.lock();
         switch (cmd)
@@ -59,11 +58,14 @@ void Dialog::Dialogmanage()
         case ShowGoods:/**/cmd = status; break;
         case LogIn: manageLogIn();
             break;
-        case LogOut:
+        case LogOut:manageLogOut();
             break;
         case SignIn:manageSignIn();
             break;
+        case Income:manageIncome();
+            break;
         case End:
+
            // server->save(); 
             return;
             break;
@@ -72,10 +74,11 @@ void Dialog::Dialogmanage()
         }
         if(status==Exit){ step = 1; if (userType == HalfSeller || userType == HalfConsumer)userType = Visitor; }//outway:status=Exit
         //usingLocker.unlock();
-        if (!notSend) {
+        if (!output->empty()) {
+            sendV("cmd", cmd);
             output->sendInfo();
-            input->clear();
         }
+        input->clear();
     }
 }
 
@@ -171,6 +174,57 @@ void Dialog::manageLogIn()
                 ExitProcess;
             }
         }
+        break;
+    }
+}
+
+void Dialog::manageLogOut()
+{
+    switch (step)
+    {
+    case 1:
+        if (!HasLogIn) {
+            ExitProcess;
+        }else
+        switch (userType)
+        {
+        case ConsumerUser:
+            consumers->releaseFromMemoryIntoFile(user->id());            
+            break;
+        case SellerUser:
+            sellers->releaseFromMemoryIntoFile(user->id());
+        default:
+            break;
+        }
+        userType = Visitor;
+        ExitProcess;
+        break;
+    default:
+        break;
+    }
+}
+
+void Dialog::manageIncome()
+{
+    bool flag;
+    moneyType money;
+    switch(step) {
+    case 1:
+        if (!HasLogIn) {
+            ExitProcess; break;
+        }
+        money = recvV("Money");
+        flag=user->income(money);
+        if (flag&&userType == ConsumerUser) {
+            consumers->saveFile(user->id());
+        }
+        else if (flag&&userType == SellerUser) {
+            sellers->saveFile(user->id());
+        }
+        else flag = false;
+        sendV("Flag", flag);
+        break;
+    default:
         break;
     }
 }

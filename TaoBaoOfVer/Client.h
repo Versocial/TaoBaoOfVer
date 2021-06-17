@@ -34,6 +34,7 @@ public:
 	void whenLogIn();
 	void whenLogOut();
 	void whenSignIn();
-
+	void whenInfome();
+	void sendRequestWithoutAnswer();
 };
 

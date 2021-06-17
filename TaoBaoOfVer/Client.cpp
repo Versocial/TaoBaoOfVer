@@ -16,7 +16,7 @@ static 	Server*server ;
 
 
 unordered_map<string, enum Command> Client::Client_Command{
-    { "@E", Exit},{"@L",LogIn},{"@O",LogOut}, {"@End",End},{"@S",SignIn}
+    { "@E", Exit},{"@L",LogIn},{"@O",LogOut}, {"@End",End},{"@S",SignIn},{"@M",Income} 
 };
 
 
@@ -73,6 +73,7 @@ void Client::ClientMain()
     case LogIn:whenLogIn(); break;
     case LogOut:whenLogOut(); break;
     case SignIn:whenSignIn(); break;
+    case Income:whenInfome(); break;
     default:
         break;
     }
@@ -164,8 +165,39 @@ void Client::sendRequest()
     needAnswer = true;
 }
 
+void Client::sendRequestWithoutAnswer()
+{
+    output->sendInfo();
+    input->clear();
+}
+
 void Client::whenLogOut()
 {
+    switch (step) {
+    case 1:
+        if (!HasLogIn){
+            cout << "NO, you must log in before you log out.\n";
+            ExitProcess;
+    }
+        cout << "Oh, " << user->Name() << " , are you sure to log out ? type in 'O' or 'o' to confirm.\n" << endl;
+        step++;
+        WaitInput;
+        break;
+    case 2:
+        ReadByCin(tempInfo);
+        if (tempInfo[0] == 'O' || tempInfo[0] == 'o') {
+            sendV("cmd", LogOut);
+            sendRequestWithoutAnswer();
+            user->deleteByPtr();
+            user = NULL;
+            userID = 0;
+            userType = Visitor;
+            cout << " OK .\n";
+        }
+        else cout << "Oh you don't really want to log out now, right?\n";
+        ExitProcess;
+        break;
+    }
 }
 
 Client::~Client()
@@ -263,6 +295,35 @@ void Client::whenSignIn()
         break;
     default:
 
+        break;
+    }
+}
+
+void Client::whenInfome()
+{
+    moneyType money;
+    bool flag=false;
+    switch(step) {
+    case 1:
+        if (!HasLogIn) { cout << "Please log in or sign in first.\n"; ExitProcess; }
+        else {
+            cout << "Please enter how mang dollors you want to charge.\n";
+            WaitInput;
+            step++;
+        }
+        break;
+    case 2:
+        ReadByCin(money);
+        sendV("cmd", Income);
+        sendV("Money", money);
+        sendRequest();
+        waitForAnswer();
+        flag = recvV("Flag");
+        if (flag) { cout << "got your " << money << " dollors, Suceess ! "; user->income(money); }
+        else cout << "Sorry you are refused.\n";
+        ExitProcess;
+        break;
+    default:
         break;
     }
 }

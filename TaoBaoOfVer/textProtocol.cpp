@@ -23,6 +23,7 @@ bool Text::empty()
 void Text::clear()
 {
     *buf = 0;
+    sended = false;
 }
 
 char* Text::buffer()
