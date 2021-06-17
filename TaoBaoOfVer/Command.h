@@ -17,6 +17,9 @@ enum Command {
 	AskGoodsInfo,
 	ChangeInfo,
 	ShowInfo,
+	ChooseGood,
+	ShowOrder,
+	ManageOrder
 };
 
 enum _ClientType {

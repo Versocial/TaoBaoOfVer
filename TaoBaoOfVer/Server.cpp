@@ -42,7 +42,7 @@ void Server::save()
 
 Server* Server::getInstance(Text& in, Text& out)
 {
-    if (instance == NULL) { instance = new Server(in, out); }
+    if (instance == NULL) { instance = new Server(in, out); instance->allOrders = OrdersControler::getInstance(OdersPath); }
     return instance;
 }
 

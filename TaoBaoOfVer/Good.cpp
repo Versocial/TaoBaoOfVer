@@ -116,16 +116,37 @@ Number Good::SellingNum()const
 	return sellingNum;
 }
 
-bool Good::sell(Number selling)
+bool Good::sellStart(Number selling)
 {
 	if (sellingNum > selling) {
 		sellingNum -= selling;
+		onSelling += selling;
+		return true;
+	}else 	return false;
+}
+
+bool Good::sellConcel(Number selling)
+{
+	if (onSelling >= selling) {
+		onSelling -= selling;
+		sellingNum += selling;
+		return true;
+	}
+	return false;
+}
+
+bool Good::sellFinish(Number selling)
+{
+	if (onSelling > selling) {
+		onSelling -= selling;
 		if (soldNum + sellingNum > sellingNum) { soldNum += sellingNum; }
 		else soldNum = (unsigned long long) - 1;
 		return true;
 	}
 	return false;
 }
+
+
 
 bool Good::increaseSelling(Number num)
 {

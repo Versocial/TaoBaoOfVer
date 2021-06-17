@@ -1,6 +1,7 @@
 #pragma once
 #include "Client.h"
 #define chachePath ("../res/chache") 
+#define shopCarPath ("../res/shopCar") 
 
 #define sendV(tag,x){output->setString(tag, to_string(x)); }
 #define sendT(tag,x){output->setString(tag,x);}
@@ -34,6 +35,7 @@ int main() {
     client->ClientMain();
     delete(client);
     delete(server);
+
 }
 
 Client::Client(Text& in, Text& out) {
@@ -45,6 +47,7 @@ Client::Client(Text& in, Text& out) {
     output = &out;
     goods = GoodsControler::getInstance(chachePath);
     clearChacheFiles(chachePath);
+    shopCar = OrdersControler::getInstance(shopCarPath);
     tempID = 0;
 }
 
@@ -85,6 +88,8 @@ void Client::ClientMain()
     case AddGood:whenAddGood(); break;
     case ChangeInfo:whenChangeInfo(command); break;
     case ShowInfo:whenShowInfo(command); break;
+    case Shop:; break;
+        case 
     default:ExitProcess;
         break;
     }

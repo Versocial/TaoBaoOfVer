@@ -6,11 +6,13 @@
 #include "Command.h"
 #include "textProtocol.h"
 #include<thread>
+#include "OrdersControler.h"
 
 #define ConsumersControlerPath ("../res/Consumer") 
 #define GoodsControlerPath ("../res/Good") 
 #define SellersControlerPath ("../res/Seller")
 #define LogPath ("../res/server.log")
+#define OdersPath ("../res/Order")
 
 typedef  unsigned int CMD;
 typedef int ClientType;
@@ -18,6 +20,7 @@ typedef int ClientType;
 class Server
 {
 private:
+	OrdersControler* allOrders;
 	mutex usingLocker;
 	thread* autoSave;
 	static Server* instance;

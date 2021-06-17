@@ -7,6 +7,7 @@
 #include "Server.h"
 #include "sstream"
 #include "textProtocol.h"
+#include "OrdersControler.h"
 using namespace::std;
 
 class Client
@@ -29,6 +30,7 @@ private:
 	Text* input;
 	Text* output;
 	GoodsControler* goods;
+	OrdersControler* shopCar;
 	inline	void waitForAnswer();
 	inline void sendRequest();
 	void clearChacheFiles(const char* ChachePath)const;
@@ -37,14 +39,18 @@ public:
 	Client(Text& in,Text& out);
 	~Client();
 	void ClientMain();
+	void sendRequestWithoutAnswer();
 	void whenLogIn();
 	void whenLogOut();
 	void whenSignIn();
 	void whenInfome();
 	void whenAddGood();
-	void sendRequestWithoutAnswer();
 	void whenAskForAllGoods();
 	void whenChangeInfo(string cmd);
 	void whenShowInfo(string cmd);
+	void whenCooseGood();
+	void whenShowOrder();
+	void whenManageOrder();
+
 };
 

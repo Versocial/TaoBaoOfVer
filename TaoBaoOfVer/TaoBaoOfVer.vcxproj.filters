@@ -54,6 +54,9 @@
     <ClInclude Include="OrdersControler.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="shopCar.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="User.cpp">
@@ -115,5 +118,6 @@
     <None Include="userData">
       <Filter>资源文件</Filter>
     </None>
+    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>

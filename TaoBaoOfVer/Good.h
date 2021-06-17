@@ -12,13 +12,13 @@ class Good:public Object
 private:
 	string name;
 	idType sellerID;
+	Number onSelling;
 	Number sellingNum;
 	unsigned long long  soldNum;
 	priceType originalPrice;
 protected:
 	GoodType type = DEFAULT;
 	int discount;
-	virtual priceType getPrice()const;
 	void  setOriginalPrice(priceType price);
 	void initGood(idType id, istream& input, ostream& output);
 
@@ -26,6 +26,7 @@ protected:
 	Good(idType id);
 	Good(idType id, idType sellerId, string name, priceType price, Number selling);//for create a new good
 public:
+	virtual priceType getPrice()const;
 	static bool canBeName(string name);
 	Good();
 	static Good* newGood(istream&);
@@ -34,7 +35,9 @@ public:
 	string Name();
 	unsigned long long SoldNum()const;
 	Number SellingNum()const;
-	bool sell(Number selling);
+	bool sellStart(Number selling);
+	bool sellConcel(Number selling);
+	bool sellFinish(Number selling);
 	bool increaseSelling(Number num);
 	bool decreaseSelling(Number num);
 	bool setSelling(Number num);
