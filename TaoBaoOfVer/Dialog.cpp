@@ -75,6 +75,9 @@ void Dialog::Dialogmanage()
             break;
         case ManageOrder:manageOrder();
             break;
+        case PullSoldOrder:manageSoldPull();
+            break;
+            break;
         case End:
            // server->save();
             delete this;
@@ -446,8 +449,8 @@ void Dialog::manageSoldPull()
                 sendT(to_string(num), tempi);
                     num++;
             }
-            sendV("Num", num);
         }
+        sendV("Num", num);
         ExitProcess;
         break;
     default:

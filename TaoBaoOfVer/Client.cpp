@@ -23,7 +23,7 @@ static 	Server*server ;
 unordered_map<string, enum Command> Client::Client_Command{
     { "@E", Exit},{"@L",LogIn},{"@O",LogOut}, {"@End",End},{"@S",SignIn},{"@M",Income} ,{"@P",AskGoodsInfo},{"@A",AddGood},{"@CN",ChangeInfo},
     {"@CP",ChangeInfo},{"@show",ShowInfo},{"@user",ShowInfo},{"@G",	ChooseGood},{"@T",Target},{"@car",ShowOrder},{"@shop",ManageOrder},{"@p",PullSoldOrder},
-    {"@s",ShowOrder}
+    {"@s",ShowSoldOrder}
 };
 
 
@@ -95,7 +95,7 @@ void Client::ClientMain()
     case ShowOrder:whenShowOrder(); break;
     case ManageOrder:whenManageOrder(); break;
     case PullSoldOrder:whenManagePullSold(); break;
-    case ShowSoldOrder:whenShowOrder(); break;
+    case ShowSoldOrder:whenShowSold(); break;
     case Target:pullTarget(); break;
     default:ExitProcess;
         break;
@@ -539,11 +539,15 @@ void Client::whenManagePullSold()
     {
     case 1 :
         sendV("cmd", PullSoldOrder);
+        sendRequest();
+        waitForAnswer();
         num=recvV("Num");
         for (int i = 0; i < num; i++) {
-             recvT(to_string(num),tempInfo);
+             recvT(to_string(i),tempInfo);
              istringstream inputs(tempInfo);
-             orders->addToMemory(orders->theOrder()->getByStream(inputs));
+             Order* tempOrder = (Order*)orders->theOrder()->getByStream(inputs);
+             orders->addToMemory(tempOrder);
+             orders->saveFile(tempOrder->id());
         }
         cout << "got " << num << " answers, type in '@s' to look.\n";
         ExitProcess;
@@ -554,6 +558,7 @@ void Client::whenManagePullSold()
 void Client::whenShowSold()
 {
     cout << orders->toShow(goods);
+    ExitProcess;
 }
 Good* Client::pullTarget_recv(idType id)
 {

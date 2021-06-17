@@ -111,6 +111,7 @@ set<idType> User::getSetFromStream(istream&input)
 	input >> id;
 	while (id != _INVALID_ID) {
 		ans.insert(id);
+		input >> id;
 	}
 	return ans;
 }
