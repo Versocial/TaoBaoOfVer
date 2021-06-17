@@ -21,7 +21,7 @@ static 	Server*server ;
 
 unordered_map<string, enum Command> Client::Client_Command{
     { "@E", Exit},{"@L",LogIn},{"@O",LogOut}, {"@End",End},{"@S",SignIn},{"@M",Income} ,{"@P",AskGoodsInfo},{"@A",AddGood},{"@CN",ChangeInfo},
-    {"@CP",ChangeInfo},{"@show",ShowInfo},{"@user",ShowInfo}
+    {"@CP",ChangeInfo},{"@show",ShowInfo},{"@user",ShowInfo},{"@G",	ChooseGood},{"@T",Target}
 };
 
 
@@ -45,8 +45,8 @@ Client::Client(Text& in, Text& out) {
 	step = 1;
     input = &in;
     output = &out;
-    goods = GoodsControler::getInstance(chachePath);
     clearChacheFiles(chachePath);
+    goods = GoodsControler::getInstance(chachePath);
     shopCar = OrdersControler::getInstance(shopCarPath);
     tempID = 0;
 }
@@ -91,6 +91,7 @@ void Client::ClientMain()
     case ChooseGood:whenCooseGood(); break;
     case ShowOrder:whenShowOrder(); break;
     case ManageOrder:whenManageOrder(); break;
+    case Target:pullTarget(); break;
     default:ExitProcess;
         break;
     }
@@ -358,7 +359,7 @@ void Client::whenCooseGood()
         ExitProcess;
         return;
     }
-    Number number;
+
     switch (step)
     {
     case 1:
@@ -371,23 +372,27 @@ void Client::whenCooseGood()
         if (tempID == _INVALID_ID) { cout << "invalid id! reType!\n"; WaitInput; break; }
         pullTarget_send(tempID);
         cout << "Give how much you want.\n";
+        step++;
         WaitAnswerAndInput;
         break;
     case 3:
-        ReadByCin(number);
-        Good* good = pullTarget_recv();
-        if (good == NULL) { cout << "No such id !" << endl; ExitProcess; }
-        else if (good->SellingNum() < number) { cout << "Too much ! sure to continue ? 'y' to confirm.\n"; WaitInput; }
+        ReadByCin(tempNumber);
+        tempGood = pullTarget_recv(tempID);
+        if (tempGood == NULL) { cout << "No such id !" << endl; ExitProcess; }
+        else if (tempGood->SellingNum() < tempNumber) { cout << "Too much ! sure to continue ? 'y' to confirm.\n"; step++; WaitInput; }
         else {
-            shopCar->addGood(good->getSellerID(), user->id(), good->id(), number);
-            cout << "OK. you add "<<number<<" of such thing : \n"<<good->toShow()<<endl;
+            shopCar->addGood(tempGood->getSellerID(), user->id(), tempGood->id(), tempNumber);
+            shopCar->saveFile(tempGood->id());
+            cout << "OK. you add "<<tempNumber<<" of such thing : \n"<<tempGood->toShow()<<endl;
             ExitProcess;
         }
+        break;
     case 4:
         ReadByCin(tempInfo);
         if (tempInfo[0] == 'y') {
-            shopCar->addGood(good->getSellerID(), user->id(), good->id(), number);
-            cout << "OK. you add " << number << " of such thing : \n" << good->toShow() << endl;
+            shopCar->addGood(tempGood->getSellerID(), user->id(), tempGood->id(), tempNumber);
+            shopCar->saveFile(tempGood->id());
+            cout << "OK. you add " << tempNumber << " of such thing : \n" << tempGood->toShow() << endl;
         }
         else cout << "OK, you conceled.\n";
         ExitProcess;
@@ -412,8 +417,34 @@ Good* Client::pullTarget(idType id )
 {
     pullTarget_send(id);
     waitForAnswer();
-    return pullTarget_recv();
+    return pullTarget_recv(id);
    
+}
+
+void Client::pullTarget()
+{
+    idType temp;
+    switch (step)
+    {
+    case 1:
+        cout << "Type in Good id you want to choose.\n";
+        step++;
+        WaitInput;
+        break;
+    case 2:
+        ReadByCin(temp);
+        if (temp != _INVALID_ID) {
+            tempGood = pullTarget(temp);
+            if (tempGood == NULL)temp = _INVALID_ID;
+            else goods->saveFile(tempGood->id());
+        }
+        if (temp == _INVALID_ID) { cout << " NO such an good id.\n"; }
+        else { cout << tempGood->toShow()<<endl; }
+            ExitProcess;
+        break;
+    default:
+        break;
+    }
 }
 
 void Client::pullTarget_send(idType id)
@@ -423,9 +454,9 @@ void Client::pullTarget_send(idType id)
     sendV("0", id);
     sendRequest();
 }
-Good* Client::pullTarget_recv()
+Good* Client::pullTarget_recv(idType id)
 {
-    string ans = recvT(to_string(0));
+    string ans = recvT(to_string(id));
     if (ans == "0")return NULL;
     istringstream input(ans);
     Good* tempGo = Good::newGood(input);
@@ -562,6 +593,8 @@ Client::~Client()
 {
     delete input;
     delete output;
+    delete goods;
+    delete shopCar;
 }
 
 void Client::whenSignIn()
@@ -659,8 +692,8 @@ void Client::whenSignIn()
 
 void Client::clearChacheFiles(const char* ChachePath)const
 {   
-    intptr_t hFile = 0;//鏂囦欢鍙ユ焺  
-    struct _finddata_t fileinfo;//鏂囦欢淇℃伅  
+    intptr_t hFile = 0;//文件句柄  
+    struct _finddata_t fileinfo;//文件信息  
     string p(ChachePath);
     if ((hFile = _findfirst(p.assign(ChachePath).append("\\*.TBgood").c_str(), &fileinfo)) != -1)
     {

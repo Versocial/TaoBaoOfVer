@@ -70,6 +70,8 @@ void Dialog::Dialogmanage()
             break;
         case ChangeInfo:manageChange();
             break;
+        case Target:manageTargetPull();
+            break;
         case End:
            // server->save();
             delete this;
@@ -358,7 +360,7 @@ void Dialog::manageTargetPull()
         num = recvV("Num");
         sendV("Num",num);
         for (int i = 0; i < num; i++) {
-            id = recvV(to_string(num));
+            id = recvV(to_string(i));
             string toSend = "0";
             if (goods->containsInMemory(id))toSend = ((Good*)goods->getObjectInMemory(id))->turnIntoString();
             sendT(to_string(id), toSend);

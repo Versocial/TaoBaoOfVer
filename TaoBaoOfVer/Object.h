@@ -13,6 +13,8 @@ protected:
 	Object();
 	Object(idType id);
 	~Object();
+protected:
+	void setID(idType id);
 public:
 	idType id()const;
 	virtual Object* getByStream( istream&)=0;//read from string 

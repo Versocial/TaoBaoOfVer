@@ -21,6 +21,7 @@ private:
 	int ClientTempFlag;
 	string tempInfo;
 	Good* tempGood;
+	Number tempNumber;
 	idType tempID;
 	CMD cmd;
 	CMD cmdRecvd;
@@ -51,9 +52,11 @@ public:
 	void whenCooseGood();
 	void whenShowOrder();
 	void whenManageOrder();
+	void pullTarget();
+
 	Good* pullTarget(idType id);
 	void pullTarget_send(idType id);
-	Good* pullTarget_recv();
+	Good* pullTarget_recv(idType id);
 };
 //hou tai din shi la qu
 

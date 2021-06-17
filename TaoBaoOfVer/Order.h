@@ -14,6 +14,7 @@ private:
 	idType sellerID;
 	idType consumerID;
 	unordered_map<idType,Number>goodsSet;
+protected:
 public:
 	Order();
 	Order(idType seller, idType consumer);
@@ -28,4 +29,5 @@ public:
 	virtual bool deleteByPtr() ;//delete this
 
 	bool OrderNow(GoodsControler* good);
+	void setTheID(idType id);
 };

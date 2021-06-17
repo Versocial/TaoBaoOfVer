@@ -2,6 +2,11 @@
 
 
 
+void Order::setTheID(idType id)
+{
+	setID(id);
+}
+
 Order::Order():Object()
 {
 }

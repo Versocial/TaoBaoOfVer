@@ -40,6 +40,8 @@ void OrdersControler::addGood(idType seller,idType consumer, idType goodId, Numb
 	}
 	else {
 		order = new Order(seller, consumer);
+		order->setTheID(seller);
+		addToMemory(order);
 	}
 	order->addGood(goodId, num);
 	saveFile(seller);

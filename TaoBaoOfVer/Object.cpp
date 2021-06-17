@@ -13,6 +13,11 @@ Object::~Object()
 {
 }
 
+void Object::setID(idType id)
+{
+	ID = id;
+}
+
 
 idType Object::id() const
 {
