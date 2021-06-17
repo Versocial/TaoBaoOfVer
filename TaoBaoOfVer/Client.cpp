@@ -53,7 +53,6 @@ void Client::ClientMain()
     needAnswer=false;
     canExit = false;
     while (1) {
-        string command;
         if (cmd==Exit) {           //get command for keyboard when no process running
                  cin >> command;
                 while (!Client_Command.count(command)) { cout << "Wrong Command.\n"; cin >> command; }
@@ -76,7 +75,7 @@ void Client::ClientMain()
     {
     case Exit:
         if (status == Exit) { continue; }
-        status = Exit;sendV("cmd",Exit); sendRequest(); cout << "exit the process.\n";  step = 1; needAnswer = false; continue;
+        status = Exit;sendV("cmd",Exit); sendRequestWithoutAnswer(); cout << "exit the process.\n";  step = 1; needAnswer = false; continue;
         break;
     case LogIn:whenLogIn(); break;
     case LogOut:whenLogOut(); break;
@@ -231,12 +230,20 @@ void Client::whenAskForAllGoods()
     }
 }
 
+/*
+@L
+c
+10001
+eveveve
+@CN
+
+*/
 void Client::whenChangeInfo(string command)
 {
     string info;
     bool flag = true;
-    if (!HasLogIn) { cout << "Please LogIn first !\n"; return; }
-    switch (command[1])
+    if (!HasLogIn) { cout << "Please LogIn first !\n"; ExitProcess; return; }
+    switch (command[2])
     {
     case 'N':
         switch (step)
@@ -254,8 +261,9 @@ void Client::whenChangeInfo(string command)
             else {
                 user->changeName(info);
                 sendV("cmd", ChangeInfo);
+                sendT("Text", info);
                 sendV("Flag", false);
-                sendRequest();
+                sendRequestWithoutAnswer();
                 cout << "Succeessfullly change Name !\n";
                 ExitProcess;
             }
@@ -275,6 +283,7 @@ void Client::whenChangeInfo(string command)
             if (User::canBeName(info)) {
                 sendV("cmd", ChangeInfo);
                 sendV("Flag", true);
+                sendT("PassWd", info);
                 sendRequest();
                 step++;
                 cout << "Give what you want to change Into.\n";
@@ -292,12 +301,16 @@ void Client::whenChangeInfo(string command)
                 ExitProcess;
             }else  {
                 ReadByCin(info); 
-                if (!User::canBeName(info)) {
+                if (!User::canBePassword(info)) {
                     cout << "Illegal Name Format ! Please type in again your password, which must be : digit or label , 6 to15 characters.\n";
                     WaitInput;
                 }
                 else {
-                    user->changeName(info);
+                    user->changePassWord(info);
+                    sendV("cmd", ChangeInfo);
+                    sendV("Flag", true);
+                    sendT("PassWd", info);
+                   sendRequestWithoutAnswer();
                     cout << "OK.\n";
                     ExitProcess;
                 }
@@ -331,6 +344,7 @@ void Client::whenShowInfo(string command)
         break;
     }
 }
+
 
 void Client::whenAddGood()//////
 {
@@ -400,7 +414,7 @@ void Client::whenAddGood()//////
             sendV("Price", good->getOriginalPrice());
             sendV("Type", good->Type());
             cout << "OK.\n";
-            sendRequest();
+            sendRequestWithoutAnswer();
             goods->addToMemory(good);
             goods->saveFile(good->id());
             ExitProcess;

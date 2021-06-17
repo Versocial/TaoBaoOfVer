@@ -12,6 +12,7 @@ using namespace::std;
 class Client
 {
 private:
+	string command;
 	bool canExit;
 	bool needAnswer;
 	 enum Command status;

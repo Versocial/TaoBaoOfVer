@@ -1,6 +1,18 @@
-﻿  Good.cpp
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Good.cpp(169,18): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
-  textProtocol.cpp
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\textProtocol.cpp(59,23): warning C4018: “<”: 有符号/无符号不匹配
+﻿  Client.cpp
+A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(99,14): warning C4244: “=”: 从“__int64”转换到“CMD”，可能丢失数据
+A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(154,20): warning C4244: “=”: 从“__int64”转换到“int”，可能丢失数据
+A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(207,18): warning C4244: “=”: 从“__int64”转换到“unsigned long”，可能丢失数据
+A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(208,18): warning C4244: “=”: 从“__int64”转换到“int”，可能丢失数据
+A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(364,18): warning C4244: “=”: 从“__int64”转换到“unsigned long”，可能丢失数据
+A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(498,39): warning C4553: “==”: 未使用表达式结果；是否打算使用“=”?
+A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(507,18): warning C4244: “=”: 从“__int64”转换到“unsigned long”，可能丢失数据
+  Dialog.cpp
+A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Dialog.cpp(50,12): warning C4244: “=”: 从“__int64”转换到“CMD”，可能丢失数据
+A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Dialog.cpp(98,20): warning C4244: “=”: 从“__int64”转换到“ClientType”，可能丢失数据
+A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Dialog.cpp(148,18): warning C4244: “=”: 从“__int64”转换到“ClientType”，可能丢失数据
+A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Dialog.cpp(149,16): warning C4244: “=”: 从“__int64”转换到“unsigned long”，可能丢失数据
+A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Dialog.cpp(250,22): warning C4244: “=”: 从“__int64”转换到“unsigned long”，可能丢失数据
+A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Dialog.cpp(300,19): warning C4244: “=”: 从“__int64”转换到“unsigned int”，可能丢失数据
+A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Dialog.cpp(302,62): warning C4244: “参数”: 从“unsigned __int64”转换到“unsigned int”，可能丢失数据
   正在生成代码...
   TaoBaoOfVer.vcxproj -> A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\Debug\TaoBaoOfVer.exe

@@ -68,7 +68,8 @@ void Dialog::Dialogmanage()
             break;
         case AddGood:manageAddGood();
             break;
-        case ChangeInfo:manageChang();
+        case ChangeInfo:manageChange();
+            break;
         case End:
            // server->save();
             delete this;
@@ -309,7 +310,7 @@ void Dialog::manageAddGood()
     }
 }
 
-void Dialog::manageChang()
+void Dialog::manageChange()
 {
     bool flag;
     string info;
@@ -319,22 +320,29 @@ void Dialog::manageChang()
     case 1:
         if (!HasLogIn) { ExitProcess; break; }
         flag=recvV("Flag");
-        info = recvT("Text");
-        if (flag == 1) {//change password
+        if (flag) {//change password
             pass = recvT("PassWd");
             flag = user->matchWithPassWord(pass);
-            if (flag)user->changePassWord(info);
-            if (userType == ConsumerUser)consumers->saveFile(user->id());
-            else sellers->saveFile(user->id());
             sendV("Flag", flag);
+            ExitProcess;
         }
         else {//change name
+            info = recvT("Text");
             user->changeName(info);
+            if (userType == ConsumerUser)consumers->saveFile(user->id());
+            else sellers->saveFile(user->id());
+            step++;
+        }
+        break;
+    case 2:
+        flag = recvV("Flag");
+        pass = recvT("PassWd");
+        if (flag) {
+            user->changePassWord(pass);
             if (userType == ConsumerUser)consumers->saveFile(user->id());
             else sellers->saveFile(user->id());
         }
         ExitProcess;
-        break;
     default:
         break;
     }
