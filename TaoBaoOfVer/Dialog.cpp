@@ -348,3 +348,24 @@ void Dialog::manageChange()
     }
 }
 
+void Dialog::manageTargetPull()
+{
+    idType id;
+    int num = 0;
+    switch (step)
+    {
+    case 1:
+        num = recvV("Num");
+        sendV("Num",num);
+        for (int i = 0; i < num; i++) {
+            id = recvV(to_string(num));
+            string toSend = "0";
+            if (goods->containsInMemory(id))toSend = ((Good*)goods->getObjectInMemory(id))->turnIntoString();
+            sendT(to_string(id), toSend);
+        }
+        ExitProcess;
+    default:
+        break;
+    }
+}
+

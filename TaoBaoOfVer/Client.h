@@ -51,6 +51,9 @@ public:
 	void whenCooseGood();
 	void whenShowOrder();
 	void whenManageOrder();
-
+	Good* pullTarget(idType id);
+	void pullTarget_send(idType id);
+	Good* pullTarget_recv();
 };
+//hou tai din shi la qu
 

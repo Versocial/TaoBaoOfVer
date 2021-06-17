@@ -88,8 +88,9 @@ void Client::ClientMain()
     case AddGood:whenAddGood(); break;
     case ChangeInfo:whenChangeInfo(command); break;
     case ShowInfo:whenShowInfo(command); break;
-    case Shop:; break;
-        case 
+    case ChooseGood:whenCooseGood(); break;
+    case ShowOrder:whenShowOrder(); break;
+    case ManageOrder:whenManageOrder(); break;
     default:ExitProcess;
         break;
     }
@@ -348,6 +349,89 @@ void Client::whenShowInfo(string command)
     default:ExitProcess;
         break;
     }
+}
+
+void Client::whenCooseGood()
+{
+    if (userType != ConsumerUser) {
+        cout << "You should be a consumer to buy !"<<endl;
+        ExitProcess;
+        return;
+    }
+    Number number;
+    switch (step)
+    {
+    case 1:
+        cout << "Type in id of what you want to shop.\n";
+        WaitInput;
+        step++;
+        break;
+    case 2:
+        ReadByCin(tempID);
+        if (tempID == _INVALID_ID) { cout << "invalid id! reType!\n"; WaitInput; break; }
+        pullTarget_send(tempID);
+        cout << "Give how much you want.\n";
+        WaitAnswerAndInput;
+        break;
+    case 3:
+        ReadByCin(number);
+        Good* good = pullTarget_recv();
+        if (good == NULL) { cout << "No such id !" << endl; ExitProcess; }
+        else if (good->SellingNum() < number) { cout << "Too much ! sure to continue ? 'y' to confirm.\n"; WaitInput; }
+        else {
+            shopCar->addGood(good->getSellerID(), user->id(), good->id(), number);
+            cout << "OK. you add "<<number<<" of such thing : \n"<<good->toShow()<<endl;
+            ExitProcess;
+        }
+    case 4:
+        ReadByCin(tempInfo);
+        if (tempInfo[0] == 'y') {
+            shopCar->addGood(good->getSellerID(), user->id(), good->id(), number);
+            cout << "OK. you add " << number << " of such thing : \n" << good->toShow() << endl;
+        }
+        else cout << "OK, you conceled.\n";
+        ExitProcess;
+        break;
+    default:ExitProcess;
+        break;
+    }
+}
+
+
+
+
+void Client::whenShowOrder()
+{
+}
+
+void Client::whenManageOrder()
+{
+}
+
+Good* Client::pullTarget(idType id )
+{
+    pullTarget_send(id);
+    waitForAnswer();
+    return pullTarget_recv();
+   
+}
+
+void Client::pullTarget_send(idType id)
+{
+    sendV("cmd", Target);
+    sendV("Num", 1);
+    sendV("0", id);
+    sendRequest();
+}
+Good* Client::pullTarget_recv()
+{
+    string ans = recvT(to_string(0));
+    if (ans == "0")return NULL;
+    istringstream input(ans);
+    Good* tempGo = Good::newGood(input);
+    goods->addToMemory(tempGo);
+    goods->saveFile(tempGo->id());
+    return tempGo;
 }
 
 

@@ -19,7 +19,8 @@ enum Command {
 	ShowInfo,
 	ChooseGood,
 	ShowOrder,
-	ManageOrder
+	ManageOrder,
+	Target,
 };
 
 enum _ClientType {

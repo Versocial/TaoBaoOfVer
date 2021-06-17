@@ -63,6 +63,7 @@ private:
 	void manageGoodsPulling();
 	void manageAddGood();
 	void manageChange();
+	void manageTargetPull();
 public:
 	~Dialog();
 	Dialog(Server* server, Text& in, Text& out);
