@@ -59,6 +59,7 @@ private:
 	void manageIncome();
 	void manageGoodsPulling();
 	void manageAddGood();
+	void manageChang();
 public:
 	~Dialog();
 	Dialog(Server* server, Text& in, Text& out);

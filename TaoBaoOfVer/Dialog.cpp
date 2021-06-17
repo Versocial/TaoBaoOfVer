@@ -68,6 +68,7 @@ void Dialog::Dialogmanage()
             break;
         case AddGood:manageAddGood();
             break;
+        case ChangeInfo:manageChang();
         case End:
            // server->save();
             delete this;
@@ -250,11 +251,12 @@ void Dialog::manageGoodsPulling()
         while (num>=0&&goodID > goods->startID()) {
             if (goods->containsInMemory(goodID)) {
                 if (num == 0)break;
-                sendT("Good",goods->getObjectInMemory(goodID)->turnIntoString());
+                sendT(("Good"+to_string(MAXPULLNUM-num)),goods->getObjectInMemory(goodID)->turnIntoString());
                     num--;
             }
             goodID--;
         }
+        sendV("Num", MAXPULLNUM - num);
         if (num == MAXPULLNUM) {
             flag = false;
         }
@@ -300,6 +302,37 @@ void Dialog::manageAddGood()
         goods->addToMemory(good);
         goods->saveFile(tempID);
         ((Seller*)user)->addGood(tempID);
+        ExitProcess;
+        break;
+    default:
+        break;
+    }
+}
+
+void Dialog::manageChang()
+{
+    bool flag;
+    string info;
+    string pass;
+    switch (step)
+    {
+    case 1:
+        if (!HasLogIn) { ExitProcess; break; }
+        flag=recvV("Flag");
+        info = recvT("Text");
+        if (flag == 1) {//change password
+            pass = recvT("PassWd");
+            flag = user->matchWithPassWord(pass);
+            if (flag)user->changePassWord(info);
+            if (userType == ConsumerUser)consumers->saveFile(user->id());
+            else sellers->saveFile(user->id());
+            sendV("Flag", flag);
+        }
+        else {//change name
+            user->changeName(info);
+            if (userType == ConsumerUser)consumers->saveFile(user->id());
+            else sellers->saveFile(user->id());
+        }
         ExitProcess;
         break;
     default:

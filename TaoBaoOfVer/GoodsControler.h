@@ -18,6 +18,6 @@ public:
 	static GoodsControler* getInstance(string path);
 	~GoodsControler();
 	bool addOneGoodByCin();// just for test
-	void toShowGoods(ostream& input);
+	void toShowGoods(ostream& output);
 };
 

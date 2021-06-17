@@ -6,7 +6,7 @@
 #define sendT(tag,x){output->setString(tag,x);}
 #define recvV(tag) (input->getValue(tag))
 #define recvT(tag) (input->getString(tag))
-#define recvTs(tag) (input->getStrings(tag))
+//#define recvTs(tag) (input->getStrings(tag))
 #define HasLogIn (userType==ConsumerUser||userType==SellerUser)
 
 #define CUser ((Consumer*)User)
@@ -19,7 +19,8 @@ static 	Server*server ;
 
 
 unordered_map<string, enum Command> Client::Client_Command{
-    { "@E", Exit},{"@L",LogIn},{"@O",LogOut}, {"@End",End},{"@S",SignIn},{"@M",Income} ,{"@P",AskGoodsInfo},{"@A",AddGood}
+    { "@E", Exit},{"@L",LogIn},{"@O",LogOut}, {"@End",End},{"@S",SignIn},{"@M",Income} ,{"@P",AskGoodsInfo},{"@A",AddGood},{"@CN",ChangeInfo},
+    {"@CP",ChangeInfo},{"@show",ShowInfo},{"@user",ShowInfo}
 };
 
 
@@ -52,8 +53,9 @@ void Client::ClientMain()
     needAnswer=false;
     canExit = false;
     while (1) {
+        string command;
         if (cmd==Exit) {           //get command for keyboard when no process running
-                string command;  cin >> command;
+                 cin >> command;
                 while (!Client_Command.count(command)) { cout << "Wrong Command.\n"; cin >> command; }
                 cmd = Client_Command[command];
         }
@@ -82,7 +84,9 @@ void Client::ClientMain()
     case Income:whenInfome(); break;
     case AskGoodsInfo:whenAskForAllGoods(); break;
     case AddGood:whenAddGood(); break;
-    default:
+    case ChangeInfo:whenChangeInfo(command); break;
+    case ShowInfo:whenShowInfo(command); break;
+    default:ExitProcess;
         break;
     }
     if (cmd == Exit) { step = 1; if (userType == HalfConsumer || userType == HalfSeller)userType = Visitor; tempGood = NULL; }//outway:cmd=Exit 
@@ -183,7 +187,7 @@ void Client::whenAskForAllGoods()
 {
     bool flag;
     int number;
-    set<string >ans;
+      string info;
     idType goodID;
     switch (step)
     {
@@ -202,11 +206,11 @@ void Client::whenAskForAllGoods()
         else step++;
         flag = recvV("Flag");        
         goodID = recvV("ID");
-        if(flag) ans = recvTs("Good");
-        number = ans.size();
+        number = recvV("Num");
         if (number > 0)cout << "Got " << number << " Goods ! " << endl;
         else cout << "Sorry, sellers all put up the shutters now !"<<endl;
-        for (string info:ans) {
+        for (int i = 0; i < number;i++) {
+            info = recvT("Good" +to_string(i));
             istringstream infor(info);
             tempGood = Good::newGood(infor);
             if (goods->containsInMemory(tempGood->id()))goods->removeFromMemory(tempGood->id());
@@ -222,7 +226,108 @@ void Client::whenAskForAllGoods()
             WaitAnswerAndInput;
         }
         break;
-   default:
+   default:ExitProcess;
+        break;
+    }
+}
+
+void Client::whenChangeInfo(string command)
+{
+    string info;
+    bool flag = true;
+    if (!HasLogIn) { cout << "Please LogIn first !\n"; return; }
+    switch (command[1])
+    {
+    case 'N':
+        switch (step)
+        {
+        case 1:
+            cout << "Give me what name you want to change to.\n";
+            step++;
+            WaitInput;
+        case 2:
+            ReadByCin(info);
+            if (!User::canBeName(info)) {
+                cout << "Wrong format ! name must be : digit or label , 2 to15 characters.\n";
+                WaitInput;
+            }
+            else {
+                user->changeName(info);
+                sendV("cmd", ChangeInfo);
+                sendV("Flag", false);
+                sendRequest();
+                cout << "Succeessfullly change Name !\n";
+                ExitProcess;
+            }
+            break;
+        }
+        break;
+    case 'P':
+        switch (step)
+        {
+        case 1:
+            cout << "Type in your last password.\n";
+            step++;
+            WaitInput;
+            break;
+        case 2:
+            ReadByCin(info);
+            if (User::canBeName(info)) {
+                sendV("cmd", ChangeInfo);
+                sendV("Flag", true);
+                sendRequest();
+                step++;
+                cout << "Give what you want to change Into.\n";
+                WaitAnswerAndInput;
+            }
+            else {
+                cout << "Wrong ! Exit ! \n";
+                ExitProcess;
+            }
+            break;
+        default:
+            if(step==3)flag = recvV("Flag");
+            if (!flag) {
+                cout << "Wrong ! Exit ! \n";
+                ExitProcess;
+            }else  {
+                ReadByCin(info); 
+                if (!User::canBeName(info)) {
+                    cout << "Illegal Name Format ! Please type in again your password, which must be : digit or label , 6 to15 characters.\n";
+                    WaitInput;
+                }
+                else {
+                    user->changeName(info);
+                    cout << "OK.\n";
+                    ExitProcess;
+                }
+               }
+            step++;
+            break;
+        }
+        break;
+    default:ExitProcess;
+        break;
+    }
+}
+
+void Client::whenShowInfo(string command)
+{
+    string Info;
+    switch (command[1]) {
+    case 's':
+        goods->toShowGoods(cout);
+        cout << "you can type in '@P' to pull the latest information from server.\n ";
+        ExitProcess;
+        break;
+    case 'u':
+        if (!HasLogIn) { cout << "Please Log in first !\n"; ExitProcess; break; }
+         Info= (userType == ConsumerUser) ? "consumer" : "seller";
+        cout << " " << Info << " " << user->Name() << " :" << endl;
+        cout << "ID: " << user->id() << " Balance: " << user->Money()<<endl;
+        ExitProcess;
+        break;
+    default:ExitProcess;
         break;
     }
 }
@@ -444,7 +549,7 @@ void Client::whenSignIn()
         }
         break;
     default:
-
+        ExitProcess;
         break;
     }
 }
@@ -491,7 +596,7 @@ void Client::whenInfome()
         else cout << "Sorry you are refused.\n";
         ExitProcess;
         break;
-    default:
+    default:ExitProcess;
         break;
     }
 }

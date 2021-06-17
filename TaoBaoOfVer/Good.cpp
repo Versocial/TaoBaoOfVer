@@ -202,13 +202,30 @@ bool Good::deleteByPtr()
 string Good::toShow() const
 {
 	string postfix = "";
-	if (getPrice() < originalPrice)postfix = " Now is " + to_string(originalPrice - getPrice()) + " RMB less than the Orignal Price !";
-	return "trade good [ "+to_string(ID)+" ] :"+name+" price: "+to_string(getPrice())+" selling: "+to_string(sellingNum)+" sold: "+to_string(soldNum)+postfix;
+	if (getPrice() < originalPrice)postfix = ", Now is " + to_string(originalPrice - getPrice()) + " RMB less than the Orignal Price !";
+	string typeInfo="Good";
+	switch (type)
+	{
+	case BOOK:
+		typeInfo = " a book";
+		break;
+	case ELEC:
+		typeInfo = " a electronice thing";
+		break;
+	case CLOUTH:
+		typeInfo = " a clouth ";
+		break;
+	case DEFAULT:
+		break;
+	default:
+		break;
+	}
+	return "trade good [ "+to_string(ID)+" ] :"+name+","+typeInfo+" ,price: "+to_string(getPrice())+" ,selling: "+to_string(sellingNum)+" ,sold: "+to_string(soldNum)+postfix;
 }
 
 
 
-int book:: BookDiscount=1;
+int book:: BookDiscount=100;
  book::book(istream& input) :Good(input)// when client read info
  {
 	 type = BOOK;
@@ -219,9 +236,9 @@ int book:: BookDiscount=1;
  }
  priceType book::getPrice() const
 {
-	return (priceType)ceil(getOriginalPrice()*discount*BookDiscount/10000);
+	return (priceType)ceil( BookDiscount* discount  / 10000*getOriginalPrice());
 }
- int clouthing::ClouthDiscount=1;
+ int clouthing::ClouthDiscount=100;
 
 
 clouthing::clouthing(istream& input) :Good(input)// when client read info
@@ -235,9 +252,9 @@ clouthing::clouthing(idType id, idType sellerId, string name, priceType price, N
 }
 priceType clouthing::getPrice() const
 {
-	return (priceType)ceil(getOriginalPrice() * discount * ClouthDiscount/10000);
+	return (priceType)ceil(ClouthDiscount * discount / 10000 * getOriginalPrice());
 }
-int electronic::ElecDiscount=1;
+int electronic::ElecDiscount=100;
 electronic::electronic(istream&input):Good(input)// when client read info
 {
 	type = ELEC;
@@ -248,5 +265,5 @@ electronic::electronic(idType id, idType sellerId, string name, priceType price,
 }
 priceType electronic::getPrice() const
 {
-	return (priceType)ceil(getOriginalPrice() * discount * ElecDiscount/10000);
+	return (priceType)ceil(ElecDiscount * discount / 10000 * getOriginalPrice());
 }

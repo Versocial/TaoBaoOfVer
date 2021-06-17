@@ -14,7 +14,9 @@ enum Command {
 	ShowGoods,
 	End,
 	Income,
-	AskGoodsInfo
+	AskGoodsInfo,
+	ChangeInfo,
+	ShowInfo,
 };
 
 enum _ClientType {

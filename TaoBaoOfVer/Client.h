@@ -43,5 +43,7 @@ public:
 	void whenAddGood();
 	void sendRequestWithoutAnswer();
 	void whenAskForAllGoods();
+	void whenChangeInfo(string cmd);
+	void whenShowInfo(string cmd);
 };
 
