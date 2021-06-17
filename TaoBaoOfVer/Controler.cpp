@@ -43,15 +43,14 @@ Object* Controler::readFromFile(idType id)
 
 
 
-set<idType> Controler::AllIDInMemory()
+void Controler::AllIDInMemory(set<idType>&IDset)const
 {
-	unordered_map<idType, Object*>::iterator it = allObjects.begin();
-	set<idType> IDset;
+	auto it = allObjects.begin();
 	while (it != allObjects.end()) {
 		IDset.insert(it->first);
 		it++;
 	}
-		return IDset;
+		return ;
 }
 
 int Controler::ObjectNum()
@@ -87,7 +86,7 @@ bool Controler::addToMemory(istream& input)
 bool  Controler::readOutAllFromFile()
 {
 	//AvoidConfictFromSaving
-	vector<string> files=getFiles(filePath);
+	vector<string> files; getFiles(filePath,files);
 	for (string filePath : files) {
 		ifstream input(filePath);
 		if (input.is_open()) {
@@ -153,12 +152,11 @@ Controler:: ~Controler() {
 }
 
 
- vector<string> Controler::getFiles(string path)
+void  Controler::getFiles(string path, vector<string>&files)
 {
 	intptr_t hFile = 0;//文件句柄  
 	struct _finddata_t fileinfo;//文件信息  
 	string p;
-	vector<string>files;
 	if ((hFile = _findfirst(p.assign(path).append("\\*."+ objPostfix()).c_str(), &fileinfo)) != -1)
 		// "\\*"是指读取文件夹下的所有类型的文件，若想读取特定类型的文件，以png为例，则用“\\*.png”
 	{
@@ -168,7 +166,7 @@ Controler:: ~Controler() {
 		} while (_findnext(hFile, &fileinfo) == 0);
 		_findclose(hFile);
 	}
-	return files;
+	return ;
 }
 
 idType Controler::suggestID()

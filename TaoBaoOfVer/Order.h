@@ -28,6 +28,9 @@ public:
 	virtual string turnIntoString()const ;//wirte into string
 	virtual bool deleteByPtr() ;//delete this
 
-	bool OrderNow(GoodsControler* good);
+	bool concelOrder(GoodsControler* good);
+	bool finishOrder(GoodsControler(*good));
+	bool startOrder(GoodsControler* good);
 	void setTheID(idType id);
+	idType SellerID();
 };

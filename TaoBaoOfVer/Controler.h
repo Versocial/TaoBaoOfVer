@@ -16,7 +16,7 @@ class Controler
 private:
 	//filePath
 	string filePath;
-	vector<string> getFiles(string path);
+	void getFiles(string path, vector<string>& files);
 	//Memory
 	unordered_map <idType, Object*> allObjects;//core Memory
 	bool addToMemory(istream& input);//add to Memory
@@ -47,7 +47,7 @@ public:;
 	  bool removeFromMemory(idType id);//remove from Memory
 	 bool addToMemory(Object* ptr);// add toMemory (just Memory not file, but ask for save)
 	 bool containsInMemory(idType id);// if Memory has id 
-	 set<idType> AllIDInMemory();//all IDs in Memory
+	 void AllIDInMemory(set<idType>&)const;//all IDs in Memory
 	 //Auto Save
 	 void askForSave(idType id);//remember to saveing
 	 int save();

@@ -32,7 +32,7 @@ char* Text::buffer()
     return buf;
 }
 
-string Text::getString(string tag)
+ void Text::getString(string tag, string& ans)
 {
     string n = "\\{"+tag+":[\\w ]+(?=\\})";
     regex Regex(n.c_str());
@@ -41,12 +41,12 @@ string Text::getString(string tag)
     if (result.size() == 0) { 
         cout << tag << " wrong" << endl; 
     }
-     string ans((char*) &result[0].str()[tag.size()+2]);
-     return ans;
+    string temp ((char*)&result[0].str()[tag.size() + 2]);
+        ans=""+temp;
      
 }
 
-set<string> Text::getStrings(string tag)
+void Text::getStrings(string tag, set<string>&v)
 {
     string n = "\\{" + tag + ":[\\w ]+(?=\\})";
     regex Regex(n.c_str());
@@ -55,12 +55,11 @@ set<string> Text::getStrings(string tag)
     if (result.size() == 0) {
         cout << tag << " wrong" << endl;
     }
-    set<string>v;
     for (int i = 0; i < result.size(); i++) {
         string ans((char*)&result[0].str()[tag.size() + 2]);
         v.insert(ans);
     }
-    return v;
+    return ;
 
 }
 
@@ -73,7 +72,9 @@ void Text::setString(string tag, string info)
 
 long long Text::getValue(string Tag)
 {
-    return atoll(getString(Tag).c_str());
+    string temp;
+    getString(Tag, temp);
+    return atoll(temp.c_str());
 }
 
 void Text::sendInfo()

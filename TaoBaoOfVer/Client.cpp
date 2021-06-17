@@ -2,11 +2,12 @@
 #include "Client.h"
 #define chachePath ("../res/chache") 
 #define shopCarPath ("../res/shopCar") 
+#define ordersPath ("../res/recv") 
 
 #define sendV(tag,x){output->setString(tag, to_string(x)); }
 #define sendT(tag,x){output->setString(tag,x);}
 #define recvV(tag) (input->getValue(tag))
-#define recvT(tag) (input->getString(tag))
+#define recvT(tag,x) (input->getString(tag,x))
 //#define recvTs(tag) (input->getStrings(tag))
 #define HasLogIn (userType==ConsumerUser||userType==SellerUser)
 
@@ -21,7 +22,8 @@ static 	Server*server ;
 
 unordered_map<string, enum Command> Client::Client_Command{
     { "@E", Exit},{"@L",LogIn},{"@O",LogOut}, {"@End",End},{"@S",SignIn},{"@M",Income} ,{"@P",AskGoodsInfo},{"@A",AddGood},{"@CN",ChangeInfo},
-    {"@CP",ChangeInfo},{"@show",ShowInfo},{"@user",ShowInfo},{"@G",	ChooseGood},{"@T",Target}
+    {"@CP",ChangeInfo},{"@show",ShowInfo},{"@user",ShowInfo},{"@G",	ChooseGood},{"@T",Target},{"@car",ShowOrder},{"@shop",ManageOrder},{"@p",PullSoldOrder},
+    {"@s",ShowOrder}
 };
 
 
@@ -47,7 +49,8 @@ Client::Client(Text& in, Text& out) {
     output = &out;
     clearChacheFiles(chachePath);
     goods = GoodsControler::getInstance(chachePath);
-    shopCar = OrdersControler::getInstance(shopCarPath);
+    shopCar = OrdersControler::getInstance(shopCarPath);    
+    orders = OrdersControler::getInstance(ordersPath);
     tempID = 0;
 }
 
@@ -91,6 +94,8 @@ void Client::ClientMain()
     case ChooseGood:whenCooseGood(); break;
     case ShowOrder:whenShowOrder(); break;
     case ManageOrder:whenManageOrder(); break;
+    case PullSoldOrder:whenManagePullSold(); break;
+    case ShowSoldOrder:whenShowOrder(); break;
     case Target:pullTarget(); break;
     default:ExitProcess;
         break;
@@ -163,11 +168,18 @@ void Client::whenLogIn()
             else { cout << "Wrong password! You have " << chance << "chances left.\n"; WaitInput;  };
             step++;
         }  else {
-            temp=recvT("Name");
-            if (userType == HalfConsumer) { user = new Consumer(userID, temp,"0"); userType = ConsumerUser; }
-            else if (userType == HalfSeller) { user = new Seller(userID, temp,"0"); userType = SellerUser; }
+            recvT("Name",temp);
+            if (userType == HalfConsumer) { 
+                user = new Consumer(userID, temp,"0"); userType = ConsumerUser;
+                if (shopCar->containsInFile(user->id()))shopCar->readFromFile(user->id());
+            }
+            else if (userType == HalfSeller) { 
+                user = new Seller(userID, temp,"0"); userType = SellerUser; 
+                if (orders->containsInFile(user->id()))orders->readFromFile(user->id());
+            }
             tempM=recvV("Money");
             user->income(tempM);
+            
             cout<<"Login suceessful ! welcome "<<user->Name()<<" , your balance:"<<user->Money() <<" Have a good day ! "<< endl;
             ExitProcess;
         }
@@ -216,7 +228,7 @@ void Client::whenAskForAllGoods()
         if (number > 0)cout << "Got " << number << " Goods ! " << endl;
         else cout << "Sorry, sellers all put up the shutters now !"<<endl;
         for (int i = 0; i < number;i++) {
-            info = recvT("Good" +to_string(i));
+             recvT("Good" +to_string(i),info);
             istringstream infor(info);
             tempGood = Good::newGood(infor);
             if (goods->containsInMemory(tempGood->id()))goods->removeFromMemory(tempGood->id());
@@ -407,10 +419,74 @@ void Client::whenCooseGood()
 
 void Client::whenShowOrder()
 {
+   shopCar->toShow(goods);
+        ExitProcess;
 }
 
 void Client::whenManageOrder()
 {
+    int flag;
+    string info;
+    switch (step)
+    {
+    case 1:
+        cout << "Please give the order id you want to shop.\n";
+        step++;
+        WaitInput;
+        break;
+    case 2:
+        ReadByCin(tempID);
+        if (!shopCar->containsInMemory(tempID)) {
+            cout << " No such id , you can type '@car' to have a review.\n";
+            ExitProcess;
+        }
+        else {
+            sendV("cmd", ManageOrder);
+            sendT("OD", (shopCar->getObjectInMemory(tempID))->turnIntoString())
+            sendRequest();
+            waitForAnswer();
+            flag = recvV("Flag");
+            tempPrice = recvV("Price");
+            cout << "The Total Price is" << tempPrice << endl;
+            switch (flag)
+            {
+            case 0:break;
+            case 1:info = "You need more money to buy them.\n";
+                break;
+            case 2:info = "Something sold out or not enough for you.\n";
+                break;
+            default:info = "For some unkown reason, you are refused.\n";
+                break;
+            }
+            cout << info;
+            if (flag == 0) { cout << "Order is ready, type in 'y' to pay for it !.\n"; step++; WaitInput; }
+            else  ExitProcess;
+        };
+        break;
+    case 3:
+        ReadByCin(info);
+        if (info[0] != 'y') {
+            sendV("cmd", ManageOrder);
+            sendV("Flag", false);
+            sendRequestWithoutAnswer();
+            cout << "OK, you will think about it later.\n";
+            ExitProcess; break;
+        }
+        sendV("cmd", ManageOrder);
+        sendV("Flag", true);
+        sendRequest();
+        waitForAnswer();
+        flag = recvV("Flag");
+        if (flag) {
+            cout << "Succeess ! \n";
+            user->outcome(tempPrice);
+        }
+        else { cout << "Ordered pay failed.\n";  }
+        ExitProcess;
+        break;
+    default:ExitProcess;
+        break;
+    }
 }
 
 Good* Client::pullTarget(idType id )
@@ -454,9 +530,34 @@ void Client::pullTarget_send(idType id)
     sendV("0", id);
     sendRequest();
 }
+void Client::whenManagePullSold()
+{
+    int num;
+    
+    if (userType != SellerUser) { cout << "Only seller can do this.\n"; ExitProcess; return; }
+    switch (step)
+    {
+    case 1 :
+        sendV("cmd", PullSoldOrder);
+        num=recvV("Num");
+        for (int i = 0; i < num; i++) {
+             recvT(to_string(num),tempInfo);
+             istringstream inputs(tempInfo);
+             orders->addToMemory(orders->theOrder()->getByStream(inputs));
+        }
+        cout << "got " << num << " answers, type in '@s' to look.\n";
+        ExitProcess;
+    default:
+        break;
+    }
+}
+void Client::whenShowSold()
+{
+    cout << orders->toShow(goods);
+}
 Good* Client::pullTarget_recv(idType id)
 {
-    string ans = recvT(to_string(id));
+    string ans;recvT(to_string(id),ans);
     if (ans == "0")return NULL;
     istringstream input(ans);
     Good* tempGo = Good::newGood(input);
@@ -692,8 +793,8 @@ void Client::whenSignIn()
 
 void Client::clearChacheFiles(const char* ChachePath)const
 {   
-    intptr_t hFile = 0;//文件句柄  
-    struct _finddata_t fileinfo;//文件信息  
+    intptr_t hFile = 0;//鏂囦欢鍙ユ焺  
+    struct _finddata_t fileinfo;//鏂囦欢淇℃伅  
     string p(ChachePath);
     if ((hFile = _findfirst(p.assign(ChachePath).append("\\*.TBgood").c_str(), &fileinfo)) != -1)
     {

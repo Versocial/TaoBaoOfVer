@@ -20,7 +20,6 @@ typedef int ClientType;
 class Server
 {
 private:
-	OrdersControler* allOrders;
 	mutex usingLocker;
 	thread* autoSave;
 	static Server* instance;
@@ -29,6 +28,7 @@ private:
 	void autoSavingThread();
 	void save();
 public:
+	OrdersControler* allOrders;
 	ConsumersControler* consumers;
 	SellersControler* sellers;
 	GoodsControler* goods;
@@ -54,6 +54,7 @@ private:
 	User* user;
 	Text* input;
 	Text* output;
+	Order* orderNow;
 
 	void Dialogmanage();
 	void manageSignIn();
@@ -64,6 +65,8 @@ private:
 	void manageAddGood();
 	void manageChange();
 	void manageTargetPull();
+	void manageOrder();
+	void manageSoldPull();
 public:
 	~Dialog();
 	Dialog(Server* server, Text& in, Text& out);

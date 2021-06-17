@@ -16,8 +16,8 @@ public:
 	void sendInfo();//send
 	bool infoReady();// before read will check if read 
 	char* buffer();
-	string getString(string tag);
-	set<string> getStrings(string tag);
+	void getString(string tag,string& ans);
+	void  getStrings(string tagget, set<string>& v);
 	void setString(string tag, string info);
 	long long getValue(string Tag);
 };

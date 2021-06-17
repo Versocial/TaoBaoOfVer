@@ -23,6 +23,7 @@ private:
 	Good* tempGood;
 	Number tempNumber;
 	idType tempID;
+	moneyType tempPrice;
 	CMD cmd;
 	CMD cmdRecvd;
 	idType userID;
@@ -32,6 +33,7 @@ private:
 	Text* output;
 	GoodsControler* goods;
 	OrdersControler* shopCar;
+	OrdersControler* orders;
 	inline	void waitForAnswer();
 	inline void sendRequest();
 	void clearChacheFiles(const char* ChachePath)const;
@@ -52,6 +54,8 @@ public:
 	void whenCooseGood();
 	void whenShowOrder();
 	void whenManageOrder();
+	void whenManagePullSold();
+	void whenShowSold();
 	void pullTarget();
 
 	Good* pullTarget(idType id);

@@ -7,6 +7,11 @@ void Order::setTheID(idType id)
 	setID(id);
 }
 
+idType Order::SellerID()
+{
+	return sellerID;
+}
+
 Order::Order():Object()
 {
 }
@@ -21,7 +26,7 @@ Order::Order(idType seller, idType consumer)
 
 priceType Order::totalPrice()
 {
-	return priceType();
+	return total;
 }
 
 int Order::kinds()
@@ -40,33 +45,48 @@ void Order::addGood(idType id, Number num)
 	return;
 }
 
-string Order::toShow(GoodsControler* good)
+string Order::toShow(GoodsControler* goods)
 {
-	return string();
+	priceType price = 0; auto it = goodsSet.begin();
+	string ans;
+	while (it != goodsSet.end()) {
+		ans += "Order ID : " + to_string(id()) + " : ";
+		if (goods->containsInMemory(it->first)) {
+			Good* good =( (Good*)(goods->getObjectInMemory(it->first)));
+			price += good->getPrice() * it->second;
+			ans = ans + " seller: "+to_string(sellerID)+" price: "+to_string(good->getPrice() * it->second)+" for "+to_string(it->second)+" of such thing:" + good->toShow();
+			if (OrderdTime != 0)ans =ans+ " time when " + to_string(OrderdTime) + " sold.\n";
+		}
+		else ans =ans+" you want "+to_string(it->second)+", but information not found in chache.";
+			ans += "\n";
+			it++;
+	}
+	return ans;
 }
 
 Object* Order::getByStream(istream&input)
 {
-	input >> OrderdTime>>total>>sellerID>>consumerID;
+	Order* order = new Order();
+	input >>order->ID>> order->OrderdTime>>order->total>>order->sellerID>>order->consumerID;
 	idType id; input >> id;
 	Number num;
 	while (id != _INVALID_ID) {
 		input >> num;
-		addGood(id, num);
+		order->addGood(id, num);
+		input >> id;
 	}
-	return nullptr;
+	return order;
 }
 
 string Order::turnIntoString() const
 {
-	string ans = to_string(OrderdTime)+" "+to_string(total)+" "+to_string(sellerID)+" "+ to_string(consumerID) +"\n";
+	string ans =to_string(ID)+" "+ to_string(OrderdTime)+" "+to_string(total)+" "+to_string(sellerID)+" "+ to_string(consumerID) +" ";
 	auto it = goodsSet.begin();
-	goodsSet.begin();
 	while (it != goodsSet.end()) {
 		ans +=to_string( it->first);
 		ans += " ";
 		ans += to_string(it->second);
-		ans += "\n";
+		ans += "  ";
 		it++;
 	}
 	ans += " 0";
@@ -79,7 +99,36 @@ bool Order::deleteByPtr()
 	return false;
 }
 
-bool Order::OrderNow(GoodsControler* good)
+bool Order::concelOrder(GoodsControler* good)
+{
+	auto it = goodsSet.begin();
+	while (it != goodsSet.end()) {
+		if (good->containsInMemory(it->first)) {
+			((Good*)good->getObjectInMemory(it->first))->sellConcel(it->second);
+		}
+		else {
+			return false;
+		}
+	}
+	return true;
+}
+
+bool Order::finishOrder(GoodsControler(*good))
+{
+	auto it = goodsSet.begin();
+	while (it != goodsSet.end()) {
+		if (good->containsInMemory(it->first)) {
+			((Good*)good->getObjectInMemory(it->first))->sellFinish(it->second);
+		}
+		else {
+			return false;
+		}
+		it++;
+	}
+	return true;
+}
+
+bool Order::startOrder(GoodsControler* good)
 {
 	OrderdTime = time(NULL);
 	auto it = goodsSet.begin();
@@ -87,11 +136,12 @@ bool Order::OrderNow(GoodsControler* good)
 	while (it != goodsSet.end()) {
 		if (good->containsInMemory(it->first)) {
 			total += ((Good*)good->getObjectInMemory(it->first))->getPrice()*it->second;
+			if(!((Good*)good->getObjectInMemory(it->first))->sellStart(it->second))return false;
 		}
 		else {
-
 			return false; 
 		}
+		it++;
 	}
 	return true;
 }

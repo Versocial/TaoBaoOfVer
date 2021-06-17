@@ -51,7 +51,8 @@ bool GoodsControler::addOneGoodByCin()//just for test
 void GoodsControler::toShowGoods(ostream&output)
 {
 	output << "All Goods :\n";
-	for (idType id : AllIDInMemory()) {
+	set<idType>allID; AllIDInMemory(allID);
+	for (idType id :allID) {
 		output<< ((Good*)getObjectInMemory(id))->toShow()<<endl;
 	}
 }

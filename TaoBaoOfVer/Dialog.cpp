@@ -3,7 +3,7 @@
 #define sendV(tag,x){output->setString(tag, to_string(x)); }
 #define sendT(tag,x){output->setString(tag,x);}
 #define recvV(tag) (input->getValue(tag))
-#define recvT(tag) (input->getString(tag))
+#define recvT(tag,x) (input->getString(tag,x))
 #define ExitProcess {status=Exit;}
 #define HasLogIn (userType==ConsumerUser||userType==SellerUser)
 
@@ -11,6 +11,7 @@
 #define SUser ((Seller*)User)
 #define sellers (server->sellers)
 #define consumers (server->consumers)
+#define orders (server->allOrders)
 #define goods (server->goods)
 #define MAXPULLNUM 7
 
@@ -72,6 +73,8 @@ void Dialog::Dialogmanage()
             break;
         case Target:manageTargetPull();
             break;
+        case ManageOrder:manageOrder();
+            break;
         case End:
            // server->save();
             delete this;
@@ -104,8 +107,8 @@ void Dialog::manageSignIn()
         if (userID != _INVALID_ID)step++;
         break;
     case 2:
-        passWd=recvT("passWd");
-        name=recvT("Name");
+        recvT("passWd",passWd);
+        recvT("Name", name);
         if (userType == HalfConsumer) {
             user = new Consumer(userID,name,passWd);
             consumers->addToMemory(user);
@@ -119,7 +122,7 @@ void Dialog::manageSignIn()
         step++;
         break;
     case 3:
-        flag=recvV("Flag");
+        recvV("Flag",flag);
         if (flag) {
             if (userType == HalfConsumer) {
                 userType = ConsumerUser;
@@ -164,7 +167,7 @@ void Dialog::manageLogIn()
         break;        
     default:
         string passWord;
-        passWord=recvT("passWd");
+        recvT("passWd",passWord);
         user =(User*)( (userType == HalfConsumer  )?consumers->readFromFile(userID): sellers->readFromFile(userID));
         flag = user->matchWithPassWord(passWord);  
         sendV("Flag",flag);
@@ -297,7 +300,7 @@ void Dialog::manageAddGood()
         step++;
         break;
     case 2:
-        name = recvT("Name");
+        recvT("Name",name);
         type = (GoodType)recvV("Type");
         selling = recvV("Sell");
         price = recvV("Price");
@@ -305,6 +308,7 @@ void Dialog::manageAddGood()
         goods->addToMemory(good);
         goods->saveFile(tempID);
         ((Seller*)user)->addGood(tempID);
+        sellers->saveFile(user->id());
         ExitProcess;
         break;
     default:
@@ -323,13 +327,13 @@ void Dialog::manageChange()
         if (!HasLogIn) { ExitProcess; break; }
         flag=recvV("Flag");
         if (flag) {//change password
-            pass = recvT("PassWd");
+             recvT("PassWd",pass);
             flag = user->matchWithPassWord(pass);
             sendV("Flag", flag);
             ExitProcess;
         }
         else {//change name
-            info = recvT("Text");
+             recvT("Text",info);
             user->changeName(info);
             if (userType == ConsumerUser)consumers->saveFile(user->id());
             else sellers->saveFile(user->id());
@@ -338,7 +342,7 @@ void Dialog::manageChange()
         break;
     case 2:
         flag = recvV("Flag");
-        pass = recvT("PassWd");
+         recvT("PassWd",pass);
         if (flag) {
             user->changePassWord(pass);
             if (userType == ConsumerUser)consumers->saveFile(user->id());
@@ -371,3 +375,94 @@ void Dialog::manageTargetPull()
     }
 }
 
+void Dialog::manageOrder()
+{
+    idType id;
+    string info;
+    int flag;
+    istringstream inputs;
+    switch (step)
+    {
+    case 1:
+        if (userType != ConsumerUser) {
+            ExitProcess;
+            break;
+        }
+        id = orders->suggestID();
+         recvT("OD",info);
+        inputs.str(info);
+        orderNow = (Order*)orders->theOrder()->getByStream(inputs);
+        orders->addToMemory(orderNow);
+        flag=orderNow->startOrder(goods);
+        if (!flag) {
+            flag = 2;
+            ExitProcess;
+        }
+        else if (orderNow->totalPrice() > user->Money()) {
+            flag = 1;
+            ExitProcess;
+        }
+        else flag = 0;
+        sendV("Flag", flag);
+        sendV("Price", orderNow->totalPrice());
+        step++;
+        break;
+    case 2:
+        flag = recvV("Flag");
+        if (flag == true) {
+            if (!sellers->containsInMemory(orderNow->SellerID())) {
+                if (sellers->containsInFile(orderNow->SellerID())) { sellers->readFromFile(orderNow->SellerID()); }
+            }
+            if (sellers->containsInMemory(orderNow->SellerID())) {
+                orderNow->finishOrder(goods);
+                orders->saveFile(orderNow->id());
+                user->outcome(orderNow->totalPrice());
+                ((Seller*)sellers->getObjectInMemory(orderNow->SellerID()))->income(orderNow->totalPrice());
+                ((Seller*)sellers->getObjectInMemory(orderNow->SellerID()))->addOrderID(orderNow->id());
+                consumers->saveFile(user->id());
+                sellers->saveFile(orderNow->SellerID());
+                sendV("Flag", true);
+            }
+            else sendV("Flag", false);
+        }
+        else {
+            orderNow->concelOrder(goods);
+        }
+        ExitProcess;
+        break;
+    default:ExitProcess;
+        break;
+    }
+}
+void Dialog::manageSoldPull()
+{
+    int num = 0;
+    switch (step)
+    {
+    case 1:
+        for (idType id : ((Seller*)user)->soldOders) {
+            if (orders->containsInMemory(id)) {
+                string tempi = ((Order*)(orders->getObjectInMemory(id)))->turnIntoString();
+                sendT(to_string(num), tempi);
+                    num++;
+            }
+            sendV("Num", num);
+        }
+        ExitProcess;
+        break;
+    default:
+        ExitProcess;
+        break;
+    }
+}
+/*
+@L
+c
+10001
+eveveve
+@P
+@car
+@shop
+10001
+
+*/

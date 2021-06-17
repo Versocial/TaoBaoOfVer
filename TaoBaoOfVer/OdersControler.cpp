@@ -18,6 +18,11 @@ OrdersControler::OrdersControler(string path) :Controler(path){
 
 }
 
+Order* OrdersControler::theOrder()
+{
+	return (Order*)&theObject();
+}
+
 OrdersControler::~OrdersControler()
 {
 	instance = NULL;
@@ -25,9 +30,8 @@ OrdersControler::~OrdersControler()
 
 OrdersControler* OrdersControler::getInstance(const char* path)
 {
-	if (instance != NULL) { delete instance; }
+	if (instance != NULL) {/* delete instance; */}
 	instance= new OrdersControler(path);
-	instance->readOutAllFromFile();
 	return instance;
 }
 
@@ -47,7 +51,14 @@ void OrdersControler::addGood(idType seller,idType consumer, idType goodId, Numb
 	saveFile(seller);
 }
 
-string OrdersControler::toShow()const
+string OrdersControler::toShow(GoodsControler* good)
 {
-	return string();
+	cout<< "All Orders:\n";
+	set<idType> allID; AllIDInMemory(allID);
+	for (idType id : allID) {
+		cout<< "\n";
+		cout<< ((Order*)getObjectInMemory(id))->toShow(good);
+	}
+
+	return "";
 }

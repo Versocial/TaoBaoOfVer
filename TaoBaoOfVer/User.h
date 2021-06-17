@@ -63,16 +63,17 @@ class Seller :
 	public User
 {
 private:
-	set<idType> tradeGoods;
-	set<idType>orders;
 	Seller(istream&);
 public:
+	set<idType> tradeGoods;
+	set<idType>soldOders;
 	Seller();
 	Seller(idType id);//for client
 	Seller(idType ID, string Name, string PassWord);//for signin
 	userType   type()const;
 	bool addGood(idType id);
 	bool deleteGood(idType id);
+	void addOrderID(idType id);
 
 	virtual Object* getByStream(istream&);
 	virtual string turnIntoString()const;

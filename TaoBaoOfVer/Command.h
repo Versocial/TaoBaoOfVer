@@ -21,6 +21,8 @@ enum Command {
 	ShowOrder,
 	ManageOrder,
 	Target,
+	ShowSoldOrder,
+	PullSoldOrder,
 };
 
 enum _ClientType {
