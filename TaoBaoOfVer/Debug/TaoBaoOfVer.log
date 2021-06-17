@@ -1,17 +1,4 @@
 ﻿  Client.cpp
-C:\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(626,11): error C2628: “BYTE”后面接“unsigned”是非法的(是否忘记了“;”?)
-C:\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(626,11): error C2628: “BYTE”后面接“int”是非法的(是否忘记了“;”?)
-C:\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(626,17): error C2208: “unsigned char”: 没有使用此类型进行定义的成员
-C:\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(17602,17): error C2628: “SHORT”后面接“unsigned”是非法的(是否忘记了“;”?)
-C:\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(17602,17): error C2628: “SHORT”后面接“int”是非法的(是否忘记了“;”?)
-C:\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(17602,23): error C2208: “short”: 没有使用此类型进行定义的成员
-C:\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(17629,17): error C2628: “SHORT”后面接“unsigned”是非法的(是否忘记了“;”?)
-C:\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(17629,17): error C2628: “SHORT”后面接“int”是非法的(是否忘记了“;”?)
-C:\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(17629,23): error C2208: “short”: 没有使用此类型进行定义的成员
-C:\Windows Kits\10\Include\10.0.19041.0\um\consoleapi3.h(348,16): error C2628: “DWORD”后面接“unsigned”是非法的(是否忘记了“;”?)
-C:\Windows Kits\10\Include\10.0.19041.0\um\consoleapi3.h(348,16): error C2628: “DWORD”后面接“int”是非法的(是否忘记了“;”?)
-C:\Windows Kits\10\Include\10.0.19041.0\um\consoleapi3.h(356,16): error C2628: “DWORD”后面接“unsigned”是非法的(是否忘记了“;”?)
-C:\Windows Kits\10\Include\10.0.19041.0\um\consoleapi3.h(356,16): error C2628: “DWORD”后面接“int”是非法的(是否忘记了“;”?)
 C:\Windows Kits\10\Include\10.0.19041.0\shared\rpcndr.h(192,14): error C2872: “byte”: 不明确的符号
 C:\Windows Kits\10\Include\10.0.19041.0\shared\rpcndr.h(191,23): message : 可能是“unsigned char byte”
 V:\intergalaxyships\VisualStudio\VC\Tools\MSVC\14.28.29910\include\cstddef(29,12): message : 或    “std::byte”
@@ -116,96 +103,16 @@ C:\Windows Kits\10\Include\10.0.19041.0\shared\rpcndr.h(191,23): message : 可�
 V:\intergalaxyships\VisualStudio\VC\Tools\MSVC\14.28.29910\include\cstddef(29,12): message : 或    “std::byte”
 A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(67,32): error C4996: 'inet_addr': Use inet_pton() or InetPton() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
 A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(125,14): warning C4244: “=”: 从“__int64”转换到“CMD”，可能丢失数据
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(150,13): warning C4003: 类函数宏的调用“max”参数不足
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(150,13): error C2589: “(”:“::”右边的非法标记
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(150): error C2144: 语法错误:“unknown-type”的前面应有“)”
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(150): error C2144: 语法错误:“unknown-type”的前面应有“;”
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(150,13): error C2059: 语法错误:“)”
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(163,9): warning C4003: 类函数宏的调用“max”参数不足
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(163,9): error C2589: “(”:“::”右边的非法标记
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(163): error C2144: 语法错误:“unknown-type”的前面应有“)”
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(163): error C2144: 语法错误:“unknown-type”的前面应有“;”
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(163,9): error C2059: 语法错误:“)”
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(174,9): warning C4003: 类函数宏的调用“max”参数不足
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(174,9): error C2589: “(”:“::”右边的非法标记
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(174): error C2144: 语法错误:“unknown-type”的前面应有“)”
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(174): error C2144: 语法错误:“unknown-type”的前面应有“;”
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(174,9): error C2059: 语法错误:“)”
 A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(180,20): warning C4244: “=”: 从“__int64”转换到“int”，可能丢失数据
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(236,13): warning C4003: 类函数宏的调用“max”参数不足
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(236,13): error C2589: “(”:“::”右边的非法标记
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(236): error C2144: 语法错误:“unknown-type”的前面应有“)”
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(236): error C2144: 语法错误:“unknown-type”的前面应有“;”
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(236,13): error C2059: 语法错误:“)”
 A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(242,18): warning C4244: “=”: 从“__int64”转换到“unsigned long”，可能丢失数据
 A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(243,18): warning C4244: “=”: 从“__int64”转换到“int”，可能丢失数据
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(291,13): warning C4003: 类函数宏的调用“max”参数不足
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(291,13): error C2589: “(”:“::”右边的非法标记
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(291): error C2144: 语法错误:“unknown-type”的前面应有“)”
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(291): error C2144: 语法错误:“unknown-type”的前面应有“;”
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(291,13): error C2059: 语法错误:“)”
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(317,13): warning C4003: 类函数宏的调用“max”参数不足
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(317,13): error C2589: “(”:“::”右边的非法标记
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(317): error C2144: 语法错误:“unknown-type”的前面应有“)”
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(317): error C2144: 语法错误:“unknown-type”的前面应有“;”
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(317,13): error C2059: 语法错误:“)”
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(338,17): warning C4003: 类函数宏的调用“max”参数不足
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(338,17): error C2589: “(”:“::”右边的非法标记
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(338): error C2144: 语法错误:“unknown-type”的前面应有“)”
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(338): error C2144: 语法错误:“unknown-type”的前面应有“;”
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(338,17): error C2059: 语法错误:“)”
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(399,9): warning C4003: 类函数宏的调用“max”参数不足
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(399,9): error C2589: “(”:“::”右边的非法标记
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(399): error C2144: 语法错误:“unknown-type”的前面应有“)”
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(399): error C2144: 语法错误:“unknown-type”的前面应有“;”
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(399,9): error C2059: 语法错误:“)”
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(407,9): warning C4003: 类函数宏的调用“max”参数不足
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(407,9): error C2589: “(”:“::”右边的非法标记
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(407): error C2144: 语法错误:“unknown-type”的前面应有“)”
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(407): error C2144: 语法错误:“unknown-type”的前面应有“;”
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(407,9): error C2059: 语法错误:“)”
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(419,9): warning C4003: 类函数宏的调用“max”参数不足
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(419,9): error C2589: “(”:“::”右边的非法标记
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(419): error C2144: 语法错误:“unknown-type”的前面应有“)”
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(419): error C2144: 语法错误:“unknown-type”的前面应有“;”
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(419,9): error C2059: 语法错误:“)”
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(454,9): warning C4003: 类函数宏的调用“max”参数不足
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(454,9): error C2589: “(”:“::”右边的非法标记
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(454): error C2144: 语法错误:“unknown-type”的前面应有“)”
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(454): error C2144: 语法错误:“unknown-type”的前面应有“;”
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(454,9): error C2059: 语法错误:“)”
 A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(464,20): warning C4244: “=”: 从“__int64”转换到“int”，可能丢失数据
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(483,9): warning C4003: 类函数宏的调用“max”参数不足
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(483,9): error C2589: “(”:“::”右边的非法标记
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(483): error C2144: 语法错误:“unknown-type”的前面应有“)”
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(483): error C2144: 语法错误:“unknown-type”的前面应有“;”
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(483,9): error C2059: 语法错误:“)”
 A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(495,16): warning C4244: “=”: 从“__int64”转换到“int”，可能丢失数据
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(527,9): warning C4003: 类函数宏的调用“max”参数不足
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(527,9): error C2589: “(”:“::”右边的非法标记
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(527): error C2144: 语法错误:“unknown-type”的前面应有“)”
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(527): error C2144: 语法错误:“unknown-type”的前面应有“;”
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(527,9): error C2059: 语法错误:“)”
 A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(560,13): warning C4244: “=”: 从“__int64”转换到“int”，可能丢失数据
 A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(606,18): warning C4244: “=”: 从“__int64”转换到“unsigned long”，可能丢失数据
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(608,9): warning C4003: 类函数宏的调用“max”参数不足
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(608,9): error C2589: “(”:“::”右边的非法标记
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(608): error C2144: 语法错误:“unknown-type”的前面应有“)”
-A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(608,9): fatal error C1003: 错误计数超过 100；正在停止编译
+A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(742,39): warning C4553: “==”: 未使用表达式结果；是否打算使用“=”?
+A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(751,18): warning C4244: “=”: 从“__int64”转换到“unsigned long”，可能丢失数据
   Dialog.cpp
-C:\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(626,11): error C2628: “BYTE”后面接“unsigned”是非法的(是否忘记了“;”?)
-C:\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(626,11): error C2628: “BYTE”后面接“int”是非法的(是否忘记了“;”?)
-C:\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(626,17): error C2208: “unsigned char”: 没有使用此类型进行定义的成员
-C:\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(17602,17): error C2628: “SHORT”后面接“unsigned”是非法的(是否忘记了“;”?)
-C:\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(17602,17): error C2628: “SHORT”后面接“int”是非法的(是否忘记了“;”?)
-C:\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(17602,23): error C2208: “short”: 没有使用此类型进行定义的成员
-C:\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(17629,17): error C2628: “SHORT”后面接“unsigned”是非法的(是否忘记了“;”?)
-C:\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(17629,17): error C2628: “SHORT”后面接“int”是非法的(是否忘记了“;”?)
-C:\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(17629,23): error C2208: “short”: 没有使用此类型进行定义的成员
-C:\Windows Kits\10\Include\10.0.19041.0\um\consoleapi3.h(348,16): error C2628: “DWORD”后面接“unsigned”是非法的(是否忘记了“;”?)
-C:\Windows Kits\10\Include\10.0.19041.0\um\consoleapi3.h(348,16): error C2628: “DWORD”后面接“int”是非法的(是否忘记了“;”?)
-C:\Windows Kits\10\Include\10.0.19041.0\um\consoleapi3.h(356,16): error C2628: “DWORD”后面接“unsigned”是非法的(是否忘记了“;”?)
-C:\Windows Kits\10\Include\10.0.19041.0\um\consoleapi3.h(356,16): error C2628: “DWORD”后面接“int”是非法的(是否忘记了“;”?)
 C:\Windows Kits\10\Include\10.0.19041.0\shared\rpcndr.h(192,14): error C2872: “byte”: 不明确的符号
 C:\Windows Kits\10\Include\10.0.19041.0\shared\rpcndr.h(191,23): message : 可能是“unsigned char byte”
 V:\intergalaxyships\VisualStudio\VC\Tools\MSVC\14.28.29910\include\cstddef(29,12): message : 或    “std::byte”
@@ -320,20 +227,9 @@ A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Dialog.cpp(389,15): 
 A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Dialog.cpp(392,18): warning C4244: “=”: 从“__int64”转换到“unsigned long”，可能丢失数据
 A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Dialog.cpp(436,16): warning C4244: “=”: 从“__int64”转换到“int”，可能丢失数据
 A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Dialog.cpp(437,21): warning C4805: “==”: 在操作中将类型“int”与类型“bool”混合不安全
+  Good.cpp
+A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Good.cpp(190,18): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
   Main1.cpp
-C:\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(626,11): error C2628: “BYTE”后面接“unsigned”是非法的(是否忘记了“;”?)
-C:\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(626,11): error C2628: “BYTE”后面接“int”是非法的(是否忘记了“;”?)
-C:\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(626,17): error C2208: “unsigned char”: 没有使用此类型进行定义的成员
-C:\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(17602,17): error C2628: “SHORT”后面接“unsigned”是非法的(是否忘记了“;”?)
-C:\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(17602,17): error C2628: “SHORT”后面接“int”是非法的(是否忘记了“;”?)
-C:\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(17602,23): error C2208: “short”: 没有使用此类型进行定义的成员
-C:\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(17629,17): error C2628: “SHORT”后面接“unsigned”是非法的(是否忘记了“;”?)
-C:\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(17629,17): error C2628: “SHORT”后面接“int”是非法的(是否忘记了“;”?)
-C:\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(17629,23): error C2208: “short”: 没有使用此类型进行定义的成员
-C:\Windows Kits\10\Include\10.0.19041.0\um\consoleapi3.h(348,16): error C2628: “DWORD”后面接“unsigned”是非法的(是否忘记了“;”?)
-C:\Windows Kits\10\Include\10.0.19041.0\um\consoleapi3.h(348,16): error C2628: “DWORD”后面接“int”是非法的(是否忘记了“;”?)
-C:\Windows Kits\10\Include\10.0.19041.0\um\consoleapi3.h(356,16): error C2628: “DWORD”后面接“unsigned”是非法的(是否忘记了“;”?)
-C:\Windows Kits\10\Include\10.0.19041.0\um\consoleapi3.h(356,16): error C2628: “DWORD”后面接“int”是非法的(是否忘记了“;”?)
 C:\Windows Kits\10\Include\10.0.19041.0\shared\rpcndr.h(192,14): error C2872: “byte”: 不明确的符号
 C:\Windows Kits\10\Include\10.0.19041.0\shared\rpcndr.h(191,23): message : 可能是“unsigned char byte”
 V:\intergalaxyships\VisualStudio\VC\Tools\MSVC\14.28.29910\include\cstddef(29,12): message : 或    “std::byte”
@@ -466,20 +362,8 @@ A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Main1.cpp(70,8): err
 A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Main1.cpp(70): error C2144: 语法错误:“unknown-type”的前面应有“)”
 A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Main1.cpp(70): error C2144: 语法错误:“unknown-type”的前面应有“;”
 A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Main1.cpp(70,8): error C2059: 语法错误:“)”
+  OdersControler.cpp
   Server.cpp
-C:\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(626,11): error C2628: “BYTE”后面接“unsigned”是非法的(是否忘记了“;”?)
-C:\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(626,11): error C2628: “BYTE”后面接“int”是非法的(是否忘记了“;”?)
-C:\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(626,17): error C2208: “unsigned char”: 没有使用此类型进行定义的成员
-C:\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(17602,17): error C2628: “SHORT”后面接“unsigned”是非法的(是否忘记了“;”?)
-C:\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(17602,17): error C2628: “SHORT”后面接“int”是非法的(是否忘记了“;”?)
-C:\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(17602,23): error C2208: “short”: 没有使用此类型进行定义的成员
-C:\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(17629,17): error C2628: “SHORT”后面接“unsigned”是非法的(是否忘记了“;”?)
-C:\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(17629,17): error C2628: “SHORT”后面接“int”是非法的(是否忘记了“;”?)
-C:\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(17629,23): error C2208: “short”: 没有使用此类型进行定义的成员
-C:\Windows Kits\10\Include\10.0.19041.0\um\consoleapi3.h(348,16): error C2628: “DWORD”后面接“unsigned”是非法的(是否忘记了“;”?)
-C:\Windows Kits\10\Include\10.0.19041.0\um\consoleapi3.h(348,16): error C2628: “DWORD”后面接“int”是非法的(是否忘记了“;”?)
-C:\Windows Kits\10\Include\10.0.19041.0\um\consoleapi3.h(356,16): error C2628: “DWORD”后面接“unsigned”是非法的(是否忘记了“;”?)
-C:\Windows Kits\10\Include\10.0.19041.0\um\consoleapi3.h(356,16): error C2628: “DWORD”后面接“int”是非法的(是否忘记了“;”?)
 C:\Windows Kits\10\Include\10.0.19041.0\shared\rpcndr.h(192,14): error C2872: “byte”: 不明确的符号
 C:\Windows Kits\10\Include\10.0.19041.0\shared\rpcndr.h(191,23): message : 可能是“unsigned char byte”
 V:\intergalaxyships\VisualStudio\VC\Tools\MSVC\14.28.29910\include\cstddef(29,12): message : 或    “std::byte”
@@ -582,4 +466,5 @@ V:\intergalaxyships\VisualStudio\VC\Tools\MSVC\14.28.29910\include\cstddef(29,12
 C:\Windows Kits\10\Include\10.0.19041.0\um\oaidl.h(563,26): error C2872: “byte”: 不明确的符号
 C:\Windows Kits\10\Include\10.0.19041.0\shared\rpcndr.h(191,23): message : 可能是“unsigned char byte”
 V:\intergalaxyships\VisualStudio\VC\Tools\MSVC\14.28.29910\include\cstddef(29,12): message : 或    “std::byte”
+  User.cpp
   正在生成代码...

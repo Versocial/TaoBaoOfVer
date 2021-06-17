@@ -26,7 +26,7 @@ private:
 	int ClientTempFlag;
 	string tempInfo;
 	Good* tempGood;
-	Number tempNumber;
+	GoodNumber tempNumber;
 	idType tempID;
 	moneyType tempPrice;
 	CMD cmd;

@@ -308,7 +308,7 @@ void Dialog::manageAddGood()
 {
     string name;
     moneyType price;
-    Number selling;
+    GoodNumber selling;
     GoodType type;
     Good* good;
     switch (step) {

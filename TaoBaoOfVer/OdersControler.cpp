@@ -35,7 +35,7 @@ OrdersControler* OrdersControler::getInstance(const char* path)
 	return instance;
 }
 
-void OrdersControler::addGood(idType seller,idType consumer, idType goodId, Number num)
+void OrdersControler::addGood(idType seller,idType consumer, idType goodId, GoodNumber num)
 {
 	Order* order;
 	if (containsInFile(seller)) {

@@ -21,7 +21,7 @@
 #define WaitAnswerAndInput {needAnswer=true;canExit=true;}
 #define WaitInput {canExit=true;}//without answer waiting
 #define ExitProcess {cmd=Exit;}
-#define ReadByCin(x) {;std::cin>>(x); std::cin.clear(); std::cin.ignore(numeric_limits<streamsize>::max(), '\n');}
+#define ReadByCin(x) {;std::cin>>(x); /*std::cin.clear(); std::cin.ignore(numeric_limits<streamsize>::max(), '\n');*/}
 static 	Server*server ;
 
 

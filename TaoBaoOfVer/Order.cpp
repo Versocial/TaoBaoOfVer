@@ -34,7 +34,7 @@ int Order::kinds()
 	return goodsSet.size() ;
 }
 
-void Order::addGood(idType id, Number num)
+void Order::addGood(idType id, GoodNumber num)
 {
 	if (goodsSet.count(id)) {
 		goodsSet[id] = num;
@@ -69,7 +69,7 @@ Object* Order::getByStream(istream&input)
 	Order* order = new Order();
 	input >>order->ID>> order->OrderdTime>>order->total>>order->sellerID>>order->consumerID;
 	idType id; input >> id;
-	Number num;
+	GoodNumber num;
 	while (id != _INVALID_ID) {
 		input >> num;
 		order->addGood(id, num);

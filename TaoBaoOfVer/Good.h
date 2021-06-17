@@ -2,7 +2,7 @@
 #include "Object.h"
 #include <iostream>
 #define priceType unsigned int
-#define Number unsigned int
+#define GoodNumber unsigned int
 enum GoodType{
 		BOOK,ELEC,CLOUTH,DEFAULT
 };
@@ -12,8 +12,8 @@ class Good:public Object
 private:
 	string name;
 	idType sellerID;
-	Number onSelling;
-	Number sellingNum;
+	GoodNumber onSelling;
+	GoodNumber sellingNum;
 	unsigned long long  soldNum;
 	priceType originalPrice;
 protected:
@@ -24,23 +24,23 @@ protected:
 
 	Good(istream&);// when client read info
 	Good(idType id);
-	Good(idType id, idType sellerId, string name, priceType price, Number selling);//for create a new good
+	Good(idType id, idType sellerId, string name, priceType price, GoodNumber selling);//for create a new good
 public:
 	virtual priceType getPrice()const;
 	static bool canBeName(string name);
 	Good();
 	static Good* newGood(istream&);
-	static Good* newGood(GoodType good, idType id, idType sellerId, string name, priceType price, Number selling);
+	static Good* newGood(GoodType good, idType id, idType sellerId, string name, priceType price, GoodNumber selling);
 
 	string Name();
 	unsigned long long SoldNum()const;
-	Number SellingNum()const;
-	bool sellStart(Number selling);
-	bool sellConcel(Number selling);
-	bool sellFinish(Number selling);
-	bool increaseSelling(Number num);
-	bool decreaseSelling(Number num);
-	bool setSelling(Number num);
+	GoodNumber SellingNum()const;
+	bool sellStart(GoodNumber selling);
+	bool sellConcel(GoodNumber selling);
+	bool sellFinish(GoodNumber selling);
+	bool increaseSelling(GoodNumber num);
+	bool decreaseSelling(GoodNumber num);
+	bool setSelling(GoodNumber num);
 	priceType getOriginalPrice()const;
 	bool changeName(string name);
 	idType getSellerID()const;
@@ -59,7 +59,7 @@ private:
 	static int BookDiscount;
 public:
 	book(istream&);// when client read info
-	book(idType id, idType sellerId, string name, priceType price, Number selling);//for create a new good
+	book(idType id, idType sellerId, string name, priceType price, GoodNumber selling);//for create a new good
 	virtual priceType getPrice()const;
 };
 class clouthing :public Good {
@@ -67,7 +67,7 @@ private:
 	static int ClouthDiscount;
 public:
 	clouthing(istream&);// when client read info
-	clouthing(idType id, idType sellerId, string name, priceType price, Number selling);//for create a new good
+	clouthing(idType id, idType sellerId, string name, priceType price, GoodNumber selling);//for create a new good
 	virtual priceType getPrice()const;
 };
 class electronic :public Good {
@@ -75,6 +75,6 @@ private:
 	static int ElecDiscount;
 public:
 	electronic(istream&);// when client read info
-	electronic(idType id, idType sellerId, string name, priceType price, Number selling);//for create a new good
+	electronic(idType id, idType sellerId, string name, priceType price, GoodNumber selling);//for create a new good
 	virtual priceType getPrice()const;
 };

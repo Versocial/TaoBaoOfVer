@@ -15,6 +15,6 @@ public:
 	Order* theOrder();
 	~OrdersControler();
 	static OrdersControler* getInstance(const char* path);
-	void addGood(idType seller,idType consumer,idType goodId, Number num);//client :sellerID == Order ID ,but  not server 
+	void addGood(idType seller,idType consumer,idType goodId, GoodNumber num);//client :sellerID == Order ID ,but  not server 
 	string toShow(GoodsControler* good);
 };

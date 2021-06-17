@@ -13,14 +13,14 @@ private:
 	priceType total;
 	idType sellerID;
 	idType consumerID;
-	unordered_map<idType,Number>goodsSet;
+	unordered_map<idType,GoodNumber>goodsSet;
 protected:
 public:
 	Order();
 	Order(idType seller, idType consumer);
 	priceType totalPrice();
 	int kinds();
-	void addGood(idType id, Number num);
+	void addGood(idType id, GoodNumber num);
 
 	string toShow(GoodsControler* good);
 

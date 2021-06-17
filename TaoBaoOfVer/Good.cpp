@@ -42,7 +42,7 @@ Good::Good(idType id):Object()
 	initGood(id, cin, cout); discount = 100;
 }
 
-Good::Good(idType id, idType sellerId, string Name, priceType money, Number selling):Object(id)
+Good::Good(idType id, idType sellerId, string Name, priceType money, GoodNumber selling):Object(id)
 {
 	sellerID = sellerId;
 	name = Name;
@@ -76,7 +76,7 @@ Good* Good::newGood(istream&input)
 	return good;
 }
 
-Good* Good::newGood(GoodType goodType, idType id, idType sellerId, string name, priceType price, Number selling)
+Good* Good::newGood(GoodType goodType, idType id, idType sellerId, string name, priceType price, GoodNumber selling)
 {
 	Good* good;
 	switch (goodType) {
@@ -111,12 +111,12 @@ unsigned long long Good::SoldNum()const
 	return soldNum;
 }
 
-Number Good::SellingNum()const
+GoodNumber Good::SellingNum()const
 {
 	return sellingNum;
 }
 
-bool Good::sellStart(Number selling)
+bool Good::sellStart(GoodNumber selling)
 {
 	if (sellingNum > selling) {
 		sellingNum -= selling;
@@ -125,7 +125,7 @@ bool Good::sellStart(Number selling)
 	}else 	return false;
 }
 
-bool Good::sellConcel(Number selling)
+bool Good::sellConcel(GoodNumber selling)
 {
 	if (onSelling >= selling) {
 		onSelling -= selling;
@@ -135,7 +135,7 @@ bool Good::sellConcel(Number selling)
 	return false;
 }
 
-bool Good::sellFinish(Number selling)
+bool Good::sellFinish(GoodNumber selling)
 {
 	if (onSelling > selling) {
 		onSelling -= selling;
@@ -148,19 +148,19 @@ bool Good::sellFinish(Number selling)
 
 
 
-bool Good::increaseSelling(Number num)
+bool Good::increaseSelling(GoodNumber num)
 {
 	if (num + sellingNum > num) { sellingNum += num; return true; }
 	else return false;
 }
 
-bool Good::decreaseSelling(Number num)
+bool Good::decreaseSelling(GoodNumber num)
 {
 	if (num < sellingNum) { sellingNum -= num; return true; }
 	return false;
 }
 
-bool Good::setSelling(Number num)
+bool Good::setSelling(GoodNumber num)
 {
 	sellingNum = num;
 	return true;
@@ -251,7 +251,7 @@ int book:: BookDiscount=100;
  {
 	 type = BOOK;
  }
- book::book(idType id, idType sellerId, string name, priceType price, Number selling) :Good(id, sellerId, name, price, selling)
+ book::book(idType id, idType sellerId, string name, priceType price, GoodNumber selling) :Good(id, sellerId, name, price, selling)
  {
 	 type = BOOK;
  }
@@ -267,7 +267,7 @@ clouthing::clouthing(istream& input) :Good(input)// when client read info
 	type = CLOUTH;
 }
 
-clouthing::clouthing(idType id, idType sellerId, string name, priceType price, Number selling):Good( id, sellerId,  name, price,selling)
+clouthing::clouthing(idType id, idType sellerId, string name, priceType price, GoodNumber selling):Good( id, sellerId,  name, price,selling)
 {
 	type = CLOUTH;
 }
@@ -280,7 +280,7 @@ electronic::electronic(istream&input):Good(input)// when client read info
 {
 	type = ELEC;
 }
-electronic::electronic(idType id, idType sellerId, string name, priceType price, Number selling) :Good(id, sellerId, name, price, selling)
+electronic::electronic(idType id, idType sellerId, string name, priceType price, GoodNumber selling) :Good(id, sellerId, name, price, selling)
 {
 	type = ELEC;
 }
