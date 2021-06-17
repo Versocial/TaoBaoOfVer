@@ -17,7 +17,7 @@ class Controler
 private:
 	//filePath
 	string filePath;
-	vector<string>& getFiles(string path);
+	vector<string> getFiles(string path);
 	//Memory
 	unordered_map <idType, Object*> allObjects;//core Memory
 	bool addToMemory(istream& input);//add to Memory

@@ -16,8 +16,10 @@ private:
 	bool needAnswer;
 	 enum Command status;
 	int step ;
+	int ClientTempFlag;
 	string tempInfo;
 	Good* tempGood;
+	idType tempID;
 	CMD cmd;
 	CMD cmdRecvd;
 	idType userID;

@@ -1,5 +1,6 @@
 #pragma once
 #include "GoodsControler.h"
+#include "Good.h"
 #include "UsersControler.h"
 #include "log.h"
 #include "Command.h"
@@ -44,6 +45,7 @@ private:
 	int step;
 	CMD cmd;
 	idType userID;
+	idType tempID;
 	ClientType userType;
 	Server* server;
 	User* user;
@@ -56,6 +58,7 @@ private:
 	void manageLogOut();
 	void manageIncome();
 	void manageGoodsPulling();
+	void manageAddGood();
 public:
 	~Dialog();
 	Dialog(Server* server, Text& in, Text& out);

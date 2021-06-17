@@ -153,7 +153,7 @@ Controler:: ~Controler() {
 }
 
 
- vector<string>& Controler::getFiles(string path)
+ vector<string> Controler::getFiles(string path)
 {
 	intptr_t hFile = 0;//文件句柄  
 	struct _finddata_t fileinfo;//文件信息  

@@ -1,3 +1,4 @@
+#pragma once
 #include "Client.h"
 #define chachePath ("../res/chache") 
 
@@ -11,22 +12,22 @@
 #define CUser ((Consumer*)User)
 #define SUser ((Seller*)User)
 #define WaitAnswerAndInput {needAnswer=true;canExit=true;}
-#define WaitInput {canExit=true;}
+#define WaitInput {canExit=true;}//without answer waiting
 #define ExitProcess {cmd=Exit;}
 #define ReadByCin(x) {;cin>>(x); cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n');}
 static 	Server*server ;
 
 
 unordered_map<string, enum Command> Client::Client_Command{
-    { "@E", Exit},{"@L",LogIn},{"@O",LogOut}, {"@End",End},{"@S",SignIn},{"@M",Income} 
+    { "@E", Exit},{"@L",LogIn},{"@O",LogOut}, {"@End",End},{"@S",SignIn},{"@M",Income} ,{"@P",AskGoodsInfo},{"@A",AddGood}
 };
 
 
 int main() {
-    char S2C[60] = "0";
-    char C2S[60] = "";
-    Text StoC(S2C,60);
-    Text CtoS(C2S, 60);
+    char S2C[600] = "0";
+    char C2S[600] = "";
+    Text StoC(S2C,600);
+    Text CtoS(C2S, 600);
     Client* client = new Client(StoC, CtoS);
     server = Server::getInstance(CtoS,StoC);
     client->ClientMain();
@@ -43,6 +44,7 @@ Client::Client(Text& in, Text& out) {
     output = &out;
     goods = GoodsControler::getInstance(chachePath);
     clearChacheFiles(chachePath);
+    tempID = 0;
 }
 
 void Client::ClientMain()
@@ -78,10 +80,12 @@ void Client::ClientMain()
     case LogOut:whenLogOut(); break;
     case SignIn:whenSignIn(); break;
     case Income:whenInfome(); break;
+    case AskGoodsInfo:whenAskForAllGoods(); break;
+    case AddGood:whenAddGood(); break;
     default:
         break;
     }
-    if (cmd == Exit) { step = 1; if (userType == HalfConsumer || userType == HalfSeller)userType = Visitor; }//outway:cmd=Exit 
+    if (cmd == Exit) { step = 1; if (userType == HalfConsumer || userType == HalfSeller)userType = Visitor; tempGood = NULL; }//outway:cmd=Exit 
    if(cmd!=Exit)  status = (Command)cmd;
     }
 }
@@ -188,9 +192,14 @@ void Client::whenAskForAllGoods()
         sendV("cmd", AskGoodsInfo);
         sendRequest();
         waitForAnswer();
-        step++;
         // NO break here !
     case 2:
+        if (step >= 2) {
+            ReadByCin(tempInfo);
+            if (tempInfo[0] == 'y' || tempInfo[0] == 'Y');
+            else { cout << "exit.\n"; ExitProcess; break; }
+        }
+        else step++;
         flag = recvV("Flag");        
         goodID = recvV("ID");
         if(flag) ans = recvTs("Good");
@@ -220,32 +229,98 @@ void Client::whenAskForAllGoods()
 
 void Client::whenAddGood()//////
 {
-    string name;
-    idType GoodId;
+    string info;
     switch (step) {
     case 1:
         if (userType != SellerUser) { cout << "No, you are not a seller !"; ExitProcess; }
         else {
             sendV("cmd", AddGood);
-            cout << "Please enter its name"; 
+            sendRequest();
+            cout << "Please enter its type 'b' for book ,'c' for clouth while 'e' for electronic.\n"; 
             step++;
-            WaitInput;
+            WaitAnswerAndInput;
         }
         break;
     case 2:
-        ReadByCin(name);
+        tempID = recvV("ID");
+        if (tempID == _INVALID_ID) { cout << "you are refused for unkown reason.\n"; ExitProcess; break; }
+        ReadByCin(info);
+        if (info == "c" || info == "b" || info == "e") {
+            tempInfo= " ";
+            cout << "Give its price\n";
+            step++;
+            switch (info[0]) {
+            case 'c':ClientTempFlag = CLOUTH;
+                break;
+            case 'b':ClientTempFlag = BOOK;
+                break;
+            case 'e':ClientTempFlag = ELEC;
+                break;
+            }
+        }
+        else {
+            cout << "Please enter its type 'b' for book ,'c' for clouth while 'e' for electronic , and "+info+" is invalid.\n";
+        }
+        WaitInput;
         break;
     case 3:
+        ReadByCin(info);
+        if (atoll(info.c_str()) <= 0) { cout << "Please type a reasonable price.\n"; }
+        else {
+            tempInfo = tempInfo + " "+info+" "+to_string(userID)+" ";
+            cout << "Give its selling num\n";
+            step++;
+        }
+        WaitInput;
         break;
     case 4:
+        ReadByCin(info);
+        if (atoll(info.c_str()) <= 0) { cout << "Please type a reasonable number.\n"; }
+        else {
+            tempInfo = tempInfo + " " + info+" 0 ";
+            cout << "Give its name\n";
+            step++;
+        }
+        WaitInput;
         break;
-    case 5:
+    case 5://type>> ID>>originalPrice >> sellerID >> sellingNum >> soldNum >> name>>discount
+        ReadByCin(info);
+        if (Good::canBeName(info)) {
+            istringstream inputstring(to_string(ClientTempFlag)+" "+to_string(tempID)+" "+tempInfo + " " + info + " 1 ");
+            Good* good = Good::newGood(inputstring);
+            sendV("cmd", AddGood);
+            sendV("ID", good->id());
+            sendT("Name", good->Name());
+            sendV("Sell", good->SellingNum());
+            sendV("Price", good->getOriginalPrice());
+            sendV("Type", good->Type());
+            cout << "OK.\n";
+            sendRequest();
+            goods->addToMemory(good);
+            goods->saveFile(good->id());
+            ExitProcess;
+        }
+        else { cout << "Wrong Format !!\n"; WaitInput; }
         break;
     default:
         break;
     }
 }
+/*
+* 
+@L
+s
+10001
+stupid
 
+@A
+b
+200
+100
+LRF
+
+
+*/
 void Client::whenLogOut()
 {
     switch (step) {
@@ -378,12 +453,13 @@ void Client::clearChacheFiles(const char* ChachePath)const
 {   
     intptr_t hFile = 0;//文件句柄  
     struct _finddata_t fileinfo;//文件信息  
-    string p(ChachePath;
+    string p(ChachePath);
     if ((hFile = _findfirst(p.assign(ChachePath).append("\\*.TBgood").c_str(), &fileinfo)) != -1)
     {
         do
         {
-            p  =p+ "\\" + fileinfo.name;
+            string path(ChachePath);
+            p  =path+ "\\" + fileinfo.name;
             remove(p.c_str());
         } while (_findnext(hFile, &fileinfo) == 0);
         _findclose(hFile);

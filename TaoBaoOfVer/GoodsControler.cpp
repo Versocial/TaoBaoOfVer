@@ -1,5 +1,6 @@
 #include "GoodsControler.h"
-#define FIRST_CONSUMER_NUMBEROFGOODS 1
+
+idType GoodsControler::startId=100;
 
 GoodsControler* GoodsControler::instanceG = NULL;
 Object& GoodsControler::theObject()
@@ -13,7 +14,7 @@ string GoodsControler::objPostfix()
 }
 GoodsControler::GoodsControler(string path) :Controler(path)
 {
-	if (ObjectNum() == 0)maxId = FIRST_CONSUMER_NUMBEROFGOODS;
+	if (ObjectNum() == 0)maxId = startID();
 }
 
 GoodsControler::~GoodsControler()
@@ -21,6 +22,11 @@ GoodsControler::~GoodsControler()
 	instanceG = NULL;
 }
 
+
+idType GoodsControler::startID()
+{
+	return startId;
+}
 
 idType GoodsControler::maxID()
 {

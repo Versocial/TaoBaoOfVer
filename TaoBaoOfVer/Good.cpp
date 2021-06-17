@@ -1,3 +1,4 @@
+#pragma once
 #include "Good.h"
 #include <regex>
 #define EXIT_CMD_   ("@exit")
@@ -38,7 +39,7 @@ void Good::initGood(idType id, istream& input, ostream& output)
 
 Good::Good(idType id):Object()
 {
-	initGood(id, cin, cout); discount = 1;
+	initGood(id, cin, cout); discount = 100;
 }
 
 Good::Good(idType id, idType sellerId, string Name, priceType money, Number selling):Object(id)
@@ -48,11 +49,61 @@ Good::Good(idType id, idType sellerId, string Name, priceType money, Number sell
 	originalPrice = money;
 	sellingNum = selling;
 	soldNum = 0;
+	discount = 100;
+}
+
+Good* Good::newGood(istream&input)
+{
+	int type;
+	input >> type;
+	GoodType goodType= (GoodType)type;
+	Good* good;
+	switch (goodType)
+	{
+	case BOOK:
+		good= new book(input);
+		break;
+	case ELEC:
+		good= new electronic(input);
+		break;
+	case CLOUTH:
+		good= new clouthing(input);
+		break;
+	default:
+		good= NULL;
+		break;
+	}
+	return good;
+}
+
+Good* Good::newGood(GoodType goodType, idType id, idType sellerId, string name, priceType price, Number selling)
+{
+	Good* good;
+	switch (goodType) {
+	case BOOK:
+		good = new book(id,sellerId,name,price,selling);
+		break;
+	case ELEC:
+		good = new electronic(id, sellerId, name, price, selling);
+		break;
+	case CLOUTH:
+		good = new clouthing(id, sellerId, name, price, selling);
+		break;
+	default:
+		good = NULL;
+		break;
+	}
+	return good;
 }
 
 
 Good::Good():Object()
 {
+}
+
+string Good::Name()
+{
+	return name;
 }
 
 unsigned long long Good::SoldNum()const
@@ -113,10 +164,15 @@ idType Good::getSellerID()const
 
 bool Good::setDiscount(double Discount) 
 {
-	if (Discount > 1)discount =1;
+	if (Discount > 1)discount =100;
 	else if (Discount <= 0)return false;
 	else discount = Discount;
 	return true;
+}
+
+GoodType Good::Type()
+{
+	return type;
 }
 
 
@@ -152,18 +208,45 @@ string Good::toShow() const
 
 
 
- double book:: BookDiscount=1;
-priceType book::getPrice() const
+int book:: BookDiscount=1;
+ book::book(istream& input) :Good(input)// when client read info
+ {
+	 type = BOOK;
+ }
+ book::book(idType id, idType sellerId, string name, priceType price, Number selling) :Good(id, sellerId, name, price, selling)
+ {
+	 type = BOOK;
+ }
+ priceType book::getPrice() const
 {
-	return (priceType)ceil(getOriginalPrice()*discount*BookDiscount);
+	return (priceType)ceil(getOriginalPrice()*discount*BookDiscount/10000);
 }
-double clouthing::ClouthDiscount=1;
+ int clouthing::ClouthDiscount=1;
+
+
+clouthing::clouthing(istream& input) :Good(input)// when client read info
+{
+	type = CLOUTH;
+}
+
+clouthing::clouthing(idType id, idType sellerId, string name, priceType price, Number selling):Good( id, sellerId,  name, price,selling)
+{
+	type = CLOUTH;
+}
 priceType clouthing::getPrice() const
 {
-	return (priceType)ceil(getOriginalPrice() * discount * ClouthDiscount);
+	return (priceType)ceil(getOriginalPrice() * discount * ClouthDiscount/10000);
 }
-double electronic::ElecDiscount=1;
+int electronic::ElecDiscount=1;
+electronic::electronic(istream&input):Good(input)// when client read info
+{
+	type = ELEC;
+}
+electronic::electronic(idType id, idType sellerId, string name, priceType price, Number selling) :Good(id, sellerId, name, price, selling)
+{
+	type = ELEC;
+}
 priceType electronic::getPrice() const
 {
-	return (priceType)ceil(getOriginalPrice() * discount * ElecDiscount);
+	return (priceType)ceil(getOriginalPrice() * discount * ElecDiscount/10000);
 }

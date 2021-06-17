@@ -12,7 +12,7 @@
 #define sellers (server->sellers)
 #define consumers (server->consumers)
 #define goods (server->goods)
-
+#define MAXPULLNUM 7
 
 
 Dialog::~Dialog()
@@ -65,8 +65,12 @@ void Dialog::Dialogmanage()
         case Income:manageIncome();
             break;
         case AskGoodsInfo:manageGoodsPulling();
+            break;
+        case AddGood:manageAddGood();
+            break;
         case End:
-           // server->save(); 
+           // server->save();
+            delete this;
             return;
             break;
         default:
@@ -233,7 +237,7 @@ void Dialog::manageGoodsPulling()
 {
     bool flag=false;
     idType goodID=_INVALID_ID;
-    int num = 7;
+    int num = MAXPULLNUM;
     switch (step) {
     case 1:
         goodID = goods->maxID();
@@ -243,7 +247,7 @@ void Dialog::manageGoodsPulling()
         if (goodID == _INVALID_ID) {
             goodID = recvV("ID");
         }
-        while (num>=0&&goodID > _INVALID_ID) {
+        while (num>=0&&goodID > goods->startID()) {
             if (goods->containsInMemory(goodID)) {
                 if (num == 0)break;
                 sendT("Good",goods->getObjectInMemory(goodID)->turnIntoString());
@@ -251,17 +255,54 @@ void Dialog::manageGoodsPulling()
             }
             goodID--;
         }
-        if (num == 7) {
+        if (num == MAXPULLNUM) {
             flag = false;
         }
         else flag = true;
             sendV("Flag", flag);
-            sendV("ID", goodID);
-            if (goodID == _INVALID_ID)ExitProcess;
+            if (goodID == goods->startID()) { 
+                sendV("ID", _INVALID_ID); ExitProcess;
+            }
+            else sendV("ID", goodID);
         break;
     default:
 
             break;
+    }
+}
+
+void Dialog::manageAddGood()
+{
+    string name;
+    moneyType price;
+    Number selling;
+    GoodType type;
+    Good* good;
+    switch (step) {
+    case 1:
+        if (userType != SellerUser) {
+            sendV("ID", _INVALID_ID);
+            ExitProcess; break;
+        }
+        tempID = goods->suggestID();
+        sendV("ID",tempID);
+        if (tempID == _INVALID_ID) {
+            ExitProcess; break;
+        }
+        step++;
+        break;
+    case 2:
+        name = recvT("Name");
+        type = (GoodType)recvV("Type");
+        selling = recvV("Sell");
+        price = recvV("Price");
+        good = Good::newGood(type, tempID, user->id(), name, price, selling);
+        goods->addToMemory(good);
+        goods->saveFile(tempID);
+        ((Seller*)user)->addGood(tempID);
+        break;
+    default:
+        break;
     }
 }
 

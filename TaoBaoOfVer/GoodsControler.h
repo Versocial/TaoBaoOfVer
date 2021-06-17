@@ -7,11 +7,13 @@ using namespace::std;
 class GoodsControler:public Controler
 {
 private:
+	static  idType startId;
 	virtual Object& theObject();
 	virtual string objPostfix();
 	static GoodsControler* instanceG;
 	GoodsControler(string path);
 public:
+	idType startID();
 	idType maxID();
 	static GoodsControler* getInstance(string path);
 	~GoodsControler();
