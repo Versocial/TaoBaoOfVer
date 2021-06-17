@@ -17,6 +17,7 @@ private:
 	bool canExit;
 	bool needAnswer;
 	 enum Command status;
+	 SOCKET sock;
 	int step ;
 	int ClientTempFlag;
 	string tempInfo;

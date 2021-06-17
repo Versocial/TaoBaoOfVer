@@ -1,5 +1,7 @@
 #pragma once
 #include "Client.h"
+#include <winsock2.h>
+#pragma comment (lib, "ws2_32.lib")
 #define chachePath ("../res/chache") 
 #define shopCarPath ("../res/shopCar") 
 #define ordersPath ("../res/recv") 
@@ -28,16 +30,13 @@ unordered_map<string, enum Command> Client::Client_Command{
 
 
 int main() {
-    char S2C[600] = "0";
-    char C2S[600] = "";
+    char S2C[1000] = "0";
+    char C2S[1000] = "";
     Text StoC(S2C,600);
     Text CtoS(C2S, 600);
     Client* client = new Client(StoC, CtoS);
-    server = Server::getInstance(CtoS,StoC);
     client->ClientMain();
     delete(client);
-    delete(server);
-
 }
 
 Client::Client(Text& in, Text& out) {
@@ -56,6 +55,16 @@ Client::Client(Text& in, Text& out) {
 
 void Client::ClientMain()
 {
+    WSADATA wsaData;
+    WSAStartup(MAKEWORD(2, 2), &wsaData);
+    sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+    sockaddr_in sockAddr;
+    memset(&sockAddr, 0, sizeof(sockAddr));  
+    sockAddr.sin_family = PF_INET;
+    sockAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    sockAddr.sin_port = htons(1234);
+    connect(sock, (SOCKADDR*)&sockAddr, sizeof(SOCKADDR));
+
     needAnswer=false;
     canExit = false;
     while (1) {
@@ -107,7 +116,9 @@ void Client::ClientMain()
 
 void Client::waitForAnswer()
 {
-    while (!input->infoReady()||!output->empty()) ;
+
+    recv(sock, input->buffer(), 600, 0);
+    input->buffer()[strlen(input->buffer())] = 0;
     cmdRecvd=recvV("cmd");
     cout << "client recv : " << input->buffer() << endl;
     needAnswer = false;
@@ -190,6 +201,7 @@ void Client::whenLogIn()
 
 void Client::sendRequest()
 {
+    send(sock, output->buffer(), strlen(input->buffer()), 0);
     output->sendInfo();
     input->clear();
     needAnswer = true;
@@ -197,6 +209,7 @@ void Client::sendRequest()
 
 void Client::sendRequestWithoutAnswer()
 {
+    send(sock, output->buffer(), strlen(input->buffer()), 0);
     output->sendInfo();
     input->clear();
 }

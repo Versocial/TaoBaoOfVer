@@ -23,7 +23,7 @@ private:
 	mutex usingLocker;
 	thread* autoSave;
 	static Server* instance;
-	Server(Text& in, Text& out);
+	Server();
 	void serverMain();
 	void autoSavingThread();
 	void save();
@@ -33,7 +33,7 @@ public:
 	SellersControler* sellers;
 	GoodsControler* goods;
 	int Main1();
-	static Server* getInstance(Text& in, Text& out);
+	static Server* getInstance();
 	~Server();
 	//Dialog* dialog;//just for test
 };
@@ -55,6 +55,8 @@ private:
 	Text* input;
 	Text* output;
 	Order* orderNow;
+	SOCKET serverSocket;
+	SOCKET clientSocket;
 
 	void Dialogmanage();
 	void manageSignIn();
@@ -70,6 +72,7 @@ private:
 public:
 	~Dialog();
 	Dialog(Server* server, Text& in, Text& out);
+	Dialog(Server*s,SOCKET Client, SOCKET Cerver);
 	void run();
 };
 

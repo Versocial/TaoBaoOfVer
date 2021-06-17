@@ -1,4 +1,5 @@
 #include "Server.h"
+#include <WinSock2.h>
 
 #define sendV(tag,x){output->setString(tag, to_string(x)); }
 #define sendT(tag,x){output->setString(tag,x);}
@@ -35,19 +36,41 @@ Dialog::Dialog(Server* _server, Text& in, Text& out) {
     dialogThread= new thread(&Dialog:: Dialogmanage,this);
 }
 
+Dialog::Dialog(Server* s, SOCKET clientS, SOCKET serverS)
+{
+
+    char inBuffer [300];
+    char outBuffer [300];
+    Text in(inBuffer, 300);
+    Text out (outBuffer, 300);
+    userType = Visitor;
+    status = Exit;
+    step = 1;
+    server = s;
+    serverSocket = serverS;
+    clientSocket = clientS;
+    input = &in;
+    output = &out;
+    waitThread = NULL;
+    dialogThread = new thread(&Dialog::Dialogmanage, this);
+    dialogThread->join();
+
+}
+
 void Dialog::run()
 {
-    std::chrono::milliseconds dura(500);
-    std::this_thread::sleep_for(dura);
-    Run.notify_one();
+    while (1) {
+        //Run.notify_one();
+        
+    }
 }
 
 void Dialog::Dialogmanage()
 {
     while (1) {
-        while (!input->infoReady() || !output->empty()) {
-            std::unique_lock <std::mutex> lck(lock); waitThread=new thread(&Dialog::run, this);  Run.wait(lck);
-        }
+        int len = recv(clientSocket, input->buffer(), 300, 0);
+        input->buffer()[len] = 0;
+        output->clear();
        cmd=recvV("cmd"); 
        cout << "sever recv :" << input->buffer() << endl;
         if (status == Exit) { status = (Command)cmd; step = 1; }
@@ -91,6 +114,7 @@ void Dialog::Dialogmanage()
         if (!output->empty()) {
             sendV("cmd", cmd);
             output->sendInfo();
+            send(clientSocket, output->buffer(), strlen(output->buffer()),0);
         }
         input->clear();
     }

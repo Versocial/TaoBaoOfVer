@@ -1,16 +1,18 @@
 #include "Server.h"
 //#define AvoidConfictFromSaving  ; lock_guard<mutex> temp_lock_guard(usingLocker);
 
+#include <winsock2.h>
+#pragma comment (lib, "ws2_32.lib")
 
 Server* Server::instance = NULL;
 
-Server::Server(Text&in,Text&out) {
+Server::Server() {
     consumers = ConsumersControler::getInstance(ConsumersControlerPath);
     sellers = SellersControler::getInstance(SellersControlerPath);
     goods = GoodsControler::getInstance(GoodsControlerPath);
     //autoSave = new thread(&Server::autoSavingThread, this);
     Logger::setLogPath(LogPath);
-    Dialog* dialog= new Dialog(this, in, out);
+  //  Dialog* dialog= new Dialog(this, in, out);
 
 
 }
@@ -18,6 +20,29 @@ Server::Server(Text&in,Text&out) {
 
 void Server::serverMain()
 {
+    Server* server = Server::getInstance();
+    while (1) {
+        SOCKET servSock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+        sockaddr_in sockAddr;
+        memset(&sockAddr, 0, sizeof(sockAddr)); 
+        sockAddr.sin_family = PF_INET;  
+        sockAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+        sockAddr.sin_port = htons(1234);  
+        bind(servSock, (SOCKADDR*)&sockAddr, sizeof(SOCKADDR));
+        listen(servSock, 20);
+
+        while (1) {
+            SOCKADDR clntAddr;
+            int nSize = sizeof(SOCKADDR);
+            SOCKET clntSock = accept(servSock, (SOCKADDR*)&clntAddr, &nSize);
+            new Dialog(server,clntSock, servSock);
+        }
+    }
+
+    delete(server);
+    WSACleanup();
+    return ;
+
 }
 
 void Server::autoSavingThread()
@@ -40,10 +65,10 @@ void Server::save()
 }
 
 
-Server* Server::getInstance(Text& in, Text& out)
+Server* Server::getInstance()
 {
     if (instance == NULL) { 
-        instance = new Server(in, out); 
+        instance = new Server(); 
         instance->allOrders = OrdersControler::getInstance(OdersPath);
         instance->allOrders->readOutAllFromFile();
     }
