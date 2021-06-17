@@ -1,9 +1,11 @@
 #include "Client.h"
+#define chachePath ("../res/chache") 
 
 #define sendV(tag,x){output->setString(tag, to_string(x)); }
 #define sendT(tag,x){output->setString(tag,x);}
 #define recvV(tag) (input->getValue(tag))
 #define recvT(tag) (input->getString(tag))
+#define recvTs(tag) (input->getStrings(tag))
 #define HasLogIn (userType==ConsumerUser||userType==SellerUser)
 
 #define CUser ((Consumer*)User)
@@ -39,6 +41,8 @@ Client::Client(Text& in, Text& out) {
 	step = 1;
     input = &in;
     output = &out;
+    goods = GoodsControler::getInstance(chachePath);
+    clearChacheFiles(chachePath);
 }
 
 void Client::ClientMain()
@@ -171,6 +175,77 @@ void Client::sendRequestWithoutAnswer()
     input->clear();
 }
 
+void Client::whenAskForAllGoods()
+{
+    bool flag;
+    int number;
+    set<string >ans;
+    idType goodID;
+    switch (step)
+    {
+    case 1:
+        cout << "Pulling ... ..."<<endl;
+        sendV("cmd", AskGoodsInfo);
+        sendRequest();
+        waitForAnswer();
+        step++;
+        // NO break here !
+    case 2:
+        flag = recvV("Flag");        
+        goodID = recvV("ID");
+        if(flag) ans = recvTs("Good");
+        number = ans.size();
+        if (number > 0)cout << "Got " << number << " Goods ! " << endl;
+        else cout << "Sorry, sellers all put up the shutters now !"<<endl;
+        for (string info:ans) {
+            istringstream infor(info);
+            tempGood = new Good(infor);
+            if (goods->containsInMemory(tempGood->id()))goods->removeFromMemory(tempGood->id());
+            goods->addToMemory(tempGood);
+            goods->saveFile(tempGood->id());
+            cout << tempGood->turnIntoString()<<endl;//..
+        }
+        if (goodID==_INVALID_ID) { cout << "No more goods selling.\n"; ExitProcess; }
+        else { 
+            cout << "If you want more goods to show, type in 'y'" << endl; 
+            sendV("cmd", AskGoodsInfo);
+            sendV("ID", goodID);
+            WaitAnswerAndInput;
+        }
+        break;
+   default:
+        break;
+    }
+}
+
+void Client::whenAddGood()//////
+{
+    string name;
+    idType GoodId;
+    switch (step) {
+    case 1:
+        if (userType != SellerUser) { cout << "No, you are not a seller !"; ExitProcess; }
+        else {
+            sendV("cmd", AddGood);
+            cout << "Please enter its name"; 
+            step++;
+            WaitInput;
+        }
+        break;
+    case 2:
+        ReadByCin(name);
+        break;
+    case 3:
+        break;
+    case 4:
+        break;
+    case 5:
+        break;
+    default:
+        break;
+    }
+}
+
 void Client::whenLogOut()
 {
     switch (step) {
@@ -297,6 +372,23 @@ void Client::whenSignIn()
 
         break;
     }
+}
+
+void Client::clearChacheFiles(const char* ChachePath)const
+{   
+    intptr_t hFile = 0;//文件句柄  
+    struct _finddata_t fileinfo;//文件信息  
+    string p(ChachePath;
+    if ((hFile = _findfirst(p.assign(ChachePath).append("\\*.TBgood").c_str(), &fileinfo)) != -1)
+    {
+        do
+        {
+            p  =p+ "\\" + fileinfo.name;
+            remove(p.c_str());
+        } while (_findnext(hFile, &fileinfo) == 0);
+        _findclose(hFile);
+    }
+        return;
 }
 
 void Client::whenInfome()

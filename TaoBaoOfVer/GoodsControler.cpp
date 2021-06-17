@@ -1,5 +1,5 @@
 #include "GoodsControler.h"
-
+#define FIRST_CONSUMER_NUMBEROFGOODS 1
 
 GoodsControler* GoodsControler::instanceG = NULL;
 Object& GoodsControler::theObject()
@@ -13,6 +13,7 @@ string GoodsControler::objPostfix()
 }
 GoodsControler::GoodsControler(string path) :Controler(path)
 {
+	if (ObjectNum() == 0)maxId = FIRST_CONSUMER_NUMBEROFGOODS;
 }
 
 GoodsControler::~GoodsControler()
@@ -21,9 +22,14 @@ GoodsControler::~GoodsControler()
 }
 
 
+idType GoodsControler::maxID()
+{
+	return maxId;
+}
+
 GoodsControler* GoodsControler::getInstance(string path)
 {
-	if (instanceG == NULL) { instanceG = new GoodsControler(path); instanceG->readOutAllFromFile();  return instanceG; }
+	if (1/*instanceG == NULL*/) { instanceG = new GoodsControler(path); instanceG->readOutAllFromFile();  return instanceG; }
 	else return NULL;
 }
 

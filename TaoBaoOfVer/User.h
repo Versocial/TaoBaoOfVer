@@ -4,6 +4,7 @@
 #include<sstream>
 #include <iostream>
 #include <set>
+#include "Good.h"
 #define moneyType unsigned long long
 using namespace::std;
 

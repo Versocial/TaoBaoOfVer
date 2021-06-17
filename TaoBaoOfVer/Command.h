@@ -7,13 +7,14 @@ enum Command {
 	LogIn=1,
 	LogOut=2,
 	SignIn=3,
-	addGood,
+	AddGood,
 	ChangeGood,
 	ChangeUserInfo,
 	Shop,
 	ShowGoods,
 	End,
 	Income,
+	AskGoodsInfo
 };
 
 enum _ClientType {

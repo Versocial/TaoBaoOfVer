@@ -41,6 +41,16 @@ Good::Good(idType id):Object()
 	initGood(id, cin, cout); discount = 1;
 }
 
+Good::Good(idType id, idType sellerId, string Name, priceType money, Number selling):Object(id)
+{
+	sellerID = sellerId;
+	name = Name;
+	originalPrice = money;
+	sellingNum = selling;
+	soldNum = 0;
+}
+
+
 Good::Good():Object()
 {
 }

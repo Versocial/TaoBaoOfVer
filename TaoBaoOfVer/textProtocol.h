@@ -1,6 +1,7 @@
 #pragma once
 #include<regex>
 #include <string>
+#include <set>
 using namespace::std;
 
 class Text{
@@ -16,6 +17,7 @@ public:
 	bool infoReady();// before read will check if read 
 	char* buffer();
 	string getString(string tag);
+	set<string> getStrings(string tag);
 	void setString(string tag, string info);
 	long long getValue(string Tag);
 };

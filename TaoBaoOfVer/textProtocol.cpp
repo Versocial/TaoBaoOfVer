@@ -1,5 +1,6 @@
 #include "textProtocol.h"
 #include <iostream>
+
 //
 //int main() {
 //    cout << __cplusplus<<endl;
@@ -43,6 +44,24 @@ string Text::getString(string tag)
      string ans((char*) &result[0].str()[tag.size()+2]);
      return ans;
      
+}
+
+set<string> Text::getStrings(string tag)
+{
+    string n = "\\{" + tag + ":[\\w ]+(?=\\})";
+    regex Regex(n.c_str());
+    cmatch result;
+    regex_search(buf, result, Regex);
+    if (result.size() == 0) {
+        cout << tag << " wrong" << endl;
+    }
+    set<string>v;
+    for (int i = 0; i < result.size(); i++) {
+        string ans((char*)&result[0].str()[tag.size() + 2]);
+        v.insert(ans);
+    }
+    return v;
+
 }
 
 void Text::setString(string tag, string info)

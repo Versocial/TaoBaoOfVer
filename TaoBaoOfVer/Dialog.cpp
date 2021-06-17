@@ -64,8 +64,8 @@ void Dialog::Dialogmanage()
             break;
         case Income:manageIncome();
             break;
+        case AskGoodsInfo:manageGoodsPulling();
         case End:
-
            // server->save(); 
             return;
             break;
@@ -226,6 +226,42 @@ void Dialog::manageIncome()
         break;
     default:
         break;
+    }
+}
+
+void Dialog::manageGoodsPulling()
+{
+    bool flag=false;
+    idType goodID=_INVALID_ID;
+    int num = 7;
+    switch (step) {
+    case 1:
+        goodID = goods->maxID();
+        step++;
+        //NO break here !
+    case 2:
+        if (goodID == _INVALID_ID) {
+            goodID = recvV("ID");
+        }
+        while (num>=0&&goodID > _INVALID_ID) {
+            if (goods->containsInMemory(goodID)) {
+                if (num == 0)break;
+                sendT("Good",goods->getObjectInMemory(goodID)->turnIntoString());
+                    num--;
+            }
+            goodID--;
+        }
+        if (num == 7) {
+            flag = false;
+        }
+        else flag = true;
+            sendV("Flag", flag);
+            sendV("ID", goodID);
+            if (goodID == _INVALID_ID)ExitProcess;
+        break;
+    default:
+
+            break;
     }
 }
 

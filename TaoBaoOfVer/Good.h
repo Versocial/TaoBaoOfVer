@@ -14,14 +14,15 @@ private:
 	priceType originalPrice;
 protected:
 	double discount;
-	Good(istream&);
 	static bool canBeName(string name);
 	virtual priceType getPrice()const;
 	void  setOriginalPrice(priceType price);
 	void initGood(idType id, istream& input, ostream& output);
 public:
 	Good();
+	Good(istream&);// when client read info
 	Good(idType id);
+	Good(idType id, idType sellerId, string name, priceType price,Number selling);//for create a new good
 	unsigned long long SoldNum()const;
 	Number SellingNum()const;
 	bool sell(Number selling);

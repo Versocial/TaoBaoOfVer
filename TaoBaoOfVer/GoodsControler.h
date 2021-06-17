@@ -12,6 +12,7 @@ private:
 	static GoodsControler* instanceG;
 	GoodsControler(string path);
 public:
+	idType maxID();
 	static GoodsControler* getInstance(string path);
 	~GoodsControler();
 	bool addOneGoodByCin();// just for test

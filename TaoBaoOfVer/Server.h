@@ -55,6 +55,7 @@ private:
 	void manageLogIn();
 	void manageLogOut();
 	void manageIncome();
+	void manageGoodsPulling();
 public:
 	~Dialog();
 	Dialog(Server* server, Text& in, Text& out);

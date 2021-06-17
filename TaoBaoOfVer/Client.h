@@ -17,6 +17,7 @@ private:
 	 enum Command status;
 	int step ;
 	string tempInfo;
+	Good* tempGood;
 	CMD cmd;
 	CMD cmdRecvd;
 	idType userID;
@@ -24,8 +25,10 @@ private:
 	User* user;
 	Text* input;
 	Text* output;
+	GoodsControler* goods;
 	inline	void waitForAnswer();
 	inline void sendRequest();
+	void clearChacheFiles(const char* ChachePath)const;
 	static unordered_map<string, enum Command> Client_Command;
 public:
 	Client(Text& in,Text& out);
@@ -35,6 +38,8 @@ public:
 	void whenLogOut();
 	void whenSignIn();
 	void whenInfome();
+	void whenAddGood();
 	void sendRequestWithoutAnswer();
+	void whenAskForAllGoods();
 };
 
