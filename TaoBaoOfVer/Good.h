@@ -21,13 +21,13 @@ protected:
 	virtual priceType getPrice()const;
 	void  setOriginalPrice(priceType price);
 	void initGood(idType id, istream& input, ostream& output);
+
+	Good(istream&);// when client read info
+	Good(idType id);
+	Good(idType id, idType sellerId, string name, priceType price, Number selling);//for create a new good
 public:
 	static bool canBeName(string name);
 	Good();
-	Good(istream&);// when client read info
-	Good(idType id);
-	Good(idType id, idType sellerId, string name, priceType price,Number selling);//for create a new good
-
 	static Good* newGood(istream&);
 	static Good* newGood(GoodType good, idType id, idType sellerId, string name, priceType price, Number selling);
 

@@ -16,6 +16,8 @@ class User :public Object
 {
 private:
 protected:
+	static string turnSetIntoString(const set<idType>& idSet); 
+	static set<idType> getSetFromStream(istream& input);
 	string name;
 	string password;
 	moneyType money;
@@ -44,6 +46,7 @@ class Consumer :
 	public User
 {
 private:
+	set<idType>shopCar;
 	Consumer(istream&);// for server
 public:
 	Consumer();
@@ -61,6 +64,7 @@ class Seller :
 {
 private:
 	set<idType> tradeGoods;
+	set<idType>orders;
 	Seller(istream&);
 public:
 	Seller();

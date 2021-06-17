@@ -5,6 +5,7 @@ A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(204,18): 
 A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(245,18): warning C4244: “=”: 从“__int64”转换到“unsigned long”，可能丢失数据
 A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(379,39): warning C4553: “==”: 未使用表达式结果；是否打算使用“=”?
 A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Client.cpp(388,18): warning C4244: “=”: 从“__int64”转换到“unsigned long”，可能丢失数据
+  Consumer.cpp
   ConsumersControler.cpp
   Controler.cpp
 A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Controler.cpp(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
@@ -16,9 +17,14 @@ A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Dialog.cpp(147,16): 
 A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Dialog.cpp(248,22): warning C4244: “=”: 从“__int64”转换到“unsigned long”，可能丢失数据
 A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Dialog.cpp(297,19): warning C4244: “=”: 从“__int64”转换到“unsigned int”，可能丢失数据
 A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Dialog.cpp(299,62): warning C4244: “参数”: 从“unsigned __int64”转换到“unsigned int”，可能丢失数据
+  Good.cpp
+A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\TaoBaoOfVer\Good.cpp(169,18): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
   GoodsControler.cpp
   Main1.cpp
+  Object.cpp
+  Seller.cpp
   SellersControler.cpp
   Server.cpp
+  User.cpp
   正在生成代码...
   TaoBaoOfVer.vcxproj -> A:\Programer\音乐\Albert_C\VS-Cpp\TaoBaoOfVer\Debug\TaoBaoOfVer.exe

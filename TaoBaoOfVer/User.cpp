@@ -94,6 +94,27 @@ string User::turnIntoString() const
 	return " " + to_string(ID) + " " + password + " " + " " + to_string(money) + " " + name + " ";
 }
 
+string User::turnSetIntoString(const set<idType>& idSet)
+{
+	string ans = "\n";
+	for (idType id : idSet) {
+		ans = ans + " " + to_string(id);
+	}
+	ans = ans + " " + to_string(_INVALID_ID);
+	return ans;
+}
+
+set<idType> User::getSetFromStream(istream&input)
+{
+	set<idType>ans;
+	idType id;
+	input >> id;
+	while (id != _INVALID_ID) {
+		ans.insert(id);
+	}
+	return ans;
+}
+
 User::User():Object()
 {
 }

@@ -3,7 +3,8 @@
 
 Seller::Seller(istream& input):User(input)
 {
-
+	tradeGoods = getSetFromStream(input);
+	orders = getSetFromStream(input);
 }
 
 Seller::Seller(idType id)
@@ -44,7 +45,7 @@ Object* Seller::getByStream(istream& input)
 
 string Seller::turnIntoString() const
 {
-	return User::turnIntoString();
+	return User::turnIntoString()+User::turnSetIntoString(tradeGoods)+User::turnSetIntoString(orders);
 }
 
 bool Seller::deleteByPtr()

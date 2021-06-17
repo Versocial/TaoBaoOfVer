@@ -12,6 +12,7 @@ Consumer::Consumer(idType ID, string Name,string passWord):User(ID,Name,passWord
 
 Consumer::Consumer(istream& input):User(input)
 {
+	shopCar = User::getSetFromStream(input);
 }
 
 Consumer::Consumer(): User()
@@ -32,7 +33,7 @@ Object* Consumer::getByStream(istream& input)
 
 string Consumer::turnIntoString() const
 {
-	return User::turnIntoString();
+	return User::turnIntoString()+User::turnSetIntoString(shopCar);
 
 }
 

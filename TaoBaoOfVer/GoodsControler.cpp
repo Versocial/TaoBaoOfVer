@@ -39,13 +39,13 @@ GoodsControler* GoodsControler::getInstance(string path)
 	else return NULL;
 }
 
-bool GoodsControler::addOneGoodByCin()
+bool GoodsControler::addOneGoodByCin()//just for test
 {
 	idType id = suggestID();
 	if (id == 0) {
 		cout << "[ERORR ]: too many goods ! no id for another good ! Please contact administrator.\n"; return false;
 	}
-	return addToMemory(new Good(id));
+	return addToMemory(Good::newGood(cin));
 }
 
 void GoodsControler::toShowGoods(ostream&output)

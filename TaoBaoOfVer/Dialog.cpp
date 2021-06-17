@@ -300,6 +300,7 @@ void Dialog::manageAddGood()
         goods->addToMemory(good);
         goods->saveFile(tempID);
         ((Seller*)user)->addGood(tempID);
+        ExitProcess;
         break;
     default:
         break;

@@ -2,6 +2,8 @@
 #include<string>
 #include<iostream>
 #define idType unsigned long
+#define _INVALID_ID 0
+
 using namespace::std;
 class Object
 {

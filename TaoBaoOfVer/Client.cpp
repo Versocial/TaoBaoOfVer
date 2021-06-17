@@ -208,7 +208,7 @@ void Client::whenAskForAllGoods()
         else cout << "Sorry, sellers all put up the shutters now !"<<endl;
         for (string info:ans) {
             istringstream infor(info);
-            tempGood = new Good(infor);
+            tempGood = Good::newGood(infor);
             if (goods->containsInMemory(tempGood->id()))goods->removeFromMemory(tempGood->id());
             goods->addToMemory(tempGood);
             goods->saveFile(tempGood->id());

@@ -10,7 +10,6 @@
 
 using namespace::std;
 using namespace::stdext;
-#define _INVALID_ID 0
 
 class Controler
 {

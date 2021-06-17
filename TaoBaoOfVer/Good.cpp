@@ -57,7 +57,7 @@ Good* Good::newGood(istream&input)
 	int type;
 	input >> type;
 	GoodType goodType= (GoodType)type;
-	Good* good;
+	Good* good=NULL;
 	switch (goodType)
 	{
 	case BOOK:
@@ -184,12 +184,12 @@ Good::Good(istream& input):Object()
 
 Object* Good::getByStream(istream& input)
 {
-	return new Good(input);
+	return newGood(input);
 }
 
 string Good::turnIntoString() const
 {
-	return " "+to_string(ID)+" "+to_string(originalPrice)+" "+to_string(sellerID)+" "+to_string(sellingNum)+" "+to_string(soldNum)+" "+name+" "+to_string(discount)+" ";
+	return ""+to_string(type)+" "+to_string(ID)+" "+to_string(originalPrice)+" "+to_string(sellerID)+" "+to_string(sellingNum)+" "+to_string(soldNum)+" "+name+" "+to_string(discount)+" ";
 }
 
 bool Good::deleteByPtr()
