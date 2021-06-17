@@ -1,7 +1,10 @@
 #pragma once
+#define  define _WINSOCK_DEPRECATED_NO_WARNINGS
 #include "Client.h"
+
 #include <winsock2.h>
 #pragma comment (lib, "ws2_32.lib")
+
 #define chachePath ("../res/chache") 
 #define shopCarPath ("../res/shopCar") 
 #define ordersPath ("../res/recv") 
@@ -18,7 +21,7 @@
 #define WaitAnswerAndInput {needAnswer=true;canExit=true;}
 #define WaitInput {canExit=true;}//without answer waiting
 #define ExitProcess {cmd=Exit;}
-#define ReadByCin(x) {;cin>>(x); cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n');}
+#define ReadByCin(x) {;std::cin>>(x); std::cin.clear(); std::cin.ignore(numeric_limits<streamsize>::max(), '\n');}
 static 	Server*server ;
 
 

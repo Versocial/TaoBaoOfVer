@@ -1,4 +1,6 @@
 #pragma once
+
+#define  define _WINSOCK_DEPRECATED_NO_WARNINGS
 #include "GoodsControler.h"
 #include "Good.h"
 #include "UsersControler.h"
@@ -7,6 +9,9 @@
 #include "textProtocol.h"
 #include<thread>
 #include "OrdersControler.h"
+
+#include <winsock2.h>
+#pragma comment (lib, "ws2_32.lib")
 
 #define ConsumersControlerPath ("../res/Consumer") 
 #define GoodsControlerPath ("../res/Good") 

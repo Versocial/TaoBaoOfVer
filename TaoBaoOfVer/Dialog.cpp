@@ -1,6 +1,4 @@
 #include "Server.h"
-#include <WinSock2.h>
-
 #define sendV(tag,x){output->setString(tag, to_string(x)); }
 #define sendT(tag,x){output->setString(tag,x);}
 #define recvV(tag) (input->getValue(tag))

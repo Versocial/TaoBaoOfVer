@@ -1,3 +1,4 @@
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
 #include "Server.h"
 //#define AvoidConfictFromSaving  ; lock_guard<mutex> temp_lock_guard(usingLocker);
 

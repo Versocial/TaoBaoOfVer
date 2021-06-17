@@ -1,5 +1,5 @@
 #include "Server.h"
-#define ReadByInput(key)  ;cin>>key;cin.clear();cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
+#define ReadByInput(key)  ;std::cin>>key;std::cin.clear();std::cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
 #define DO(todo)	{usingLocker.lock();todo;usingLocker.unlock();}
 #define _EXIT ("@exit")
 #define _SHOW ("@show")

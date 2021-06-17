@@ -1,4 +1,6 @@
 #pragma once
+#define  define _WINSOCK_DEPRECATED_NO_WARNINGS
+
 #include "User.h"
 #include "UsersControler.h"
 #include "Good.h"
@@ -8,6 +10,8 @@
 #include "sstream"
 #include "textProtocol.h"
 #include "OrdersControler.h"
+#include <winsock2.h>
+#pragma comment (lib, "ws2_32.lib")
 using namespace::std;
 
 class Client
