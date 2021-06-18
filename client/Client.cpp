@@ -206,16 +206,20 @@ void Client::whenLogIn()
 
 void Client::sendRequest()
 {
-    send(sock, output->buffer(), strlen(input->buffer()), 0);
+    cout<<"send"<<output->buffer()<<"##"<<endl;
+    send(sock, output->buffer(), strlen(output->buffer()), 0);
     output->sendInfo();
+    output->clear();
     input->clear();
     needAnswer = true;
 }
 
 void Client::sendRequestWithoutAnswer()
 {
-    send(sock, output->buffer(), strlen(input->buffer()), 0);
+    cout<<"send"<<output->buffer()<<"##"<<endl;
+    send(sock, output->buffer(), strlen(output->buffer()), 0);
     output->sendInfo();
+    output->clear();
     input->clear();
 }
 
