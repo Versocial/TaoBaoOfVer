@@ -12,7 +12,7 @@ enum Command {
 	ChangeUserInfo,
 	Shop,
 	ShowGoods,
-	End,
+	END,
 	Income,
 	AskGoodsInfo,
 	ChangeInfo,
@@ -23,7 +23,8 @@ enum Command {
 	Target,
 	ShowSoldOrder,
 	PullSoldOrder,
-	ManageDisCount
+	ManageDisCount,
+
 };
 
 enum _ClientType {

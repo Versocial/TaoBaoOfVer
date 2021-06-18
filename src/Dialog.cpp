@@ -36,23 +36,10 @@ Dialog::Dialog(Server* _server, Text& in, Text& out) {
 
 Dialog::Dialog(Server* s, SOCKET clientS, SOCKET serverS)
 {
-
-    char inBuffer [300];
-    char outBuffer [300];
-    Text in(inBuffer, 300);
-    Text out (outBuffer, 300);
-    userType = Visitor;
-    status = Exit;
-    step = 1;
     server = s;
     serverSocket = serverS;
     clientSocket = clientS;
-    input = &in;
-    output = &out;
-    waitThread = NULL;
     dialogThread = new thread(&Dialog::Dialogmanage, this);
-    dialogThread->join();
-
 }
 
 void Dialog::run()
@@ -65,8 +52,21 @@ void Dialog::run()
 
 void Dialog::Dialogmanage()
 {
+    
+    char inBuffer [300];
+    char outBuffer [300];
+    Text in(inBuffer, 300);
+    Text out (outBuffer, 300);
+    userType = Visitor;
+    status = Exit;
+    step = 1;
+    input = &in;
+    output = &out;
+    waitThread = NULL;
+
     while (1) {
         int len = recv(clientSocket, input->buffer(), 300, 0);
+        if(len==-1){delete this;return;}
         input->buffer()[len] = 0;
         output->clear();
        cmd=recvV("cmd"); 
@@ -99,8 +99,7 @@ void Dialog::Dialogmanage()
         case PullSoldOrder:manageSoldPull();
             break;
             break;
-        case End:
-           // server->save();
+        case END:
             delete this;
             return;
             break;

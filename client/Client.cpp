@@ -24,9 +24,9 @@ static 	Server*server ;
 
 
 unordered_map<string, enum Command> Client::Client_Command{
-    { "@E", Exit},{"@L",LogIn},{"@O",LogOut}, {"@End",End},{"@S",SignIn},{"@M",Income} ,{"@P",AskGoodsInfo},{"@A",AddGood},{"@CN",ChangeInfo},
+    { "@E", Exit},{"@L",LogIn},{"@O",LogOut},{"@S",SignIn},{"@M",Income} ,{"@P",AskGoodsInfo},{"@A",AddGood},{"@CN",ChangeInfo},
     {"@CP",ChangeInfo},{"@show",ShowInfo},{"@user",ShowInfo},{"@G",	ChooseGood},{"@T",Target},{"@car",ShowOrder},{"@shop",ManageOrder},{"@p",PullSoldOrder},
-    {"@s",ShowSoldOrder}
+    {"@s",ShowSoldOrder},{"@end",END}
 };
 
 
@@ -111,6 +111,7 @@ void Client::ClientMain()
     case ShowSoldOrder:whenShowSold(); break;
     case ManageDisCount:whenManageDiscount();
     case Target:pullTarget(); break;
+    case END:sendV("cmd",END);delete this;return;
     default:ExitProcess;
         break;
     }
@@ -122,8 +123,9 @@ void Client::ClientMain()
 void Client::waitForAnswer()
 {
 
-    recv(sock, input->buffer(), 600, 0);
-    input->buffer()[strlen(input->buffer())] = 0;
+    int len=recv(sock, input->buffer(), 600, 0);
+    output->clear();
+    input->buffer()[len] = 0;
     cmdRecvd=recvV("cmd");
     cout << "client recv : " << input->buffer() << endl;
     needAnswer = false;
@@ -209,7 +211,6 @@ void Client::sendRequest()
     cout<<"send"<<output->buffer()<<"##"<<endl;
     send(sock, output->buffer(), strlen(output->buffer()), 0);
     output->sendInfo();
-    output->clear();
     input->clear();
     needAnswer = true;
 }
@@ -219,7 +220,6 @@ void Client::sendRequestWithoutAnswer()
     cout<<"send"<<output->buffer()<<"##"<<endl;
     send(sock, output->buffer(), strlen(output->buffer()), 0);
     output->sendInfo();
-    output->clear();
     input->clear();
 }
 
