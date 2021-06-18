@@ -54,7 +54,7 @@ string Order::toShow(GoodsControler* goods)
 		if (goods->containsInMemory(it->first)) {
 			Good* good =( (Good*)(goods->getObjectInMemory(it->first)));
 			price += good->getPrice() * it->second;
-			ans = ans + " seller: "+to_string(sellerID)+" price: "+to_string(gcood->getPrice() * it->second)+" for "+to_string(it->second)+" of such thing:" + good->toShow();
+			ans = ans + " seller: "+to_string(sellerID)+" price: "+to_string(good->getPrice() * it->second)+" for "+to_string(it->second)+" of such thing:" + good->toShow();
 			if (OrderdTime != 0)ans =ans+ " time when " + ctime(&OrderdTime) + " sold.\n";
 		}
 		else ans =ans+" you want "+to_string(it->second)+", but information not found in chache.";

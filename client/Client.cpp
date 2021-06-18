@@ -19,7 +19,7 @@
 #define WaitAnswerAndInput {needAnswer=true;canExit=true;}
 #define WaitInput {canExit=true;}//without answer waiting
 #define ExitProcess {cmd=Exit;}
-#define ReadByCin(x) {;std::cin>>(x); /*std::cin.clear(); std::cin.ignore(numeric_limits<streamsize>::max(), '\n');*/}
+#define ReadByCin(x) {;std::cin>>(x); std::cin.clear(); std::cin.ignore(numeric_limits<streamsize>::max(), '\n');}
 static 	Server*server ;
 
 
@@ -220,6 +220,7 @@ void Client::sendRequestWithoutAnswer()
     cout<<"send"<<output->buffer()<<"##"<<endl;
     send(sock, output->buffer(), strlen(output->buffer()), 0);
     output->sendInfo();
+    output->clear();
     input->clear();
 }
 
@@ -793,10 +794,10 @@ void Client::whenSignIn()
             sendT("passWd", tempInfo);
             if (userType == HalfConsumer)user = new Consumer(userID, temp2,"0");
             else user = new Seller(userID, temp2,"0");
-            sendRequest();
+            sendRequestWithoutAnswer();
             cout << "OK! Type in 'y' to logIn now ! or other any key to refuse.\n";
             step++;
-            WaitAnswerAndInput;
+            WaitInput;
         }
         break;
     case 5:
@@ -805,12 +806,16 @@ void Client::whenSignIn()
             sendV("Flag", true);
             if (userType == HalfConsumer)userType = ConsumerUser;
             else userType = SellerUser;
-            cout << " Welcome ! " << user->Name()<<"Good morning ! " << endl;
+            sendV("cmd",true);
+            sendRequestWithoutAnswer();
+            cout << " Welcome ! " << user->Name() <<"Good morning ! " << endl;
             ExitProcess;
         }
         else {
             sendV("Flag", false);
             user->deleteByPtr();
+            sendV("cmd",false);
+            sendRequestWithoutAnswer();
             cout << "Well , you can type in \"@L\" to logIn now.\n";
             ExitProcess;
         }
