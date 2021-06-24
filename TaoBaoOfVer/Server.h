@@ -67,6 +67,7 @@ private:
 	void manageTargetPull();
 	void manageOrder();
 	void manageSoldPull();
+	void manageDiscount();
 public:
 	~Dialog();
 	Dialog(Server* server, Text& in, Text& out);

@@ -56,6 +56,7 @@ public:
 	void whenManageOrder();
 	void whenManagePullSold();
 	void whenShowSold();
+	void whenDiscount();
 	void pullTarget();
 
 	Good* pullTarget(idType id);

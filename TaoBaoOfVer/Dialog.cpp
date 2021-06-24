@@ -77,6 +77,7 @@ void Dialog::Dialogmanage()
             break;
         case PullSoldOrder:manageSoldPull();
             break;
+        case Discount:manageDiscount();
             break;
         case End:
            // server->save();
@@ -455,6 +456,32 @@ void Dialog::manageSoldPull()
         break;
     default:
         ExitProcess;
+        break;
+    }
+}
+void Dialog::manageDiscount()
+{
+    int discount;
+    switch (step)
+    {
+    case 1:
+        tempID = recvV("ID");
+        if (((Seller*)user)->tradeGoods.count(tempID)) {
+            sendV("Flag", true);
+            step++;
+        }
+        else {
+            sendV("Flag", false);
+            ExitProcess;
+        }
+        break;
+    case 2:
+        discount = recvV("Discount");
+        ((Good*)(goods->getObjectInMemory(tempID)))->setDiscount(discount);
+        goods->saveFile(tempID);
+        ExitProcess;
+        break;
+    default:
         break;
     }
 }

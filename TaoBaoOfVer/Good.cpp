@@ -139,7 +139,7 @@ bool Good::sellFinish(Number selling)
 {
 	if (onSelling > selling) {
 		onSelling -= selling;
-		if (soldNum + sellingNum > sellingNum) { soldNum += sellingNum; }
+		if (soldNum + selling > soldNum) { soldNum += selling; }
 		else soldNum = (unsigned long long) - 1;
 		return true;
 	}
@@ -185,8 +185,8 @@ idType Good::getSellerID()const
 
 bool Good::setDiscount(double Discount) 
 {
-	if (Discount > 1)discount =100;
-	else if (Discount <= 0)return false;
+	if (Discount > 100)discount =100;
+	else if (Discount <= 1)return false;
 	else discount = Discount;
 	return true;
 }

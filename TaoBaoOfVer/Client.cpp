@@ -23,7 +23,7 @@ static 	Server*server ;
 unordered_map<string, enum Command> Client::Client_Command{
     { "@E", Exit},{"@L",LogIn},{"@O",LogOut}, {"@End",End},{"@S",SignIn},{"@M",Income} ,{"@P",AskGoodsInfo},{"@A",AddGood},{"@CN",ChangeInfo},
     {"@CP",ChangeInfo},{"@show",ShowInfo},{"@user",ShowInfo},{"@G",	ChooseGood},{"@T",Target},{"@car",ShowOrder},{"@shop",ManageOrder},{"@p",PullSoldOrder},
-    {"@s",ShowSoldOrder}
+    {"@s",ShowSoldOrder},{"@D",Discount}
 };
 
 
@@ -97,6 +97,7 @@ void Client::ClientMain()
     case PullSoldOrder:whenManagePullSold(); break;
     case ShowSoldOrder:whenShowSold(); break;
     case Target:pullTarget(); break;
+    case Discount:whenDiscount(); break;
     default:ExitProcess;
         break;
     }
@@ -559,6 +560,45 @@ void Client::whenShowSold()
 {
     cout << orders->toShow(goods);
     ExitProcess;
+}
+void Client::whenDiscount()
+{
+    bool flag;
+    int disc;
+    if (userType != SellerUser) { cout << "No, you must be a seller to discount.\n"; }
+    switch (step) {
+    case 1:
+        cout << "Give the id of the good.\n";
+        WaitInput;
+        step++;
+        break;
+    case 2:
+        ReadByCin(tempID);
+        sendV("cmd", Discount);
+        sendV("ID", tempID);
+        sendRequest();
+        cout << "Give your discount. 1 to 100.\n";
+        WaitAnswerAndInput;
+        step++;
+        break;
+    case 3:
+        ReadByCin(disc);
+        flag = recvV("Flag");
+        if (!flag) {
+            cout << "No, you don't has a good with id " << tempID << ".\n";
+            ExitProcess;
+            break;
+        }
+    case 4:
+       if(step!=3) ReadByCin(disc);
+        if (disc > 100 || disc <= 1) { cout << "Out of range, type agin.\n"; step = 4; WaitInput; break; }
+    case 5:
+        sendV("cmd",Discount); 
+        sendV("Discount",disc);
+        sendRequestWithoutAnswer();
+        ExitProcess;
+        break;
+    }
 }
 Good* Client::pullTarget_recv(idType id)
 {
