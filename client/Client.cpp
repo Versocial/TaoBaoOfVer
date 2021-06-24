@@ -19,14 +19,14 @@
 #define WaitAnswerAndInput {needAnswer=true;canExit=true;}
 #define WaitInput {canExit=true;}//without answer waiting
 #define ExitProcess {cmd=Exit;}
-#define ReadByCin(x) {;std::cin>>(x); std::cin.clear(); std::cin.ignore(numeric_limits<streamsize>::max(), '\n');}
+#define ReadByCin(xxx) {;std::cin>>(xxx); std::cin.clear(); std::cin.ignore(/*numeric_limits<streamsize>::max(), '\n'*/);}
 static 	Server*server ;
 
 
 unordered_map<string, enum Command> Client::Client_Command{
     { "@E", Exit},{"@L",LogIn},{"@O",LogOut},{"@S",SignIn},{"@M",Income} ,{"@P",AskGoodsInfo},{"@A",AddGood},{"@CN",ChangeInfo},
     {"@CP",ChangeInfo},{"@show",ShowInfo},{"@user",ShowInfo},{"@G",	ChooseGood},{"@T",Target},{"@car",ShowOrder},{"@shop",ManageOrder},{"@p",PullSoldOrder},
-    {"@s",ShowSoldOrder},{"@end",END}
+    {"@s",ShowSoldOrder},{"@end",END},{"@D",Discount}
 };
 
 
@@ -109,8 +109,8 @@ void Client::ClientMain()
     case ManageOrder:whenManageOrder(); break;
     case PullSoldOrder:whenManagePullSold(); break;
     case ShowSoldOrder:whenShowSold(); break;
-    case ManageDisCount:whenManageDiscount();
     case Target:pullTarget(); break;
+    case Discount:whenDiscount(); break;
     case END:sendV("cmd",END);delete this;return;
     default:ExitProcess;
         break;
@@ -127,7 +127,7 @@ void Client::waitForAnswer()
     output->clear();
     input->buffer()[len] = 0;
     cmdRecvd=recvV("cmd");
-    cout << "client recv : " << input->buffer() << endl;
+    //cout << "client recv : " << input->buffer() << endl;
     needAnswer = false;
 }
 
@@ -238,13 +238,13 @@ void Client::whenAskForAllGoods()
         sendRequest();
         waitForAnswer();
         // NO break here !
-    case 2:
-        if (step >= 2) {
+    default:
+        if (step > 2) {
             ReadByCin(tempInfo);
             if (tempInfo[0] == 'y' || tempInfo[0] == 'Y');
             else { cout << "exit.\n"; ExitProcess; break; }
         }
-        else step++;
+        step++;
         flag = recvV("Flag");        
         goodID = recvV("ID");
         number = recvV("Num");
@@ -264,10 +264,9 @@ void Client::whenAskForAllGoods()
             cout << "If you want more goods to show, type in 'y'" << endl; 
             sendV("cmd", AskGoodsInfo);
             sendV("ID", goodID);
+            sendRequest();
             WaitAnswerAndInput;
         }
-        break;
-   default:ExitProcess;
         break;
     }
 }
@@ -518,6 +517,46 @@ Good* Client::pullTarget(idType id )
     waitForAnswer();
     return pullTarget_recv(id);
    
+}
+
+
+void Client::whenDiscount()
+{
+    bool flag;
+    if (userType != SellerUser) { cout << "No, you must be a seller to discount.\n"; }
+    switch (step) {
+    case 1:
+        cout << "Give the id of the good.\n";
+        WaitInput;
+        step++;
+        break;
+    case 2:
+        ReadByCin(tempID);
+        sendV("cmd", Discount);
+        sendV("ID", tempID);
+        sendRequest();
+        cout << "Give your discount. 1 to 100.\n";
+        WaitAnswerAndInput;
+        step++;
+        break;
+    case 3:
+        ReadByCin(tempID);
+        flag = recvV("Flag");
+        if (!flag) {
+            cout << "No, you don't has a good with id " << tempID << ".\n";
+            ExitProcess;
+            break;
+        }
+    case 4:
+       if(step!=3) ReadByCin(tempID);
+        if (tempID > 100 || tempID <= 1) { cout << "Out of range, type agin.\n"; step = 4; WaitInput; break; }
+    case 5:
+        sendV("cmd",Discount); 
+        sendV("Discount",tempID);
+        sendRequestWithoutAnswer();
+        ExitProcess;
+        break;
+    }
 }
 
 void Client::pullTarget()
@@ -806,7 +845,7 @@ void Client::whenSignIn()
             sendV("Flag", true);
             if (userType == HalfConsumer)userType = ConsumerUser;
             else userType = SellerUser;
-            sendV("cmd",true);
+            sendV("cmd",SignIn);
             sendRequestWithoutAnswer();
             cout << " Welcome ! " << user->Name() <<"Good morning ! " << endl;
             ExitProcess;
@@ -814,7 +853,7 @@ void Client::whenSignIn()
         else {
             sendV("Flag", false);
             user->deleteByPtr();
-            sendV("cmd",false);
+            sendV("cmd",SignIn);
             sendRequestWithoutAnswer();
             cout << "Well , you can type in \"@L\" to logIn now.\n";
             ExitProcess;

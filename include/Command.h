@@ -24,7 +24,7 @@ enum Command {
 	ShowSoldOrder,
 	PullSoldOrder,
 	ManageDisCount,
-
+	Discount
 };
 
 enum _ClientType {

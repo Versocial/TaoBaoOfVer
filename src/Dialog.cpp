@@ -70,7 +70,7 @@ void Dialog::Dialogmanage()
         input->buffer()[len] = 0;
         output->clear();
        cmd=recvV("cmd"); 
-       cout << "sever recv :" << input->buffer() << endl;
+       cout << "recv :" << input->buffer() << endl;
         if (status == Exit) { status = (Command)cmd; step = 1; }
      //   usingLocker.lock();
         switch (cmd)
@@ -98,6 +98,7 @@ void Dialog::Dialogmanage()
             break;
         case PullSoldOrder:manageSoldPull();
             break;
+        case Discount:manageDiscount();
             break;
         case END:
             delete this;
@@ -110,6 +111,7 @@ void Dialog::Dialogmanage()
         //usingLocker.unlock();
         if (!output->empty()) {
             sendV("cmd", cmd);
+            cout<<"send :"<<output->buffer()<<endl;
             output->sendInfo();
             send(clientSocket, output->buffer(), strlen(output->buffer()),0);
         }
@@ -479,18 +481,34 @@ void Dialog::manageSoldPull()
         break;
     }
 }
+
 void Dialog::manageDiscount()
 {
+    int discount;
     switch (step)
     {
     case 1:
+        tempID = recvV("ID");
+        if (((Seller*)user)->tradeGoods.count(tempID)) {
+            sendV("Flag", true);
+            step++;
+        }
+        else {
+            sendV("Flag", false);
+            ExitProcess;
+        }
         break;
     case 2:
+        discount = recvV("Discount");
+        ((Good*)(goods->getObjectInMemory(tempID)))->setDiscount(discount);
+        goods->saveFile(tempID);
+        ExitProcess;
         break;
     default:
         break;
     }
 }
+
 /*
 @L
 c

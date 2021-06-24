@@ -139,7 +139,7 @@ bool Good::sellFinish(GoodNumber selling)
 {
 	if (onSelling > selling) {
 		onSelling -= selling;
-		if (soldNum + sellingNum > sellingNum) { soldNum += sellingNum; }
+		if (soldNum + selling > soldNum) { soldNum += selling; }
 		else soldNum = (unsigned long long) - 1;
 		return true;
 	}
@@ -185,8 +185,8 @@ idType Good::getSellerID()const
 
 bool Good::setDiscount(double Discount) 
 {
-	if (Discount > 1)discount =100;
-	else if (Discount <= 0)return false;
+	if (Discount > 100)discount =100;
+	else if (Discount <= 1)return false;
 	else discount = Discount;
 	return true;
 }
@@ -257,7 +257,7 @@ int book:: BookDiscount=100;
  }
  priceType book::getPrice() const
 {
-	return (priceType)ceil( BookDiscount* discount  / 10000*getOriginalPrice());
+	return (priceType)ceil( (double)BookDiscount* discount  / 10000*getOriginalPrice());
 }
  int clouthing::ClouthDiscount=100;
 
@@ -273,7 +273,7 @@ clouthing::clouthing(idType id, idType sellerId, string name, priceType price, G
 }
 priceType clouthing::getPrice() const
 {
-	return (priceType)ceil(ClouthDiscount * discount / 10000 * getOriginalPrice());
+	return (priceType)ceil((double)ClouthDiscount * discount / 10000 * getOriginalPrice());
 }
 int electronic::ElecDiscount=100;
 electronic::electronic(istream&input):Good(input)// when client read info
@@ -286,5 +286,5 @@ electronic::electronic(idType id, idType sellerId, string name, priceType price,
 }
 priceType electronic::getPrice() const
 {
-	return (priceType)ceil(ElecDiscount * discount / 10000 * getOriginalPrice());
+	return (priceType)ceil((double)ElecDiscount * discount / 10000 * getOriginalPrice());
 }

@@ -62,7 +62,8 @@ public:
 	void whenManagePullSold();
 	void whenShowSold();
 	void whenManageDiscount();
-	void pullTarget();
+	void pullTarget();	
+	void whenDiscount();
 
 	Good* pullTarget(idType id);
 	void pullTarget_send(idType id);
